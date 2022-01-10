@@ -1,0 +1,120 @@
+MATH_CONSTANTS = r"""
+% Math symbols/terminology I frequently use.
+% Author: Indrajit Ghosh
+
+
+
+% ########## Without math mode ##########
+
+\newcommand{\matlab}{{\sc Matlab} } % Matlab symbol
+\newcommand{\HI}{H$\ddot{\text{o}}$lder's inequality } % Holder Inequality
+
+
+
+% ######### Inside Math mode ##########
+
+%%%%%% Calculus Symbols %%%%%%%%%%%%
+\newcommand{\cvec}[1]{{\mathbf #1}} % bold R^n vector
+\newcommand{\rvec}[1]{\vec{\mathbf #1}} % vector with arrow
+\newcommand{\ihat}{\hat{\textbf{\i}}}
+\newcommand{\jhat}{\hat{\textbf{\j}}}
+\newcommand{\khat}{\hat{\textbf{k}}}
+\newcommand{\mdiv}{{\rm div}} % divergence
+\newcommand{\grad}{\textnormal{grad}~}
+\newcommand{\curl}{\textnormal{curl}~}
+\newcommand{\proj}{{\rm proj}} % projection
+
+%%%%%% Linear Algebra %%%%%%%%%
+\newcommand{\minor}{{\rm minor}}
+\newcommand{\trace}{{\rm trace}}
+\newcommand{\spn}{{\rm Span}}
+\newcommand{\rem}{{\rm rem}}
+\newcommand{\ran}{{\rm range}}
+\newcommand{\range}{{\rm range}}
+\newcommand{\Hom}{{\rm{Hom}}}
+\newcommand{\mbyn}[2]{#1\times #2} % m x n 
+
+%%%%%%% Analysis %%%%%%%%%%%%
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}} % Field F
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+\renewcommand{\emptyset}{\varnothing}
+\newcommand{\Cn}{\C^n}
+\newcommand{\Zn}{\Z^n}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\ra}{\rightarrow} % right arrow
+\newcommand{\wkly}{\rightharpoonup} % weak convergence arrow symbol
+\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\norm}[1]{\left| \left| #1 \right| \right|}
+
+% Celling and Floor function
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+% Operations
+\newcommand{\ds}{\displaystyle}
+\newcommand{\quotes}[1]{\textquotedblleft #1\textquotedblright}
+
+
+%Define two types of differential symbols in an integral.
+\newcommand{\diff}{\mathop{}\!d} %Normal article style
+\newcommand{\dd}{\mathop{}\!\mathrm{d}} %Journal style
+\newcommand{\pd}[2]{\frac{\partial #1 }{\partial #2}}      % first order partial derivative
+\newcommand{\p}{\partial}
+\newcommand{\pdS}[2]{\frac{\partial^2 #1 }{\partial #2^2}} % second order partial derivative
+\newcommand{\pdT}[2]{\frac{\partial^2 #1 }{\partial #2^2}} % third order partial derivative
+
+
+%Fraktur and Caligraphy capital letters
+\newcommand{\fA}{\mathfrak A}     \newcommand{\sA}{\mathcal A}
+\newcommand{\fB}{\mathfrak B}     \newcommand{\sB}{\mathcal B}
+\newcommand{\fC}{\mathfrak C}     \newcommand{\sC}{\mathcal C}
+\newcommand{\fD}{\mathfrak D}     \newcommand{\sD}{\mathcal D}
+\newcommand{\fE}{\mathfrak E}     \newcommand{\sE}{\mathcal E}
+\newcommand{\fF}{\mathfrak F}     \newcommand{\sF}{\mathcal F}
+\newcommand{\fG}{\mathfrak G}     \newcommand{\sG}{\mathcal G}
+\newcommand{\fH}{\mathfrak H}     \newcommand{\sH}{\mathcal H}
+\newcommand{\fI}{\mathfrak I}     \newcommand{\sI}{\mathcal I}
+\newcommand{\fK}{\mathfrak K}     \newcommand{\sK}{\mathcal K}
+\newcommand{\fJ}{\mathfrak J}     \newcommand{\sJ}{\mathcal J}
+\newcommand{\fL}{\mathfrak L}     \newcommand{\sL}{\mathcal L}
+\newcommand{\fM}{\mathfrak M}     \newcommand{\sM}{\mathcal M}
+\newcommand{\fN}{\mathfrak N}     \newcommand{\sN}{\mathcal N}
+\newcommand{\fO}{\mathfrak O}     \newcommand{\sO}{\mathcal O}
+\newcommand{\fP}{\mathfrak P}     \newcommand{\sP}{\mathcal P}
+\newcommand{\fQ}{\mathfrak Q}     \newcommand{\sQ}{\mathcal Q}
+\newcommand{\fR}{\mathfrak R}     \newcommand{\sR}{\mathcal R}
+\newcommand{\fS}{\mathfrak S}     \newcommand{\sS}{\mathcal S}
+\newcommand{\fT}{\mathfrak T}     \newcommand{\sT}{\mathcal T}
+\newcommand{\fU}{\mathfrak U}     \newcommand{\sU}{\mathcal U}
+\newcommand{\fV}{\mathfrak V}     \newcommand{\sV}{\mathcal V}
+\newcommand{\fW}{\mathfrak W}     \newcommand{\sW}{\mathcal W}
+\newcommand{\fX}{\mathfrak X}     \newcommand{\sX}{\mathcal X}
+\newcommand{\fY}{\mathfrak Y}     \newcommand{\sY}{\mathcal Y}
+\newcommand{\fZ}{\mathfrak Z}     \newcommand{\sZ}{\mathcal Z}
+
+
+%bold vector macros
+\newcommand{\bu}{{\bf u}}
+\newcommand{\bv}{{\bf v}}
+\newcommand{\bw}{{\bf w}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\by}{{\bf y}}
+\newcommand{\bz}{{\bf z}}
+\newcommand{\bX}{{\bf X}}
+\newcommand{\bY}{{\bf Y}}
+\newcommand{\bZ}{{\bf Z}}
+\newcommand{\btheta}{{\bf \theta}}
+\newcommand{\bTheta}{{\bf \Theta}}
+\newcommand{\bze}{{\bf 0}}
+\newcommand{\bT}{{\bf T}}
+\newcommand{\bB}{{\bf B}}
+\newcommand{\bE}{{\bf E}}
+\newcommand{\bN}{{\bf N}}
+
+"""
