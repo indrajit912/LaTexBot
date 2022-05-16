@@ -70,33 +70,33 @@ MATH_CONSTANTS = r"""
 \newcommand{\pdT}[2]{\frac{\partial^2 #1 }{\partial #2^2}} % third order partial derivative
 
 
-%Fraktur and Caligraphy capital letters
-\newcommand{\fA}{\mathfrak A}     \newcommand{\sA}{\mathcal A}
-\newcommand{\fB}{\mathfrak B}     \newcommand{\sB}{\mathcal B}
-\newcommand{\fC}{\mathfrak C}     \newcommand{\sC}{\mathcal C}
-\newcommand{\fD}{\mathfrak D}     \newcommand{\sD}{\mathcal D}
-\newcommand{\fE}{\mathfrak E}     \newcommand{\sE}{\mathcal E}
-\newcommand{\fF}{\mathfrak F}     \newcommand{\sF}{\mathcal F}
-\newcommand{\fG}{\mathfrak G}     \newcommand{\sG}{\mathcal G}
-\newcommand{\fH}{\mathfrak H}     \newcommand{\sH}{\mathcal H}
-\newcommand{\fI}{\mathfrak I}     \newcommand{\sI}{\mathcal I}
-\newcommand{\fK}{\mathfrak K}     \newcommand{\sK}{\mathcal K}
-\newcommand{\fJ}{\mathfrak J}     \newcommand{\sJ}{\mathcal J}
-\newcommand{\fL}{\mathfrak L}     \newcommand{\sL}{\mathcal L}
-\newcommand{\fM}{\mathfrak M}     \newcommand{\sM}{\mathcal M}
-\newcommand{\fN}{\mathfrak N}     \newcommand{\sN}{\mathcal N}
-\newcommand{\fO}{\mathfrak O}     \newcommand{\sO}{\mathcal O}
-\newcommand{\fP}{\mathfrak P}     \newcommand{\sP}{\mathcal P}
-\newcommand{\fQ}{\mathfrak Q}     \newcommand{\sQ}{\mathcal Q}
-\newcommand{\fR}{\mathfrak R}     \newcommand{\sR}{\mathcal R}
-\newcommand{\fS}{\mathfrak S}     \newcommand{\sS}{\mathcal S}
-\newcommand{\fT}{\mathfrak T}     \newcommand{\sT}{\mathcal T}
-\newcommand{\fU}{\mathfrak U}     \newcommand{\sU}{\mathcal U}
-\newcommand{\fV}{\mathfrak V}     \newcommand{\sV}{\mathcal V}
-\newcommand{\fW}{\mathfrak W}     \newcommand{\sW}{\mathcal W}
-\newcommand{\fX}{\mathfrak X}     \newcommand{\sX}{\mathcal X}
-\newcommand{\fY}{\mathfrak Y}     \newcommand{\sY}{\mathcal Y}
-\newcommand{\fZ}{\mathfrak Z}     \newcommand{\sZ}{\mathcal Z}
+%Fraktur, Caligraphy and mathscr capital letters
+\newcommand{\fA}{\mathfrak A}     \newcommand{\sA}{\mathcal A}		\newcommand{\kA}{\mathscr{A}}
+\newcommand{\fB}{\mathfrak B}     \newcommand{\sB}{\mathcal B}		\newcommand{\kB}{\mathscr{B}}
+\newcommand{\fC}{\mathfrak C}     \newcommand{\sC}{\mathcal C}		\newcommand{\kC}{\mathscr{C}}
+\newcommand{\fD}{\mathfrak D}     \newcommand{\sD}{\mathcal D}		\newcommand{\kD}{\mathscr{D}}
+\newcommand{\fE}{\mathfrak E}     \newcommand{\sE}{\mathcal E}		\newcommand{\kE}{\mathscr{E}}
+\newcommand{\fF}{\mathfrak F}     \newcommand{\sF}{\mathcal F}		\newcommand{\kF}{\mathscr{F}}
+\newcommand{\fG}{\mathfrak G}     \newcommand{\sG}{\mathcal G}		\newcommand{\kG}{\mathscr{G}}
+\newcommand{\fH}{\mathfrak H}     \newcommand{\sH}{\mathcal H}		\newcommand{\kH}{\mathscr{H}}
+\newcommand{\fI}{\mathfrak I}     \newcommand{\sI}{\mathcal I}		\newcommand{\kI}{\mathscr{I}}
+\newcommand{\fK}{\mathfrak K}     \newcommand{\sK}{\mathcal K}		\newcommand{\kK}{\mathscr{K}}
+\newcommand{\fJ}{\mathfrak J}     \newcommand{\sJ}{\mathcal J}		\newcommand{\kJ}{\mathscr{J}}
+\newcommand{\fL}{\mathfrak L}     \newcommand{\sL}{\mathcal L}		\newcommand{\kL}{\mathscr{L}}
+\newcommand{\fM}{\mathfrak M}     \newcommand{\sM}{\mathcal M}		\newcommand{\kM}{\mathscr{M}}
+\newcommand{\fN}{\mathfrak N}     \newcommand{\sN}{\mathcal N}		\newcommand{\kN}{\mathscr{N}}
+\newcommand{\fO}{\mathfrak O}     \newcommand{\sO}{\mathcal O}		\newcommand{\kO}{\mathscr{O}}
+\newcommand{\fP}{\mathfrak P}     \newcommand{\sP}{\mathcal P}		\newcommand{\kP}{\mathscr{P}}
+\newcommand{\fQ}{\mathfrak Q}     \newcommand{\sQ}{\mathcal Q}		\newcommand{\kQ}{\mathscr{Q}}
+\newcommand{\fR}{\mathfrak R}     \newcommand{\sR}{\mathcal R}		\newcommand{\kR}{\mathscr{R}}
+\newcommand{\fS}{\mathfrak S}     \newcommand{\sS}{\mathcal S}		\newcommand{\kS}{\mathscr{S}}
+\newcommand{\fT}{\mathfrak T}     \newcommand{\sT}{\mathcal T}		\newcommand{\kT}{\mathscr{T}}
+\newcommand{\fU}{\mathfrak U}     \newcommand{\sU}{\mathcal U}		\newcommand{\kU}{\mathscr{U}}
+\newcommand{\fV}{\mathfrak V}     \newcommand{\sV}{\mathcal V}		\newcommand{\kW}{\mathscr{W}}
+\newcommand{\fW}{\mathfrak W}     \newcommand{\sW}{\mathcal W}		\newcommand{\kV}{\mathscr{V}}
+\newcommand{\fX}{\mathfrak X}     \newcommand{\sX}{\mathcal X}		\newcommand{\kX}{\mathscr{X}}
+\newcommand{\fY}{\mathfrak Y}     \newcommand{\sY}{\mathcal Y}		\newcommand{\kY}{\mathscr{Y}}
+\newcommand{\fZ}{\mathfrak Z}     \newcommand{\sZ}{\mathcal Z}		\newcommand{\kZ}{\mathscr{Z}}
 
 
 %bold vector macros
