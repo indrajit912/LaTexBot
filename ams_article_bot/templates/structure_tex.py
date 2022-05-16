@@ -10,7 +10,7 @@ AMS_STRUCTURE = r"""
 \usepackage{graphicx}
 %\usepackage{graphics}
 %\usepackage{color}
-\usepackage{enumerate}
+\usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{lipsum}

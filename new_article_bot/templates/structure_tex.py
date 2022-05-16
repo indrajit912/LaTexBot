@@ -33,7 +33,7 @@ s4 = r"""
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{mathtools}
-\usepackage{enumerate}
+\usepackage{enumitem} % to use \begin{itemize}
 \usepackage[utf8]{inputenc}
 \usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
 \usepackage{lipsum}

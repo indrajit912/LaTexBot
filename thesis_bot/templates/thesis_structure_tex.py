@@ -1,6 +1,7 @@
 THESIS_STRUCTURE = r"""
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 
 \usepackage{amsmath, amsthm, amssymb} % for various mathematical operations
 \usepackage{mathtools}
