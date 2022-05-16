@@ -62,6 +62,7 @@ MATH_CONSTANTS = r"""
 \newcommand{\wkly}{\rightharpoonup} % weak convergence arrow symbol
 \newcommand{\norm}[1]{\left| \left| #1 \right| \right|}
 \newcommand{\opnorm}[1]{\left| \left| #1 \right| \right|_{\text{op}}}
+\newcommand{\supnorm}[1]{\left| \left| #1 \right| \right|_{\text{$\infty$}}}
 \newcommand{\dsum}[2]{\bigoplus_{#1}^{#2}} % direct sum
 \newcommand{\weaker}{\precsim} % weakness symbol between projections
 \newcommand{\strictlyweaker}{\prec} % Strict weakness
