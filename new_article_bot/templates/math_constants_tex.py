@@ -40,17 +40,29 @@ MATH_CONSTANTS = r"""
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Sp}{\mathbb{S}}
 \newcommand{\F}{\mathbb{F}} % Field F
 \newcommand{\<}{\langle}
 \renewcommand{\>}{\rangle}
 \renewcommand{\emptyset}{\varnothing}
 \newcommand{\Cn}{\C^n}
 \newcommand{\Zn}{\Z^n}
-\newcommand{\ep}{\varepsilon}
-\newcommand{\ra}{\rightarrow} % right arrow
+\newcommand{\1}[1]{\mathds{1}_{#1}} % characteristic funtion
+
+
+%%%%%%% Operator Algebra %%%%%%%%%%%%
+\newcommand{\Bh}{\mathcal{B}(\mathcal{H})} % B(H)
+\newcommand{\mnc}{\mathbb{M}_n(\mathbb{C})} % M_n(C) matrix algebra
+\newcommand{\RR}{\mathscr{R}} % von Neumann algebra 'R'
 \newcommand{\wkly}{\rightharpoonup} % weak convergence arrow symbol
-\newcommand{\tn}[1]{\textnormal{#1}}
 \newcommand{\norm}[1]{\left| \left| #1 \right| \right|}
+\newcommand{\opnorm}[1]{\left| \left| #1 \right| \right|_{\text{op}}}
+\newcommand{\supnorm}[1]{\left| \left| #1 \right| \right|_{\text{$\infty$}}}
+\newcommand{\dsum}[2]{\bigoplus_{#1}^{#2}} % direct sum
+\newcommand{\weaker}{\precsim} % weakness symbol between projections
+\newcommand{\strictlyweaker}{\prec} % Strict weakness
+\newcommand{\mvnequiv}[1]{\stackrel{\mathclap{\normalfont\tiny\mbox{$#1$}}}{\sim}} % Murray-von Neumman equivalence %% It requires \usepackage{mathtools}
+
 
 % Celling and Floor function
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}

@@ -115,7 +115,7 @@ THESIS_STRUCTURE = r"""
 %%% Setting Tcolorbox for boxed 'theorems'
 %%
 \usepackage{xcolor}
-\usepackage{tikz}
+\usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage[most]{tcolorbox}
 
 % Usages: \begin{tcolorbox} Here is some text! \end{tcolorbox}

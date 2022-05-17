@@ -36,6 +36,7 @@ s4 = r"""
 \usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage[utf8]{inputenc}
 \usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
+\usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage{lipsum}
 \usepackage{authblk} %For Author Titling and affiliating Purpose
 

@@ -12,7 +12,7 @@ AMS_STRUCTURE = r"""
 %\usepackage{color}
 \usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage{hyperref}
-\usepackage{tikz}
+\usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage{lipsum}
 \usetikzlibrary{matrix,arrows}
 \usepackage[english]{babel}

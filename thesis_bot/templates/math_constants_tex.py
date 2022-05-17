@@ -58,6 +58,7 @@ MATH_CONSTANTS = r"""
 
 %%%%%%% Operator Algebra %%%%%%%%%%%%
 \newcommand{\Bh}{\mathcal{B}(\mathcal{H})} % B(H)
+\newcommand{\mnc}{\mathbb{M}_n(\mathbb{C})} % M_n(C) matrix algebra
 \newcommand{\RR}{\mathscr{R}} % von Neumann algebra 'R'
 \newcommand{\wkly}{\rightharpoonup} % weak convergence arrow symbol
 \newcommand{\norm}[1]{\left| \left| #1 \right| \right|}
