@@ -1,13 +1,13 @@
 m1 = r"""
+% Author: Indrajit Ghosh
+% AMS Article LaTeX 
 
-%%%%%%%%%%%% References %%%%%%%%%%%%
-    
-    %  NOTE: To complile the references do the followings:
-    %       pdflatex main.tex
-    %       bibtex main.aux
-    %       pdflatex main.tex
-    %       pdflatex main.tex
-    %
+%  Commands for genrating pdf
+%       1. pdflatex <main.tex>
+%       2. bibtex <main.aux>
+%       3. pdflatex <main.tex>
+%       4. pdflatex <main.tex>
+%
 
 \documentclass[12pt]{amsart}
 
