@@ -5,11 +5,16 @@ s1 = r"""
 """
 
 s4 = r"""
-    colorlinks=true,
-    linkcolor={cyan},
-    filecolor=magenta,      
-    urlcolor=blue,
-    citecolor=magenta,
+    pdfsubject={Mathematics},
+	  pdfcreationdate={\today},
+	  pdfcreator={Write a creator name (e.g. MikTeX)},
+	  pdfkeywords={Write your list of keywords},
+	  colorlinks=true,
+	  linkcolor={cyan},
+	  %    filecolor=magenta,      
+	  urlcolor=blue,
+	  citecolor=magenta,
+	  pdfpagemode=UseOutlines,
 }
 
 \usepackage{graphicx}

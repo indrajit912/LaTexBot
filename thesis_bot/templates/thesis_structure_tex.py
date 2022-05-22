@@ -141,14 +141,18 @@ sorting=ynt
 %%% Hyper reference set up
 \usepackage[bookmarksopen,bookmarksnumbered]{hyperref}
 \hypersetup{
-    pdftitle={PhD Thesis},
-    pdfauthor={Indrajit Ghosh},
-    colorlinks=true,
-    linkcolor={cyan},
-%    filecolor=magenta,      
-    urlcolor=blue,
-    citecolor=magenta,
-    pdfpagemode=UseOutlines,
+	pdftitle={New PhD Thesis},
+	pdfauthor={Indrajit Ghosh},
+	pdfsubject={Mathematics},
+	pdfcreationdate={\today},
+	pdfcreator={Write a creator name (e.g. MikTeX)},
+	pdfkeywords={Write your list of keywords},
+	colorlinks=true,
+	linkcolor={cyan},
+	%    filecolor=magenta,      
+	urlcolor=blue,
+	citecolor=magenta,
+	pdfpagemode=UseOutlines,
 }
 \usepackage{bookmark}
 
