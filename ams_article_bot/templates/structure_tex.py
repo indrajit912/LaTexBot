@@ -12,6 +12,20 @@ AMS_STRUCTURE = r"""
 %\usepackage{color}
 \usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage{hyperref}
+\hypersetup{
+	pdftitle={New AMS Article},
+	pdfauthor={Indrajit Ghosh},
+	pdfsubject={Mathematics},
+	pdfcreationdate={\today},
+	pdfcreator={Write a creator name (e.g. MikTeX)},
+	pdfkeywords={Write your list of keywords},
+	colorlinks=true,
+	linkcolor={cyan},
+	%    filecolor=magenta,      
+	urlcolor=blue,
+	citecolor=magenta,
+	pdfpagemode=UseOutlines,
+}
 \usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage{lipsum}
 \usetikzlibrary{matrix,arrows}
