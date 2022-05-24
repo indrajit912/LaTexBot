@@ -31,6 +31,8 @@ m7 = r"""
 
     \maketitle
 
+    \tableofcontents % This generates table of contents
+
     %%%
     %%% The following is for the abstract.  The abstract is optional and
     %%% if not used just delete, or comment out, the following.
