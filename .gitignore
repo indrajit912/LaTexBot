@@ -5,3 +5,4 @@ ams_article_bot/templates/__pycache__/
 new_article_bot/templates/__pycache__/
 thesis_bot/__pycache__/
 latex_bot/__pycache__/
+latex_bot/tex_templates/__pycache__/
