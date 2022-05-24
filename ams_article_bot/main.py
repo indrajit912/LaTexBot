@@ -8,9 +8,7 @@
 #
 
 from pathlib import Path
-import pprint
-from subprocess import call
-import webbrowser
+import subprocess, os
 
 from templates.main_tex import main_tex_constants
 from templates.structure_tex import AMS_STRUCTURE
@@ -99,11 +97,9 @@ def main():
     create_structure_tex(output_directory_path)
     create_main_tex(informations, output_directory_path)
 
-    # call(["pdflatex", str(output_directory_path) + "/main.tex"])
 
-    # webbrowser.open(str(output_directory_path) + "/main.tex")
-
-
+    os.chdir(output_directory_path)
+    subprocess.run(["python3", "~/Documents/latex_files/scripts_for_tex/compile_tex.py"])
 
 
 if __name__ == "__main__":
