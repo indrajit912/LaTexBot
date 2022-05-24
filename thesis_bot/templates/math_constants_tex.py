@@ -150,7 +150,7 @@ MATH_CONSTANTS = r"""
 
 
 %%%%%%%%%%% Glossaries and Acronyms %%%%%%%%%%%%%
-\usepackage[acronym]{glossaries-extra}
+\usepackage[acronym, automake=true]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
 
 % Create your own acronyms

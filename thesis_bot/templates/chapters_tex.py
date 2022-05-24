@@ -47,7 +47,7 @@ Hi, I am Indrajit Ghosh, \index{Indrajit} the author of this \LaTeX \ \index{\La
 I am writing this file for mainly as a sample \TeX \ file for submitting  PhD / MSc thesis. 
 Currently, I am a research scholar at Indian Statistical Institute, Bangalore. 
 Please send any comments and suggestions you have to me at \url{rs_math1902@isibang.ac.in}. \index{isimail}
-
+\gls{vna}
 
 \begin{flushright}
 	Indrajit Ghosh\\
