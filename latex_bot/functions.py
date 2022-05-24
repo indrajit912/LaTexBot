@@ -12,7 +12,7 @@ from constants import *
 
 from tex_templates.references_bib_tex import REFERENCES
 from tex_templates.math_constants_tex import MATH_CONSTANTS
-from tex_templates.thesis_style_ist_tex import STYLE
+from tex_templates.thesis_style_ist_tex import STYLE_IST
 from tex_templates.art_sections_tex import SECTIONS
 
 from tex_templates.ams_structure_tex import AMS_STRUCTURE
@@ -37,15 +37,15 @@ def choose_from_list(given_list:list, msg_output:str="Choose an option from belo
     Ask for a input() among the elements from the list.
     Finally return the `option` user chose!
     """
-    print(f"\n{INDENT}{msg_output}:")
+    print(f"\n{INDENT}{STYLE['subheading']}{msg_output}:{STYLE['reset']}")
     for i, el in enumerate(given_list):
-        print(f"{INDENT + '  '}{i + 1}. {el}")
+        print(f"{INDENT + '  '}{STYLE['number']}{i + 1}{STYLE['reset']}. {el}")
     
     while True:
         n = int(input())
         if n in [x + 1 for x in range(len(given_list))]:
             break
-        print(f"KeyError: Please enter something from the list {[x + 1 for x in range(len(given_list))]}")
+        print(f"{STYLE['error']}KeyError{STYLE['reset']}: Please enter something from the list {[x + 1 for x in range(len(given_list))]}")
         
 
     print()
@@ -112,7 +112,7 @@ def setup_output_directory(tex_template:str):
 
         style_ist = output_directory / "style.ist"
         with open(style_ist, "w") as f:
-            f.write(STYLE)
+            f.write(STYLE_IST)
 
 
     if tex_template == TEX_TEMPLATES["beamer"]:
