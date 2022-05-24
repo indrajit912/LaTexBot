@@ -20,6 +20,8 @@ from constants import INDRAJIT
 HOME = Path.home()
 CWD = Path.cwd()
 
+COMPILE_TEX_LIVES_HERE = HOME / "Documents/latex_files/scripts_for_tex/compile_tex.py"
+
 def setup_output_directory():
 
     output_directory = CWD / "new_ams_article"
@@ -99,7 +101,7 @@ def main():
 
 
     os.chdir(output_directory_path)
-    subprocess.run(["python3", "~/Documents/latex_files/scripts_for_tex/compile_tex.py"])
+    subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
 
 
 if __name__ == "__main__":
