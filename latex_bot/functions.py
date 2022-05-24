@@ -21,6 +21,8 @@ from tex_templates.art_structure_tex import ARTICLE_STRUCTURE
 
 from tex_templates.ams_main_tex import ams_main_tex_constants
 from tex_templates.art_main_tex import art_main_tex_constants
+from tex_templates.thesis_chapters_tex import *
+from tex_templates.thesis_main_tex import MAIN
 
 
 HOME = Path.home()
@@ -151,6 +153,56 @@ def create_structure_tex(tex_template:str, output_dir):
 
 
 
+def write_thesis_chapters(output_dir):
+
+    chapters_dir = output_dir / "Chapters"
+
+    titlepage = chapters_dir / "titlepage.tex"
+    with open(titlepage, "w") as f:
+        f.write(TITLEPAGE)
+
+    abstract = chapters_dir / "abstract.tex"
+    with open(abstract, "w") as f:
+        f.write(ABSTRACT)
+
+    dedication = chapters_dir / "dedication.tex"
+    with open(dedication, "w") as f:
+        f.write(DEDICATION)
+
+    declaration = chapters_dir / "declaration.tex"
+    with open(declaration, "w") as f:
+        f.write(DECLARATION)
+
+    acknowledgements = chapters_dir / "acknowledgements.tex"
+    with open(acknowledgements, "w") as f:
+        f.write(ACKNOWLEDGEMENTS)
+
+    introduction = chapters_dir / "introduction.tex"
+    with open(introduction, "w") as f:
+        f.write(INTRODUCTION)
+
+    chap_1 = chapters_dir / "chapter01.tex"
+    with open(chap_1, "w") as f:
+        f.write(CHAPTER_1)
+
+    chap_2 = chapters_dir / "chapter02.tex"
+    with open(chap_2, "w") as f:
+        f.write(CHAPTER_2)
+
+    chap_3 = chapters_dir / "chapter03.tex"
+    with open(chap_3, "w") as f:
+        f.write(CHAPTER_3)
+
+    conclusion = chapters_dir / "conclusion.tex"
+    with open(conclusion, "w") as f:
+        f.write(CONCLUSION)
+
+    appendix = chapters_dir / "appendix.tex"
+    with open(appendix, "w") as f:
+        f.write(APPENDIX)
+
+
+
 def create_main_tex(tex_template:str, info:dict, output_dir):
 
     title = info['title']
@@ -194,7 +246,13 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
 
     if tex_template == TEX_TEMPLATES['thesis']:
-        pass
+
+        write_thesis_chapters(output_dir)
+        
+        with open(output_dir / "main.tex", "w") as f:
+            f.write(MAIN)
+
+        print(MAIN)
 
 
     if tex_template == TEX_TEMPLATES['beamer']:

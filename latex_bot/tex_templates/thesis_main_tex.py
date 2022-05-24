@@ -10,7 +10,7 @@ MAIN = r"""
 
 \documentclass[a4paper,11pt,twoside,openany]{book}
 
-\input{thesis_structure.tex}
+\input{structure.tex}
 \input{math_constants.tex}
 
 \begin{document}

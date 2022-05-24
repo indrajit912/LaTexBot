@@ -159,4 +159,16 @@ sorting=ynt
 \usepackage{imakeidx}
 \makeindex[program=makeindex,options=-s style.ist,columns=2,intoc=true]
 
+
+%%%%%%%%%%% Glossaries and Acronyms %%%%%%%%%%%%%
+\usepackage[acronym]{glossaries-extra}
+\setabbreviationstyle[acronym]{long-short}
+
+% Create your own acronyms
+\newacronym{vna}{vNa}{von Neumann algebra} % use as: \gls{vna}
+\newacronym{dct}{DCT}{Dominated Convergence Theorem}
+\newacronym{masa}{MASA}{Maximal Abelian Self-adjoint Algebra}
+
+\makeglossaries
+
 """
