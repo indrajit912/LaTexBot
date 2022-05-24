@@ -59,7 +59,7 @@ def compile_tex(texfilepath:Path):
 
 
     pdfname = texfilename[:-4] + ".pdf"
-    subprocess.run(["open", pdfname]) # opening `main.pdf`
+    subprocess.run(['xdg-open', pdfname]) # opening `main.pdf`
 
 
 def main():
@@ -68,12 +68,10 @@ def main():
 
         main_tex_file = CWD / "main.tex"
 
-        if main_tex_file.exists:
+        if main_tex_file.exists():
             compile_tex(main_tex_file)
 
         else:
-            print(False)
-        
             # Usages
             print(
                 """
