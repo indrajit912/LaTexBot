@@ -103,6 +103,10 @@ def main():
     os.chdir(output_directory_path)
     subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
 
+    os.system('clear')
+
+    print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_directory_path}\n\n")
+
 
 if __name__ == "__main__":
 
