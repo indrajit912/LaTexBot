@@ -8,9 +8,7 @@
 #
 
 from pathlib import Path
-import shutil
-from subprocess import call
-import webbrowser
+import shutil, subprocess, os
 
 from templates.main_tex import MAIN
 from templates.bibliography_bib_tex import REFERENCES
@@ -24,6 +22,8 @@ from templates.chapters_tex import *
 
 HOME = Path.home()
 CWD = Path.cwd()
+
+COMPILE_TEX_LIVES_HERE = HOME / "Documents/latex_files/scripts_for_tex/compile_tex.py"
 
 def setup_output_directory():
 
@@ -137,6 +137,13 @@ def main():
 
     # Main.tex
     create_main_tex(output_directory_path)
+
+    os.chdir(output_directory_path)
+    subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
+
+    os.system('clear')
+
+    print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_directory_path}\n\n")
 
 
 if __name__ == "__main__":
