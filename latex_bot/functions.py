@@ -39,7 +39,7 @@ def choose_from_list(given_list:list, msg_output:str="Choose an option from belo
     Ask for a input() among the elements from the list.
     Finally return the `option` user chose!
     """
-    print(f"\n{INDENT}{STYLE['subheading']}{msg_output}:{STYLE['reset']}")
+    print(f"\n{INDENT}{STYLE['subheading']}{msg_output}{STYLE['reset']}")
     for i, el in enumerate(given_list):
         print(f"{INDENT + '  '}{STYLE['number']}{i + 1}{STYLE['reset']}. {el}")
     
