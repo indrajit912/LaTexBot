@@ -18,11 +18,13 @@ from tex_templates.art_sections_tex import SECTIONS
 from tex_templates.ams_structure_tex import AMS_STRUCTURE
 from tex_templates.thesis_structure_tex import THESIS_STRUCTURE
 from tex_templates.art_structure_tex import ARTICLE_STRUCTURE
+from tex_templates.beamer_structure_tex import BEAMER_STRUCTURE
 
 from tex_templates.ams_main_tex import ams_main_tex_constants
 from tex_templates.art_main_tex import art_main_tex_constants
 from tex_templates.thesis_chapters_tex import *
 from tex_templates.thesis_main_tex import MAIN
+from tex_templates.beamer_main_tex import BEAMER_MAIN
 
 
 HOME = Path.home()
@@ -118,7 +120,12 @@ def setup_output_directory(tex_template:str):
     if tex_template == TEX_TEMPLATES["beamer"]:
 
         # TODO: Output directory for 'beamer'
-        print(" To be added soon!")
+        output_directory = CWD / "new_beamer"
+        Path.mkdir(output_directory)
+
+        ref_filename = output_directory / "references.bib"
+        with open(ref_filename, "w") as f:
+            f.write(REFERENCES)
 
 
     return output_directory
@@ -144,6 +151,9 @@ def create_structure_tex(tex_template:str, output_dir):
 
     if tex_template == TEX_TEMPLATES["thesis"]:
         structure_file = THESIS_STRUCTURE
+
+    if tex_template == TEX_TEMPLATES["beamer"]:
+        structure_file = BEAMER_STRUCTURE
 
     
     with open(output_dir / "structure.tex", "w") as f:
@@ -256,4 +266,8 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
 
     if tex_template == TEX_TEMPLATES['beamer']:
-        pass
+
+        with open(output_dir / "main.tex", "w") as f:
+            f.write(BEAMER_MAIN)
+
+        print(BEAMER_MAIN)
