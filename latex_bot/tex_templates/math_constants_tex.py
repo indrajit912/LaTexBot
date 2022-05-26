@@ -11,6 +11,10 @@ MATH_CONSTANTS = r"""
 \newcommand{\tb}[1]{\textbf{#1}} % Text Bold face
 \newcommand{\tn}[1]{\textnormal{#1}} % Normal Text
 
+% Color constants : usages- \textcolor{<colorName>}{<text>}
+\definecolor{indraPink}{rgb}{0.858, 0.188, 0.478}
+\definecolor{indraBlue}{rgb}{0, 0.199, 0.398}
+
 
 % ######### Inside Math mode ##########
 

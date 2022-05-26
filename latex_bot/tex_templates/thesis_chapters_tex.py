@@ -1,4 +1,5 @@
 TITLEPAGE = r"""
+
 \begin{titlepage}
 	\begin{center}
 		
@@ -9,20 +10,20 @@ TITLEPAGE = r"""
 
 	\noindent\rule{10cm}{0.4pt}\\[0.4cm]
 
-		{\huge \bfseries \LaTeX \ Sample File\par}\vspace{0.4cm} 
+		{\huge \bfseries \textcolor{indraBlue}{\LaTeX \ Sample File}\par}\vspace{0.4cm} 
 	\noindent\rule{10cm}{0.4pt}\\[1.5cm]
 	
 		
 		\begin{minipage}[t]{0.4\textwidth}
 			\begin{flushleft} \large
 				\emph{Author:}\\
-				{Indrajit Ghosh} 
+				{\textcolor{indraBlue}{Indrajit Ghosh}} 
 			\end{flushleft}
 		\end{minipage}
 		\begin{minipage}[t]{0.4\textwidth}
 			\begin{flushright} \large
 				\emph{Supervisor:} \\
-				{\LaTeX} 
+				{\textcolor{indraBlue}{\LaTeX}} 
 			\end{flushright}
 		\end{minipage}\\[1cm]
 		
@@ -30,7 +31,7 @@ TITLEPAGE = r"""
 		
 		\large \textit{A small sample \TeX \ file\\ for submitting }\\[0.3cm] 
 		\textit{the}\\[0.4cm]
-		Engineering\\Thesis \\[0.3cm]
+		PhD\\Thesis \\[0.3cm]
 		
 		
 				\includegraphics[width=0.4\textwidth]{Images/latex}\\[0.3cm]
@@ -40,6 +41,7 @@ TITLEPAGE = r"""
 		\vfill
 	\end{center}
 \end{titlepage}
+
 """
 
 ABSTRACT = r"""

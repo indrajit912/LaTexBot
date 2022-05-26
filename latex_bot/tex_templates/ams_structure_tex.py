@@ -32,9 +32,6 @@ AMS_STRUCTURE = r"""
 \usepackage[english]{babel}
 \usepackage{natbib} % for bibliography purposes
 
-% Color constants : usages- \textcolor{<colorName>}{<text>}
-\definecolor{indraPink}{rgb}{0.858, 0.188, 0.478}
-
 %Header and footer package
 %\usepackage{fancyhdr}
 %\pagestyle{fancy}
