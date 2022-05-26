@@ -10,12 +10,12 @@ BEAMER_STRUCTURE = r"""
 %\usepackage{color}
 \usepackage{hyperref}
 \hypersetup{
-	pdftitle={Presentation Title Here},
+	pdftitle={Decomposing Matrices},
 	pdfauthor={Indrajit Ghosh},
-	pdfsubject={Mathematics},
+	pdfsubject={Operator Algebras},
 	pdfcreationdate={\texorpdfstring{\today}{}},
 	pdfcreator={MikTeX},
-	pdfkeywords={Keyword1, Keyword2}
+	pdfkeywords={Matrix Decomposition, Operator Algebras, von-Neumann Algebras}
 }
 \usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \tikzcdset{ampersand replacement=\&} % only needs for 'beamer'
@@ -27,7 +27,9 @@ BEAMER_STRUCTURE = r"""
 
 \setbeamertemplate{theorems}[numbered]
 
+
 \theoremstyle{plain}% default
+
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
@@ -37,8 +39,14 @@ BEAMER_STRUCTURE = r"""
 \theoremstyle{definition}
 
 \newtheorem{defn}{Definition}[section]
-\newtheorem{xmpl}{Example}[section]
 \newtheorem{question}{Question}
+
+
+\theoremstyle{example}
+
+\newtheorem*{example}{Example}
+\newtheorem{xmpl}{Example}[section]
+
 
 
 \theoremstyle{remark}
