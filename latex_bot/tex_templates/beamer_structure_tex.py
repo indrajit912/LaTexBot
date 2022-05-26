@@ -29,7 +29,6 @@ BEAMER_STRUCTURE = r"""
 
 
 \theoremstyle{plain}% default
-
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
@@ -37,20 +36,15 @@ BEAMER_STRUCTURE = r"""
 
 
 \theoremstyle{definition}
-
-\newtheorem{defn}{Definition}[section]
+\newtheorem*{defn}{Definition}
 \newtheorem{question}{Question}
 
 
 \theoremstyle{example}
-
-\newtheorem*{example}{Example}
-\newtheorem{xmpl}{Example}[section]
-
+\newtheorem*{xmpl}{Example}
 
 
 \theoremstyle{remark}
-
 \newtheorem*{remark}{Remark}
 \newtheorem*{newnote}{Note}
 
