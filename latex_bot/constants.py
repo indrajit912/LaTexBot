@@ -11,7 +11,8 @@ TEX_TEMPLATES = {
     "newart" : "Plain Article",
     "amsart" : "AMS Article",
     "thesis" : "PhD Thesis",
-    "beamer" : "Beamer Presentation"
+    "beamer" : "Beamer Presentation",
+    "quit" : "Quit the Bot"
 }
 
 INDENT = "    "

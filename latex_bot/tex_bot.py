@@ -33,20 +33,25 @@ def main():
     os.system('clear')
     res = choose_from_list(TEX_TEMPLATES.values(), "Choose the template you want:")
 
-    output_dir_path = setup_output_directory(res)
+    if res == TEX_TEMPLATES['quit']:
+        print("Thanks for visiting!")
+        
+    else:
 
-    # Creating tex, bib, ist etc files
-    create_math_constants_tex(output_dir_path)
-    create_structure_tex(tex_template=res, output_dir=output_dir_path)
-    create_main_tex(tex_template=res, info=informations, output_dir=output_dir_path)
+        output_dir_path = setup_output_directory(res)
 
-    # Compiling the `main.tex` file
-    os.chdir(output_dir_path)
-    subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
+        # Creating tex, bib, ist etc files
+        create_math_constants_tex(output_dir_path)
+        create_structure_tex(tex_template=res, output_dir=output_dir_path)
+        create_main_tex(tex_template=res, info=informations, output_dir=output_dir_path)
 
-    os.system('clear')
+        # Compiling the `main.tex` file
+        os.chdir(output_dir_path)
+        subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
 
-    print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_dir_path}\n\n")
+        os.system('clear')
+
+        print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_dir_path}\n\n")
 
 
 if __name__ == '__main__':
