@@ -1,4 +1,6 @@
 BEAMER_MAIN = r"""
+
+
 %%%%
 % Author: Indrajit Ghosh
 % Stat-Math Unit,
@@ -47,28 +49,73 @@ BEAMER_MAIN = r"""
 
     \frame
     {
-        \frametitle{Frame 1 Title here}
-        \lipsum[1]
-        \pause
-        \lipsum[1]
+        \frametitle{Frame Title Here}
+        
+        Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat,
+        cursus id, nonummy sed, ullamcorper eget, sapien. Praesent pretium,
+        magna in eleifend egestas, pede pede pretium lorem!
+        
+        \begin{definition}[Indrajit, 2022]
+        	
+        	Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi
+        	auctor lorem non justo. Nam lacus libero, pretium at, lobortis vitae,
+        	ultricies et, tellus. Donec aliquet, tortor sed
+        	
+        \end{definition}
+    
+    	\pause
+    
+    	\begin{xmpl}
+    		Phasellus eu tellus sit amet tortor gravida placerat.
+    		Integer sapien est, iaculis in, pretium quis,
+    	\end{xmpl}
+        
     }
 
     \frame
     {
-        \frametitle{Frame  2 Title here}
-        \lipsum[1-2]
+        \frametitle{Frame Title here}
+        
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
+        vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida
+        mauris. Nam arcu libero, nonummy eget, consectetuer id, vulputate a,
+        magna. Donec vehicula augue eu neque. Pellentesque habitant morbi
+        tristique senectus et netus et malesuada fames ac turpis egestas. Mauris
+        ut leo. Cras viverra metus rhoncus sem. Nulla et lectus vestibulum urna
+        fringilla ultrices. Phasellus eu tellus sit amet tortor.
+        
+       
+        \begin{newnote}
+        	Donec cursus id, nonummy sed, ullamcorper eget, sapien. Praesent pretium, magna in eleifend egestas, pede pede pretium lorem!
+        \end{newnote}
+        
+        
     }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Section 2 Title}
+    \section{Section Title Here}
 
     \frame
     {
-        \frametitle{Frame 1 Title here}
-        \lipsum[1]
+        \frametitle{Frame Title Here}
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
+        vestibulum ut, placera. Curabitur dictum gravida
+        
+        \begin{enumerate}
+        	\item Hodifjlk dkjfsl shfwieo sdkfls.
+        	\item Sofdkd dlsj id jbsk, dsjifj.
+        	\item Yoin dsjfkh djfkhk wifhsdkfj jsjdflk kjhdskf!
+        	\item Lorem iplsu Jkldif.
+        \end{enumerate}
     }
 
+
+	\section{Section Title Here}
+	
+	\section{Section Title Here}
+	
+	\section{Section Title Here}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
