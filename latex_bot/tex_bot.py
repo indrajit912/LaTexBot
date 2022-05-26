@@ -30,7 +30,7 @@ def main():
     informations = INDRAJIT # Don't forget to update here
     informations.setdefault("title", article_title)
     
-    
+    os.system('clear')
     res = choose_from_list(TEX_TEMPLATES.values(), "Choose the template you want:")
 
     output_dir_path = setup_output_directory(res)
