@@ -13,7 +13,7 @@ BEAMER_STRUCTURE = r"""
 	pdftitle={Decomposing Matrices},
 	pdfauthor={Indrajit Ghosh},
 	pdfsubject={Operator Algebras},
-	pdfcreationdate={\texorpdfstring{\today}{}},
+	pdfcreationdate={\texorpdfstring{\today}{\today}},
 	pdfcreator={MikTeX},
 	pdfkeywords={Matrix Decomposition, Operator Algebras, von-Neumann Algebras}
 }
