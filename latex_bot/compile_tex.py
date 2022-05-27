@@ -41,19 +41,36 @@ def compile_tex(texfilepath:Path):
     
     """
 
+    texcompilers ={
+        "pdf" : "pdflatex",
+        "xe" : "xelatex",
+        "lua" : "lualatex"
+    }
+
     texfilepath = Path(texfilepath)
 
     parent_dir = texfilepath.parent
     texfilename = texfilepath.name
 
-    subprocess.run(["pdflatex", texfilename]) # compiling `main.tex`
+    with open(texfilename, 'r') as f:
+        if "metropolis" in f.read():
+            commented_metropolis = r"""%\usetheme{metropolis}""" in f.read()
+
+            if commented_metropolis:
+                compiler = texcompilers['pdf']
+            else:
+                compiler = texcompilers['xe']
+        else:
+            compiler = texcompilers['pdf']
+
+    subprocess.run([compiler, texfilename]) # compiling `main.tex`
 
     auxfilename = texfilename[:-4] + ".aux"
 
     subprocess.run(["bibtex", auxfilename]) # compiling `main.aux`
 
-    subprocess.run(["pdflatex", texfilename]) # compiling `main.tex`
-    subprocess.run(["pdflatex", texfilename]) # compiling `main.tex`
+    subprocess.run([compiler, texfilename]) # compiling `main.tex`
+    subprocess.run([compiler, texfilename]) # compiling `main.tex`
 
     print("\n\n:::NOTE::: Successfully complied!\n\n")
 

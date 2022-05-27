@@ -23,7 +23,7 @@ from templates.chapters_tex import *
 HOME = Path.home()
 CWD = Path.cwd()
 
-COMPILE_TEX_LIVES_HERE = HOME / "Documents/latex_files/scripts_for_tex/compile_tex.py"
+COMPILE_TEX_LIVES_HERE = HOME / "Documents/latex_files/scripts_for_tex/latex_bot/compile_tex.py"
 
 def setup_output_directory():
 
