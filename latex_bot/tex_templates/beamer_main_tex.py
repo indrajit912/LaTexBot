@@ -23,6 +23,7 @@ BEAMER_MAIN = r"""
 
 \input{structure}
 \input{math_constants}
+\input{progressbar} % Comment this line if you don't need the progressbar
 
 \title{Presentation Title}
 \subtitle{}

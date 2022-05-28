@@ -17,6 +17,9 @@ BEAMER_STRUCTURE = r"""
 	pdfcreator={MikTeX},
 	pdfkeywords={Matrix Decomposition, Operator Algebras, von-Neumann Algebras}
 }
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
 \usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \tikzcdset{ampersand replacement=\&} % only needs for 'beamer'
 \usepackage{lipsum}
