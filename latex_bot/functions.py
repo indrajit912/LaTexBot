@@ -275,7 +275,7 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
     if tex_template == TEX_TEMPLATES['beamer']:
 
-        create_beamer_progress_bar(output_dir) # Creating `progressbar.tex` file
+        # create_beamer_progress_bar(output_dir) # Creating `progressbar.tex` file
 
         with open(output_dir / "main.tex", "w") as f:
             f.write(BEAMER_MAIN)
