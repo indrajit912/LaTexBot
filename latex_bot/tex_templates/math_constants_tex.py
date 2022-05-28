@@ -15,6 +15,10 @@ MATH_CONSTANTS = r"""
 \definecolor{indraPink}{rgb}{0.858, 0.188, 0.478}
 \definecolor{indraBlue}{rgb}{0, 0.199, 0.398}
 \definecolor{madridBlue}{rgb}{0.199, 0.199, 0.695}
+\definecolor{metropolisThemeColor}{rgb}{0.105, 0.214, 0.234}
+\definecolor{metropolisBarColor}{rgb}{0.984, 0.0.515, 0.015}
+\definecolor{UBCblue}{rgb}{0.04706, 0.13725, 0.26667} % UBC Blue (primary)
+\definecolor{UBCgrey}{rgb}{0.3686, 0.5255, 0.6235} % UBC Grey (secondary)
 
 
 % ######### Inside Math mode ##########

@@ -17,12 +17,15 @@ BEAMER_MAIN = r"""
 
 \documentclass{beamer}
 
-\usetheme{Madrid}
-\usecolortheme{default}
-
-
 \input{structure}
 \input{math_constants}
+
+\usetheme{Madrid}
+
+\usefonttheme{professionalfonts} % default, serif, professionalfonts, structurebold, structureitalicserif, structuresmallcapsserif
+\usecolortheme[named=metropolisThemeColor]{structure}
+
+\useinnertheme{circles}
 
 \title{Presentation Title}
 \subtitle{}

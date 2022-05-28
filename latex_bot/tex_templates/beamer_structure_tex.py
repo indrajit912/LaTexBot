@@ -57,10 +57,11 @@ BEAMER_STRUCTURE = r"""
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%% Progressbar %%%%%%%%%%%%%
-%%%%%%%% Author: Indrajit Ghosh %%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% Progressbar %%%%%%%%%%%%%
+%%%%%%%% Author: Indrajit Ghosh
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \makeatletter
 \def\progressbar@progressbar{} % the progress bar
@@ -87,7 +88,7 @@ BEAMER_STRUCTURE = r"""
 		(0pt, 0pt) -- ++ (\progressbar@pbwd,0pt);
 		\draw[draw=none]  (\progressbar@pbwd,0pt) -- ++ (2pt,0pt);
 		
-		\draw[madridBlue,line width=\progressbar@pbht]
+		\draw[metropolisBarColor,line width=\progressbar@pbht]
 		(0pt, 0pt) -- ++ (\progressbar@tmpdim,0pt);
 		
 	\end{tikzpicture}%
@@ -99,16 +100,20 @@ BEAMER_STRUCTURE = r"""
 	\begin{frame}
 		\frametitle{}
 		
-		\textbf{\Large \textcolor{madridBlue}{\secname}}
-		\vspace{8pt}
-		\progressbar@progressbar%
-
-
+		\hspace{13pt} \large \textcolor{UBCblue}{{\secname}}
+		%\vspace{3pt}
+		\begin{center}
+			\progressbar@progressbar%
+		\end{center}
+		
+		
 		% Or you can uncomment the following to get the whole tbc 
 		%\tableofcontents[currentsection]
 		
 	\end{frame}
 }
+
+
 
 %%
 %% This is the end of the preamble.
