@@ -26,6 +26,8 @@ from tex_templates.thesis_chapters_tex import *
 from tex_templates.thesis_main_tex import MAIN
 from tex_templates.beamer_main_tex import BEAMER_MAIN
 
+from tex_templates.beamer_indrametrodrid_sty import INDRAMETRODRID
+
 
 HOME = Path.home()
 CWD = Path.cwd()
@@ -140,6 +142,13 @@ def create_math_constants_tex(output_dir):
         f.write(MATH_CONSTANTS)
 
 
+def create_indra_metrodrid_sty(output_dir):
+
+    filename = output_dir / "beamerthemeIndraMetrodrid.sty"
+    with open(filename, "w") as f:
+        f.write(INDRAMETRODRID)
+
+
 def create_structure_tex(tex_template:str, output_dir):
 
     if tex_template == TEX_TEMPLATES["amsart"]:
@@ -152,6 +161,7 @@ def create_structure_tex(tex_template:str, output_dir):
         structure_file = THESIS_STRUCTURE
 
     if tex_template == TEX_TEMPLATES["beamer"]:
+        create_indra_metrodrid_sty(output_dir) # Creating Custom Theme
         structure_file = BEAMER_STRUCTURE
 
     

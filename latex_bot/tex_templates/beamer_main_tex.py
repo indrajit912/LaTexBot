@@ -17,19 +17,14 @@ BEAMER_MAIN = r"""
 
 \documentclass{beamer}
 
+\usetheme{IndraMetrodrid} % Custom theme : Metropolis + Madrid
+
 \input{structure}
 \input{math_constants}
 
-\usetheme{Madrid}
-
-\usefonttheme{professionalfonts} % default, serif, professionalfonts, structurebold, structureitalicserif, structuresmallcapsserif
-\usecolortheme[named=metropolisThemeColor]{structure}
-
-\useinnertheme{circles}
 
 \title{Presentation Title}
 \subtitle{}
-
 
 \author{Indrajit Ghosh}
 
