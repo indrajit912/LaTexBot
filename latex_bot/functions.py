@@ -26,8 +26,6 @@ from tex_templates.thesis_chapters_tex import *
 from tex_templates.thesis_main_tex import MAIN
 from tex_templates.beamer_main_tex import BEAMER_MAIN
 
-from tex_templates.beamer_progressbar_tex import PROGRESSBAR
-
 
 HOME = Path.home()
 CWD = Path.cwd()
@@ -140,13 +138,6 @@ def create_math_constants_tex(output_dir):
     filename = output_dir / "math_constants.tex"
     with open(filename, "w") as f:
         f.write(MATH_CONSTANTS)
-
-
-def create_beamer_progress_bar(output_dir):
-
-    filename = output_dir / "progressbar.tex"
-    with open(filename, "w") as f:
-        f.write(PROGRESSBAR)
 
 
 def create_structure_tex(tex_template:str, output_dir):
@@ -274,8 +265,6 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
 
     if tex_template == TEX_TEMPLATES['beamer']:
-
-        # create_beamer_progress_bar(output_dir) # Creating `progressbar.tex` file
 
         with open(output_dir / "main.tex", "w") as f:
             f.write(BEAMER_MAIN)

@@ -51,6 +51,18 @@ BEAMER_STRUCTURE = r"""
 \newtheorem*{remark}{Remark}
 \newtheorem*{newnote}{Note}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%  Custom Beamer Styles 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\AtBeginSection[]
+{
+	\begin{frame}
+		\frametitle{Table of Contents}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
 %%
 %% This is the end of the preamble.
 %% 
