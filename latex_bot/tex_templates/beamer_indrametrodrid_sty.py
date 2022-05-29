@@ -67,7 +67,7 @@ INDRAMETRODRID = r"""
 	\begin{frame}
 		\frametitle{}
 		
-		\hspace{13pt} \large \textcolor{UBCblue}{{\secname}}
+		\hspace{13pt} \large \textcolor{metropolisThemeColor}{{\secname}}
 		%\vspace{3pt}
 		\begin{center}
 			\progressbar@progressbar%
