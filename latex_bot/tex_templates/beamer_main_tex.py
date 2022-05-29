@@ -19,8 +19,7 @@ BEAMER_MAIN = r"""
 
 \usetheme{IndraMetrodrid} % Custom theme : Metropolis + Madrid
 
-\input{structure}
-\input{math_constants}
+\usepackage{indratexpreamble}
 
 
 \title{Presentation Title}

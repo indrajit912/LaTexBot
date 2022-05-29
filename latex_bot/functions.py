@@ -121,7 +121,7 @@ def setup_output_directory(tex_template:str):
 
     if tex_template == TEX_TEMPLATES["beamer"]:
 
-        # TODO: Output directory for 'beamer'
+        # Output directory for 'beamer'
         output_directory = CWD / "new_beamer"
         Path.mkdir(output_directory)
 
@@ -135,6 +135,11 @@ def setup_output_directory(tex_template:str):
 
 
 def create_math_constants_tex(output_dir):
+
+    """
+    ::::ALERT::: Not using this function anymore in the project
+    """
+
     print(MATH_CONSTANTS)
 
     filename = output_dir / "math_constants.tex"
@@ -150,6 +155,9 @@ def create_indra_metrodrid_sty(output_dir):
 
 
 def create_structure_tex(tex_template:str, output_dir):
+    """
+    ::::ALERT::: Not using this function anymore in the project
+    """
 
     if tex_template == TEX_TEMPLATES["amsart"]:
         structure_file = AMS_STRUCTURE
@@ -161,7 +169,7 @@ def create_structure_tex(tex_template:str, output_dir):
         structure_file = THESIS_STRUCTURE
 
     if tex_template == TEX_TEMPLATES["beamer"]:
-        create_indra_metrodrid_sty(output_dir) # Creating Custom Theme
+        create_indra_metrodrid_sty(output_dir) 
         structure_file = BEAMER_STRUCTURE
 
     
@@ -219,6 +227,52 @@ def write_thesis_chapters(output_dir):
     appendix = chapters_dir / "appendix.tex"
     with open(appendix, "w") as f:
         f.write(APPENDIX)
+
+
+def write_indrapreamble_sty(tex_template:str, output_dir):
+
+    if tex_template == TEX_TEMPLATES['amsart']:
+        structure = AMS_STRUCTURE
+
+    elif tex_template == TEX_TEMPLATES['newart']:
+        structure = ARTICLE_STRUCTURE
+
+    elif tex_template == TEX_TEMPLATES['beamer']:
+        create_indra_metrodrid_sty(output_dir) # Creating Custom Theme
+        structure = BEAMER_STRUCTURE
+
+    elif tex_template == TEX_TEMPLATES['thesis']:
+        structure = THESIS_STRUCTURE
+
+
+    preamble = ""
+
+    initial = r"""
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%	   Preamble for """
+
+    initial += tex_template
+
+    initial += r"""
+    %%%%		Author: Indrajit Ghosh
+    %%%%  Indian Statistical Institute, Bangalore
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \ProvidesPackage{indratexpreamble}
+
+
+    """
+
+    preamble += initial + structure + MATH_CONSTANTS
+    
+    filename = output_dir / "indratexpreamble.sty"
+    with open(filename, 'w') as f:
+        f.write(preamble)
 
 
 

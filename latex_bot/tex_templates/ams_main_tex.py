@@ -11,8 +11,7 @@ m1 = r"""
 
 \documentclass[12pt]{amsart}
 
-\input{structure.tex}
-\input{math_constants.tex}
+\usepackage{indratexpreamble}
 
 
 %Main Article

@@ -10,8 +10,7 @@ MAIN = r"""
 
 \documentclass[a4paper,11pt,twoside,openany]{book}
 
-\input{structure.tex}
-\input{math_constants.tex}
+\usepackage{indratexpreamble}
 
 \begin{document}
 

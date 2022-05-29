@@ -1,8 +1,7 @@
 m1 = r"""
 \documentclass[12pt]{article}
 
-\input{structure}
-\input{math_constants.tex}
+\usepackage{indratexpreamble}
 
 
 %Main Article
