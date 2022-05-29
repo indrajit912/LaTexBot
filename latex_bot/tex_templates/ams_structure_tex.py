@@ -156,11 +156,6 @@ AMS_STRUCTURE = r"""
 
 
 % Here is a different 'checkmark' if you need it uncomment the following cmd
-%\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
-
-
-%%
-%% This is the end of the preamble.
-%% 
+%\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
 
 """
