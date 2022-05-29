@@ -44,7 +44,7 @@ BEAMER_MAIN = r"""
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\section{Introduction}
 
-    \frame
+    \frame %
     {
         \frametitle{Frame Title Here}
         
@@ -69,7 +69,7 @@ BEAMER_MAIN = r"""
         
     }
 
-    \frame
+    \frame %
     {
         \frametitle{Frame Title here}
         
@@ -93,7 +93,7 @@ BEAMER_MAIN = r"""
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Section Title Here}
 
-    \frame
+    \frame %
     {
         \frametitle{Frame Title Here}
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
