@@ -10,7 +10,7 @@ m1 = r"""
 """
 m2 = "" # variable text
 m3 = "" # variable text
-m4 = r"""\date{\today\\\small}"""
+m4 = r"""\date{\today}"""
 m5 = "" # variable text
 
 m6 = r"""
