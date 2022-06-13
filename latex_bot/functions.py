@@ -319,10 +319,11 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
     if tex_template == TEX_TEMPLATES["newart"]:
 
-        m1, m4, m6 = art_main_tex_constants
+        m1, m6 = art_main_tex_constants
         m2 = r"""\title{""" + title + "}\n"
-        m3 = r"""\author[1]{""" + authorname + r"""\thanks{Email: """ + email + "}}\n"
-        m5 = r"""\affil[1]{\small{""" + dept + r""", \textcolor{olive}{""" + institute + r"""}}}"""
+        m3 = r"""\author{%""" + "\n" + INDENT + r"""\textsc{""" + authorname + r"""}\thanks{A thank you or further information} \\ % Your name""" + "\n"
+        m4 = INDENT + r"""\normalsize """ + dept + r""" \\% Your dept.""" + "\n" + INDENT + r"""\normalsize """ + institute + r"""\\ % Your institution""" + "\n"
+        m5 = INDENT + r"""\normalsize \href{mailto:""" + email + r"""}{""" + email + r"""} % Your email address"""
 
         tex_string = m1 + m2 + m3 + m4 + m5 + m6
 

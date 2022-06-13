@@ -31,7 +31,10 @@ ARTICLE_STRUCTURE = r"""
 }
 \makeatother
 
+
+
 \usepackage{framed}
+\usepackage{lastpage} % to get the last page and total number of pages
 \usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -44,6 +47,55 @@ ARTICLE_STRUCTURE = r"""
 \usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage{lipsum}
 \usepackage{authblk} %For Author Titling and affiliating Purpose
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Title customizations %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titling} % Customizing the title section
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+\pretitle{\begin{center}\LARGE\bfseries} % Article title formatting
+	\posttitle{\end{center}} % Article title closing formatting
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Abstract Customizations %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Section Title Customizations %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titlesec} % Allows customization of titles
+%\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+%\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+
+%\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+%\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Header and Footer Customizations %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\shorttitle{The Short Title} % Write your short title
+\newcommand\authors{Indrajit Ghosh} % Write the Authors name here
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[CO]{\small\scshape\shorttitle}
+\fancyhead[CE]{\small\scshape\authors}
+\fancyfoot[C]{\thepage \ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %Basic Structure
@@ -83,4 +135,5 @@ style=alphabetic,
 sorting=ynt
 ]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 \addbibresource{bibliography.bib} % The filename of the bibliography
+
 """

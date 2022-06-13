@@ -1,23 +1,31 @@
 m1 = r"""
-\documentclass[12pt]{article}
+
+\documentclass[12pt, twoside]{article}
 
 \usepackage{indratexpreamble}
+
+"""
+
+m6 = r"""
+	%\and  %Uncomment if 2 authors are required, duplicate these 4 lines if more
+	%\textsc{Soumyashant Nayak}\thanks{Corresponding author} \\ % Second author's name
+	%\normalsize Stat-Math Unit, \\ 
+	%\normalsize Indian Statistical Institute \\ % Second author's institution
+	%\normalsize \href{mailto:someone@somewhere.com}{someone@somewhere.com} % Second author's email address
+}
+\date{\today} % Use \date{} to omit a date
+
+
 
 
 %Main Article
 \begin{document}
 
-"""
-m2 = "" # variable text
-m3 = "" # variable text
-m4 = r"""\date{\today}"""
-m5 = "" # variable text
-
-m6 = r"""
 \maketitle
 
+
 \begin{abstract}
-\lipsum[1]
+\noindent \lipsum[1]
 \end{abstract}
 
 \section{Section 1 Title}
@@ -36,4 +44,4 @@ title={References}]
 \end{document}
 """
 
-art_main_tex_constants = (m1, m4, m6)
+art_main_tex_constants = (m1, m6)
