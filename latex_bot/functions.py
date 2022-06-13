@@ -91,6 +91,10 @@ def setup_output_directory(tex_template:str):
         with open(sections / "section2.tex", "w") as f:
             f.write(SECTIONS['2'])
 
+        bib_filename = output_directory / "bibliography.bib"
+        with open(bib_filename, "w") as f:
+            f.write(REFERENCES)
+
         imgs = output_directory / "images"
         Path.mkdir(imgs)
 
