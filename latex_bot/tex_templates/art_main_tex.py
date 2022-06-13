@@ -22,6 +22,7 @@ m6 = r"""
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
 
 
 \begin{abstract}
