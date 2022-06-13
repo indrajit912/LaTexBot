@@ -92,7 +92,7 @@ ARTICLE_STRUCTURE = r"""
 \fancyhf{}
 \fancyhead[CO]{\small\scshape\shorttitle}
 \fancyhead[CE]{\small\scshape\authors}
-\fancyfoot[C]{\thepage \ of \pageref{LastPage}}
+\fancyfoot[R]{\footnotesize Page \ \thepage \ of \pageref{LastPage}}
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\footrulewidth}{0pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
