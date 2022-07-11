@@ -21,6 +21,7 @@ ARTICLE_STRUCTURE = r"""
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{amsfonts}
+\usepackage{mathrsfs} % renders \mathscr cmd
 \usepackage{mathtools}
 \usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage[utf8]{inputenc}
