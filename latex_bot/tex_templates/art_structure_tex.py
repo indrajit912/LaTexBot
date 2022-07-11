@@ -1,24 +1,7 @@
 ARTICLE_STRUCTURE = r"""
 
 %Some packages I commonly use.
-\usepackage{hyperref}
-\hypersetup{
-    pdftitle={Article Title},
-    pdfauthor={Indrajit Ghosh},
-    pdfsubject={Mathematics},
-	pdfcreationdate={\today},
-	pdfcreator={Write a creator name (e.g. MikTeX)},
-	pdfkeywords={Write your list of keywords},
-	colorlinks=true,
-	linkcolor={cyan},
-	 %    filecolor=magenta,      
-	 urlcolor=blue,
-	 citecolor=magenta,
-	 pdfpagemode=UseOutlines,
-}
-
 \usepackage{graphicx}
-
 \usepackage{xcolor} %For coloring texts and objects
 % Here I define a macro \mathcolor for coloring text in math mode.
 \makeatletter
@@ -30,8 +13,6 @@ ARTICLE_STRUCTURE = r"""
   \endgroup
 }
 \makeatother
-
-
 
 \usepackage{framed}
 \usepackage{lastpage} % to get the last page and total number of pages
@@ -85,8 +66,8 @@ ARTICLE_STRUCTURE = r"""
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% Header and Footer Customizations %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\shorttitle{The Short Title} % Write your short title
-\newcommand\authors{Indrajit Ghosh} % Write the Authors name here
+\newcommand\shorttitle{Vector Valued sub-Harmonic Functions} % Write your short title
+\newcommand\authors{Indrajit Ghosh, Soumyashant Nayak} % Write the Authors name here
 \usepackage{fancyhdr} % Headers and footers
 \pagestyle{fancy}
 \fancyhf{}
@@ -95,8 +76,24 @@ ARTICLE_STRUCTURE = r"""
 \fancyfoot[R]{\footnotesize Page \ \thepage \ of \pageref{LastPage}}
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{13.59999pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle={\shorttitle},
+    pdfauthor={\authors},
+    pdfsubject={Mathematics},
+	pdfcreationdate={\today},
+	pdfcreator={MikTeX and Overleaf},
+	pdfkeywords={sub-Harmonic Functions, Vector valued Distributions},
+	colorlinks=true,
+	linkcolor={cyan},
+	 %    filecolor=magenta,      
+	 urlcolor=blue,
+	 citecolor=magenta,
+	 pdfpagemode=UseOutlines,
+}
 
 %Basic Structure
 \newcommand{\attn}[1]{\textbf{#1}}

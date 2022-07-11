@@ -8,7 +8,7 @@
 from terminal_style import IndraStyle
 
 TEX_TEMPLATES = {
-    "newart" : "Plain Article",
+    "newart" : "Article",
     "amsart" : "AMS Article",
     "thesis" : "PhD Thesis",
     "beamer" : "Beamer Presentation",
