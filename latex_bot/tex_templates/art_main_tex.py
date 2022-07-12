@@ -21,7 +21,7 @@ m3 = r"""
 
 m5 = r""" % For multiple authors do: \author[1]{Author1 Name}
 %\author[2]{\textsc{Second Author name}} % Second author name here
-\newcommand\authors{Author1 Name} % Write the Authors name separated by comma here 
+\newcommand\authors{Indrajit Ghosh} % Write the Authors name separated by comma here 
 """
 
 # \newcommand{\firstauthoremail}{rs\_math1902@isibang.ac.in} % First author email
