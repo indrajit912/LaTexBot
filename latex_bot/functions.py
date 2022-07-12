@@ -319,13 +319,13 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
 
     if tex_template == TEX_TEMPLATES["newart"]:
 
-        m1, m6 = art_main_tex_constants
-        m2 = r"""\title{""" + title + "}\n"
-        m3 = r"""\author{%""" + "\n" + INDENT + r"""\textsc{""" + authorname + r"""}\thanks{A thank you or further information} \\ % Your name""" + "\n"
-        m4 = INDENT + r"""\normalsize """ + dept + r""" \\% Your dept.""" + "\n" + INDENT + r"""\normalsize """ + institute + r"""\\ % Your institution""" + "\n"
-        m5 = INDENT + r"""\normalsize \href{mailto:""" + email + r"""}{""" + email + r"""} % Your email address"""
-
-        tex_string = m1 + m2 + m3 + m4 + m5 + m6
+        m1, m3, m5, m7, m10 = art_main_tex_constants
+        m2 = r"""\title{""" + title + "} % Title of the Document" + "\n"
+        m4 = r"""\author{\textsc{""" + authorname + r"""}}"""
+        m6 = r"""\newcommand{\firstauthoremail}{\normalsize """ + email + r"""} % First author email""" + "\n"
+        m8 = r"""\affil{\normalsize """ + dept + r"""} % For multiple authors : \affil{\normalsize Author1 Dept.}""" + "\n"
+        m9 = r"""\affil{\normalsize """ + institute + r"""} % For multiple authors : \affil{\normalsize Author1 Institute.}""" + "\n"
+        tex_string = m1 + m2 + m3 + m4 + m5 + m6 + m7 + m8 + m9 + m10
 
         with open(output_dir / "main.tex", "w") as f:
             f.write(tex_string)

@@ -7,10 +7,10 @@ ARTICLE_STRUCTURE = r"""
 \makeatletter
 \def\mathcolor#1#{\@mathcolor{#1}}
 \def\@mathcolor#1#2#3{%
-  \protect\leavevmode
-  \begingroup
-    \color#1{#2}#3%
-  \endgroup
+	\protect\leavevmode
+	\begingroup
+	\color#1{#2}#3%
+	\endgroup
 }
 \makeatother
 
@@ -28,12 +28,12 @@ ARTICLE_STRUCTURE = r"""
 \usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
 \usepackage{tikz-cd} % Online editor: https://tikzcd.yichuanshen.de/
 \usepackage{lipsum}
-\usepackage{authblk} %For Author Titling and affiliating Purpose
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% Title customizations %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage{titling} % Customizing the title section
 \setlength{\droptitle}{-4\baselineskip} % Move the title up
 \pretitle{\begin{center}\LARGE\bfseries} % Article title formatting
@@ -67,8 +67,6 @@ ARTICLE_STRUCTURE = r"""
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% Header and Footer Customizations %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\shorttitle{Vector Valued sub-Harmonic Functions} % Write your short title
-\newcommand\authors{Indrajit Ghosh, Soumyashant Nayak} % Write the Authors name here
 \usepackage{fancyhdr} % Headers and footers
 \pagestyle{fancy}
 \fancyhf{}
