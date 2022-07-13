@@ -41,7 +41,8 @@ def main():
         output_dir_path = setup_output_directory(res)
 
         # Creating tex, bib, ist etc files
-        write_indrapreamble_sty(tex_template=res, output_dir=output_dir_path)
+        if not res == TEX_TEMPLATES['plainart']:
+            write_indrapreamble_sty(tex_template=res, output_dir=output_dir_path)
         create_main_tex(tex_template=res, info=informations, output_dir=output_dir_path)
 
         # Compiling the `main.tex` file

@@ -20,6 +20,7 @@ from tex_templates.thesis_structure_tex import THESIS_STRUCTURE
 from tex_templates.art_structure_tex import ARTICLE_STRUCTURE
 from tex_templates.beamer_structure_tex import BEAMER_STRUCTURE
 
+from tex_templates.plain_art_main_tex import plain_art_main_constants
 from tex_templates.ams_main_tex import ams_main_tex_constants
 from tex_templates.art_main_tex import art_main_tex_constants
 from tex_templates.thesis_chapters_tex import *
@@ -59,6 +60,14 @@ def choose_from_list(given_list:list, msg_output:str="Choose an option from belo
     
 
 def setup_output_directory(tex_template:str):
+
+    if tex_template == TEX_TEMPLATES["plainart"]:   
+
+        # Output directory for 'plainart' 
+        
+        output_directory = CWD / "plain_article"
+        Path.mkdir(output_directory)
+
 
     if tex_template == TEX_TEMPLATES["amsart"]:   
 
@@ -299,6 +308,23 @@ def create_main_tex(tex_template:str, info:dict, output_dir):
     dept = info['dept']
     institute = info['institute']
     country = info['country']
+
+
+    if tex_template == TEX_TEMPLATES["plainart"]:
+    
+        m1, m2 = plain_art_main_constants
+
+        tex_string = m1
+        tex_string += r"""\newcommand{\Title}{""" + title + r"""}""" + "\n"
+        tex_string += r"""\newcommand{\Author}{""" + authorname + r"""}""" + "\n"
+        tex_string += r"""\newcommand{\Department}{""" + dept + r"""}""" + "\n"
+        tex_string += r"""\newcommand{\Institute}{""" + institute + r"""}""" + "\n"
+        tex_string += m2
+
+        with open(output_dir / "main.tex", "w") as f:
+            f.write(tex_string)
+
+        print(tex_string)
     
 
     if tex_template == TEX_TEMPLATES["amsart"]:
