@@ -10,7 +10,7 @@
 
 from functions import *
 
-COMPILE_TEX_LIVES_HERE = HOME / "Documents/latex_files/scripts_for_tex/latex_bot/compile_tex.py"
+COMPILE_TEX_LIVES_HERE = Path(__file__).resolve().parent / 'compile_tex.py'
 
 
 def main():
