@@ -22,6 +22,7 @@ ARTICLE_STRUCTURE = r"""
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{mathrsfs} % renders \mathscr cmd
+\usepackage{dsfont} % renders '1' for characteristic function...
 \usepackage{mathtools}
 \usepackage{enumitem} % Give extra customization on top of itemize and enumerate
 \usepackage[utf8]{inputenc}
