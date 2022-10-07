@@ -47,7 +47,7 @@ m10 = r"""
 	\renewcommand\AB@affilsepx{, \protect\Affilfont}
 	\makeatother
 	
-	\affil{\firstauthoremail} % For multiple authors do: \affil[1]{\firstauthoremail}
+	\affil{\texttt{\firstauthoremail}} % For multiple authors do: \affil[1]{\firstauthoremail}
 %	\affil[2]{\secondauthoremail} % Second author email
 }
 
