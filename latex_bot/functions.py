@@ -33,7 +33,7 @@ from tex_templates.beamer_indrametrodrid_sty import INDRAMETRODRID
 HOME = Path.home()
 CWD = Path.cwd()
 
-IMAGE_FILE = HOME / "Documents/latex_files/scripts_for_tex/latex_bot/tex_templates/latex.jpeg" # Change here accordingly
+IMAGE_FILE = Path(__file__).resolve().parent / "/tex_templates/latex.jpeg"
 
 
 def choose_from_list(given_list:list, msg_output:str="Choose an option from below"):
