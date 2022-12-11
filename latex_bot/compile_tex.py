@@ -6,7 +6,7 @@
 #
 
 from pathlib import Path
-import subprocess, sys, os
+import sys, os
 
 
 HOME = Path.home()
@@ -152,56 +152,6 @@ def compile_texfile_to_pdf(texfile:Path):
 
     os.system(f"xdg-open {pdf}")
 
-
-
-# def compile_tex(texfilepath:Path):
-#     """
-#     This function takes a texfile's absolute Path and compiles
-#     it in the following manner:
-
-#         pdflatex <main.tex>
-#         bibtex <main.aux>
-#         pdflatex <main.tex>
-#         pdflatex <main.tex>
-    
-#     """
-
-#     texcompilers ={
-#         "pdf" : "pdflatex",
-#         "xe" : "xelatex",
-#         "lua" : "lualatex"
-#     }
-
-#     texfilepath = Path(texfilepath)
-
-#     parent_dir = texfilepath.parent
-#     texfilename = texfilepath.name
-
-#     with open(texfilename, 'r') as f:
-#         if "metropolis" in f.read():
-#             commented_metropolis = r"""%\usetheme{metropolis}""" in f.read()
-
-#             if commented_metropolis:
-#                 compiler = texcompilers['pdf']
-#             else:
-#                 compiler = texcompilers['xe']
-#         else:
-#             compiler = texcompilers['pdf']
-
-#     subprocess.run([compiler, texfilename]) # compiling `main.tex`
-
-#     auxfilename = texfilename[:-4] + ".aux"
-
-#     subprocess.run(["bibtex", auxfilename]) # compiling `main.aux`
-
-#     subprocess.run([compiler, texfilename]) # compiling `main.tex`
-#     subprocess.run([compiler, texfilename]) # compiling `main.tex`
-
-#     print("\n\n:::NOTE::: Successfully complied!\n\n")
-
-
-#     pdfname = texfilename[:-4] + ".pdf"
-#     subprocess.run(['xdg-open', pdfname]) # opening `main.pdf`
 
 
 def main():
