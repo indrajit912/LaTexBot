@@ -224,8 +224,9 @@ def generate_sample_tex_file(filepath:Path=Path.cwd() / "fonts_demo.tex"):
 
 
 def main():
-    # generate_fonts_tex_file('./tex_dir/')
-    generate_sample_tex_file('./tex_dir/spam.tex')
+    garbage_dir = '.garbage/'
+    # generate_fonts_tex_file(garbage_dir)
+    # generate_sample_tex_file(garbage_dir + 'spam.tex')
     pass
 
 
