@@ -99,7 +99,7 @@ def get_font_env(env_name:str="my_font", fontfamily:str=None):
         "}\\selectfont}{\\par}"
     )
 
-def generate_fonts_tex_file(where_to_save:Path):
+def generate_fonts_tex_file(where_to_save:Path=Path.cwd()):
     """
     This will create `fonts.tex` file which will contain all envs for
     various fonts which can be used in a TeX doc.
@@ -225,8 +225,8 @@ def generate_sample_tex_file(filepath:Path=Path.cwd() / "fonts_demo.tex"):
 
 def main():
     garbage_dir = './garbage/'
-    # generate_fonts_tex_file(garbage_dir)
-    generate_sample_tex_file(garbage_dir + 'spam.tex')
+    generate_fonts_tex_file(garbage_dir)
+    # generate_sample_tex_file(garbage_dir + 'spam.tex')
     pass
 
 
