@@ -8,6 +8,7 @@
 
 from pathlib import Path
 import sys, os
+import subprocess
 
 
 HOME = Path.home()
@@ -151,7 +152,7 @@ def compile_texfile_to_pdf(texfile:Path):
 
     print("\n\n:::NOTE::: Successfully complied!\n\n")
 
-    os.system(f"xdg-open {pdf}")
+    subprocess.run(["xdg-open", str(pdf)])
 
 
 
