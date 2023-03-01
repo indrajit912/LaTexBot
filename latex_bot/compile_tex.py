@@ -143,9 +143,8 @@ def compile_texfile_to_pdf(texfile:Path):
     compile_tex(tex_file=texfile, tex_compiler=tex_compiler, output_format='.pdf')
 
     print(f" - Compiling using bibtex")
-    os.system(f"bibtex {aux_file.name} > {os.devnull}") # compiling `.aux` file
-    # TODO: Fix the following, capture the output of following cmd into /dev/null/
-    # subprocess.run(["bibtex", aux_file.name, f"> {os.devnull}"])
+    # compiling `.aux` file using bibtex and sending the output to DEVNULL
+    subprocess.run(["bibtex", aux_file.name], stdout=subprocess.DEVNULL)
 
     print(f" - Compiling using {tex_compiler}")
     compile_tex(tex_file=texfile, tex_compiler=tex_compiler, output_format='.pdf')
