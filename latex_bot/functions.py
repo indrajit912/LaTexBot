@@ -57,6 +57,10 @@ def choose_from_list(given_list:list, msg_output:str="Choose an option from belo
 
     return dict(enumerate(given_list))[n - 1]
 
+
+def clear_terminal_screen():
+    """A platform independent function to clear terminal screen"""
+    os.system('cls' if os.name == 'nt' else 'clear')
     
 
 def setup_output_directory(tex_template:str):

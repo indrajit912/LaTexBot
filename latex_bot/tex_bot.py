@@ -49,7 +49,7 @@ def main():
         os.chdir(output_dir_path)
         subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)]) #TODO: directly use 'compile_tex()' here
 
-        os.system('clear')
+        clear_terminal_screen()
 
         print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_dir_path}\n\n")
 
