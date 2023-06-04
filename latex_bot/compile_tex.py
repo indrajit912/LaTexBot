@@ -7,12 +7,30 @@
 #
 
 from pathlib import Path
-import sys, os
+import sys, os, platform
 import subprocess
 
 
 HOME = Path.home()
 CWD = Path.cwd()
+
+
+def open_file(filepath:Path):
+    """
+    This function can open file at `filepath` using the platform's 
+    default application.
+    """
+    filepath = Path(filepath)
+    
+    if platform.system() == "Darwin":
+        subprocess.call(('open', filepath)) # MacOS
+
+    elif platform.system() == "Windows":
+        os.startfile(filepath)  # Windows
+
+    else:
+        subprocess.call(('xdg-open', filepath)) # Linux
+
 
 def list_files(path):
     """
@@ -153,7 +171,7 @@ def compile_texfile_to_pdf(texfile:Path):
 
     print("\n\n:::NOTE::: Successfully complied!\n\n")
 
-    subprocess.run(["xdg-open", str(pdf)])
+    subprocess.run(["xdg-open", str(pdf)]) # TODO: use `open_file()` functions here
 
 
 
