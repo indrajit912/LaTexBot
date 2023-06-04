@@ -6,7 +6,7 @@
 #
 
 from pathlib import Path
-import subprocess, os, shutil, platform
+import subprocess, os, shutil
 
 from constants import *
 
@@ -61,23 +61,6 @@ def choose_from_list(given_list:list, msg_output:str="Choose an option from belo
 def clear_terminal_screen():
     """A platform independent function to clear terminal screen"""
     os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def open_file(filepath:Path):
-    """
-    This function can open file at `filepath` using the platform's 
-    default application.
-    """
-    filepath = Path(filepath)
-    
-    if platform.system() == "Darwin":
-        subprocess.call(('open', filepath)) # MacOS
-
-    elif platform.system() == "Windows":
-        os.startfile(filepath)  # Windows
-
-    else:
-        subprocess.call(('xdg-open', filepath)) # Linux
     
 
 def setup_output_directory(tex_template:str):
