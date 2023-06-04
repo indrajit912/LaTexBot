@@ -171,7 +171,7 @@ def compile_texfile_to_pdf(texfile:Path):
 
     print("\n\n:::NOTE::: Successfully complied!\n\n")
 
-    subprocess.run(["xdg-open", str(pdf)]) # TODO: use `open_file()` functions here
+    open_file(pdf)
 
 
 
