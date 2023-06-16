@@ -47,7 +47,7 @@ def main():
 
         # Compiling the `main.tex` file
         os.chdir(output_dir_path)
-        subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)]) #TODO: directly use 'compile_tex()' here
+        subprocess.run(["python3", str(COMPILE_TEX_LIVES_HERE)])
 
         clear_terminal_screen()
 
