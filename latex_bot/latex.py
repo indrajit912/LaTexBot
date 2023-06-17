@@ -5,6 +5,12 @@
 # Date: Jun 17, 2023
 #
 
+from datetime import datetime
+
+__all__ = ["TexFile"]
+
+TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
+
 
 class TexFile:
     """
@@ -33,10 +39,10 @@ class TexFile:
 \usepackage[english]{babel}
 \usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
 """
-    default_body_text = "YourTextHere"
+    default_body_text = "\nYourTextHere\n"
     default_tex_compiler = "pdflatex"
     default_output_format = ".pdf"
-    default_pre_doc_commands = ""
+    default_pre_doc_commands = f"\n% Author: Indrajit Ghosh\n% Date: {TODAY}\n"
     default_post_doc_commands = ""
 
 
@@ -92,6 +98,35 @@ class TexFile:
             if post_doc_commands is not None
             else TexFile.default_post_doc_commands
         )
+
+        self._rebuild()
+
+    def _rebuild(self):
+        """
+        Rebuilds the entire TeX template text from ``\\documentclass`` to 
+        ``\\end{document}`` according to all settings and choices.
+        """
+        self.body = (
+            self._pre_doc_commands
+            + "\n"
+            + self._documentclass
+            + "\n"
+            + self._preamble
+            + "\n"
+            + r"\begin{document}"
+            + "\n"
+            + self._body_text
+            + "\n"
+            + r"\end{document}"
+            + "\n"
+        )
+
+    def __str__(self):
+        return self.body
+    
+    def __repr__(self):
+        classname = self.__class__.__name__
+        return f"{classname}({self._documentclass})"
 
 
     @property
@@ -149,3 +184,13 @@ class TexFile:
     @post_doc_commands.setter
     def post_doc_commands(self, newcmds:str):
         self._post_doc_commands = newcmds
+
+
+
+def main():
+    
+    texfile = TexFile()
+
+
+if __name__ == '__main__':
+    main()
