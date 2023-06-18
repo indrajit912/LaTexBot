@@ -37,6 +37,16 @@ class TexFile:
         File extension, e.g. `.tex`, `.bib`, `.sty` etc
     filename : :class: `str`
         Name of the TeX file, e.g. `main`, `bibliography` etc
+    author : :class: `str`
+        Author of the TexFile
+
+    Optional Parameters:
+    ---------------------
+    title : :class:`str`
+        Title of the TeX document
+    pdfsubject : :class:`str`
+    pdfkeywords : :class:`str`
+    pdfcreator : :class:`str`
     """
 
     default_documentclass = r"\documentclass[12pt, twoside]{article}"
@@ -47,10 +57,11 @@ class TexFile:
     default_body_text = "\nYourTextHere\n"
     default_tex_compiler = "pdflatex"
     default_output_format = ".pdf"
-    default_pre_doc_commands = f"\n% Author: Indrajit Ghosh\n% Date: {TODAY}\n"
+    default_pre_doc_commands = "\\newcommand{\\Author}{Indrajit Ghosh}"
     default_post_doc_commands = ""
     default_file_extension = ".tex"
     default_filename = "untitled"
+    default_author = "Indrajit Ghosh"
 
 
     def __init__(
@@ -64,6 +75,12 @@ class TexFile:
             post_doc_commands:str=None,
             file_extension:str=None,
             filename:str=None,
+            author:str=None,
+            *,
+            title:str=None,
+            pdfsubject:str=None,
+            pdfkeywords:str=None,
+            pdfcreator:str=None,
             **kwargs,
     ):
         self._tex_compiler = (
@@ -120,8 +137,15 @@ class TexFile:
             else TexFile.default_filename
         )
 
-        self._pre_doc_commands = f"% ```{self._filename}{self._file_extension}```\n" + \
-                                                         self._pre_doc_commands
+        self._author = (
+            author
+            if author is not None
+            else TexFile.default_author
+        )
+
+        self._fileinfo = "\n" + "%"*60 + f"\n%\t{self._filename}{self._file_extension}\n" + \
+                                f"%\tAuthor: {self._author}\n" + \
+                                f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
 
         self._rebuild()
 
@@ -131,8 +155,10 @@ class TexFile:
         ``\\end{document}`` according to all settings and choices.
         """
         self.body = (
-            self._pre_doc_commands
+            self._fileinfo
             + "\n"
+            + self._pre_doc_commands
+            + "\n\n"
             + self._documentclass
             + "\n"
             + self._preamble
@@ -153,6 +179,51 @@ class TexFile:
     def __repr__(self):
         classname = self.__class__.__name__
         return f"{classname}({self._documentclass})"
+    
+    @property
+    def metadata(self):
+        return {
+            "tex_compiler": self._tex_compiler,
+            "output_format": self._output_format,
+            "documentclass": self._documentclass,
+            "preamble": self._preamble,
+            "body_text": self._body_text,
+            "pre_doc_commands": self._pre_doc_commands,
+            "post_doc_commands": self._post_doc_commands,
+            "file_extension": self._file_extension,
+            "filename": self._filename
+        }
+    
+    @metadata.setter
+    def metadata(self, newdata:dict):
+        if 'tex_compiler' in newdata.keys():
+            self._tex_compiler = newdata['tex_compiler']
+        
+        if 'output_format' in newdata.keys():
+            self._output_format = newdata['output_format']
+
+        if 'documentclass' in newdata.keys():
+            self._documentclass = newdata['documentclass']
+        
+        if 'preamble' in newdata.keys():
+            self._preamble = newdata['preamble']
+        
+        if 'body_text' in newdata.keys():
+            self._body_text = newdata['body_text']
+        
+        if 'pre_doc_commands' in newdata.keys():
+            self._pre_doc_commands = newdata['pre_doc_commands']
+        
+        if 'post_doc_commands' in newdata.keys():
+            self._post_doc_commands = newdata['post_doc_commands']
+        
+        if 'file_extension' in newdata.keys():
+            self._file_extension = newdata['file_extension']
+
+        if 'filename' in newdata.keys():
+            self._filename = newdata['filename']
+
+        self._rebuild()
     
     def add_to_preamble(self, txt, prepend=False):
         """
@@ -259,6 +330,7 @@ class TexFile:
     
     @filename.setter
     def filename(self, newname:str):
+        # TODO: If the `newname` ends with an extension then strip it
         self._filename = newname
 
 
@@ -270,9 +342,9 @@ class TexFile:
 def main():
     
     texfile = TexFile()
-    texfile.add_to_document("Hi I am indrajit")
-    texfile.file_extension = "tex"
-    texfile.filename = "main"
+    texfile.filename = 'main'
+    d = {'tex_compiler': 'pdflatex', 'output_format': '.pdf', 'documentclass': '\\documentclass[12pt, twoside]{article}', 'preamble': '\n\\usepackage[english]{babel}\n\\usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}\n', 'body_text': '\nYourTextHere\n', 'pre_doc_commands': '\\newcommand{\\Author}{Indrajit Ghosh}', 'post_doc_commands': '', 'file_extension': '.tex', 'filename': 'untitled'}
+    texfile.metadata = d
     print(texfile)
 
 
