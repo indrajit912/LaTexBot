@@ -157,6 +157,10 @@ class TexFile:
 
         self.classfile = classfile
 
+        if self.classfile:
+            self._documentclass = self._preamble = self._post_doc_commands = \
+                                                        self._pre_doc_commands = ''
+
         self._rebuild()
 
     def _rebuild(self):
@@ -169,38 +173,35 @@ class TexFile:
                                 f"%\tAuthor: {self._author}\n" + \
                                 f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
         
+        self.body = (
+            self._fileinfo
+            + "\n"
+            + self._pre_doc_commands
+        )
+        
         if not self.classfile:
-            self.body = (
-                self._fileinfo
-                + "\n"
-                + self._pre_doc_commands
-                + "\n\n"
+            self.body += (
+                "\n\n"
                 + self._documentclass
-                + "\n"
+                +"\n"
                 + self._preamble
                 + "\n"
                 + r"\begin{document}"
-                + "\n"
-                + self._body_text
-                + "\n"
-                + self._post_doc_commands
+            )
+
+        self.body += (
+            "\n"
+            + self._body_text
+            + "\n"
+        )
+
+        if not self.classfile:
+            self.body += (
+                self._post_doc_commands
                 + "\n"
                 + r"\end{document}"
                 + "\n"
             )
-
-        else:
-            # The file is a class file like `cls`, `sty` etc
-            self._documentclass = self._preamble = self._post_doc_commands = \
-                                                        self._pre_doc_commands = ''
-            
-
-            self.body = (
-                self._fileinfo
-                + "\n"
-                + self._body_text
-            )
-            
 
     def __str__(self):
         return self.body
@@ -444,10 +445,9 @@ class TexFile:
 
 
 def main():
-    
-    texfile = TexFile(classfile=True)
-    texfile.filename = "spam.tex"
-    print(texfile)
+    file = TexFile()
+    file.filename = "main"
+    print(file)
 
 
 if __name__ == '__main__':
