@@ -40,6 +40,9 @@ class TexFile:
         Name of the TeX file, e.g. `main`, `bibliography` etc
     author : :class: `str`
         Author of the TexFile
+    classfile : :class: `bool`
+        If this is true then the TexFile will be assumed to be a class file like `sty`, `cls` etc.
+        In `True` case the above attributes will be '' and `body_text` can be updated.
 
     Optional Parameters:
     ---------------------
@@ -438,8 +441,6 @@ class TexFile:
             f.write(self.body)
 
         return texfilepath
-
-
 
 
 def main():
