@@ -57,7 +57,9 @@ class TexFile:
     default_body_text = "\nYourTextHere\n"
     default_tex_compiler = "pdflatex"
     default_output_format = ".pdf"
-    default_pre_doc_commands = "\\newcommand{\\Author}{Indrajit Ghosh}\n"
+    default_pre_doc_commands = "\\date{\\today} % keep \\date{} for no date\n" + \
+                                            "\\newcommand{\\Author}{Indrajit Ghosh}\n"
+                                            
     default_post_doc_commands = ""
     default_file_extension = ".tex"
     default_filename = "untitled"
@@ -198,7 +200,8 @@ class TexFile:
             "pre_doc_commands": self._pre_doc_commands,
             "post_doc_commands": self._post_doc_commands,
             "file_extension": self._file_extension,
-            "filename": self._filename
+            "filename": self._filename,
+            "author": self._author
         }
     
     @metadata.setter
@@ -229,6 +232,9 @@ class TexFile:
 
         if 'filename' in newdata.keys():
             self._filename = newdata['filename']
+        
+        if 'author' in newdata.keys():
+            self._author = newdata['author']
 
         self._rebuild()
     
@@ -402,10 +408,7 @@ class TexFile:
 def main():
     
     texfile = TexFile()
-    texfile.filename = 'main.tex'
-    texfile.pdfkeywords = ""
-    
-    texfile.add_to_preamble(r"\title{\Title} % Title of the Document")
+    texfile.filename = "spam.tex"
     print(texfile)
 
 
