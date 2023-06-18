@@ -35,6 +35,8 @@ class TexFile:
         Text (definitions, commands) to be inserted at right after ``\\begin{document}``, e.g. ``\\boldmath``
     file_extension : :class:`str`
         File extension, e.g. `.tex`, `.bib`, `.sty` etc
+    filename : :class: `str`
+        Name of the TeX file, e.g. `main`, `bibliography` etc
     """
 
     default_documentclass = r"\documentclass[12pt, twoside]{article}"
@@ -48,6 +50,7 @@ class TexFile:
     default_pre_doc_commands = f"\n% Author: Indrajit Ghosh\n% Date: {TODAY}\n"
     default_post_doc_commands = ""
     default_file_extension = ".tex"
+    default_filename = "untitled"
 
 
     def __init__(
@@ -60,6 +63,7 @@ class TexFile:
             pre_doc_commands:str=None,
             post_doc_commands:str=None,
             file_extension:str=None,
+            filename:str=None,
             **kwargs,
     ):
         self._tex_compiler = (
@@ -109,6 +113,15 @@ class TexFile:
             if file_extension is not None
             else TexFile.default_file_extension
         )
+
+        self._filename = (
+            filename
+            if filename is not None
+            else TexFile.default_filename
+        )
+
+        self._pre_doc_commands = f"% ```{self._filename}{self._file_extension}```\n" + \
+                                                         self._pre_doc_commands
 
         self._rebuild()
 
@@ -240,6 +253,14 @@ class TexFile:
             newext = "." + newext
         self._file_extension = newext
 
+    @property
+    def filename(self):
+        return self._filename
+    
+    @filename.setter
+    def filename(self, newname:str):
+        self._filename = newname
+
 
     def copy(self):
         return copy.deepcopy(self)
@@ -250,8 +271,9 @@ def main():
     
     texfile = TexFile()
     texfile.add_to_document("Hi I am indrajit")
-    texfile.file_extension = "sty"
-    print(texfile.file_extension)
+    texfile.file_extension = "tex"
+    texfile.filename = "main"
+    print(texfile)
 
 
 if __name__ == '__main__':
