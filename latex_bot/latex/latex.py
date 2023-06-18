@@ -79,6 +79,7 @@ class TexFile:
             file_extension:str=None,
             filename:str=None,
             author:str=None,
+            classfile:bool=False,
             *,
             title:str=None,
             pdfsubject:str=None,
@@ -151,6 +152,8 @@ class TexFile:
         self._pdfcreator = pdfcreator
         self._pdfkeywords = pdfkeywords
 
+        self.classfile = classfile
+
         self._rebuild()
 
     def _rebuild(self):
@@ -163,25 +166,38 @@ class TexFile:
                                 f"%\tAuthor: {self._author}\n" + \
                                 f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
         
-        
-        self.body = (
-            self._fileinfo
-            + "\n"
-            + self._pre_doc_commands
-            + "\n\n"
-            + self._documentclass
-            + "\n"
-            + self._preamble
-            + "\n"
-            + r"\begin{document}"
-            + "\n"
-            + self._body_text
-            + "\n"
-            + self._post_doc_commands
-            + "\n"
-            + r"\end{document}"
-            + "\n"
-        )
+        if not self.classfile:
+            self.body = (
+                self._fileinfo
+                + "\n"
+                + self._pre_doc_commands
+                + "\n\n"
+                + self._documentclass
+                + "\n"
+                + self._preamble
+                + "\n"
+                + r"\begin{document}"
+                + "\n"
+                + self._body_text
+                + "\n"
+                + self._post_doc_commands
+                + "\n"
+                + r"\end{document}"
+                + "\n"
+            )
+
+        else:
+            # The file is a class file like `cls`, `sty` etc
+            self._documentclass = self._preamble = self._post_doc_commands = \
+                                                        self._pre_doc_commands = ''
+            
+
+            self.body = (
+                self._fileinfo
+                + "\n"
+                + self._body_text
+            )
+            
 
     def __str__(self):
         return self.body
@@ -425,13 +441,12 @@ class TexFile:
 
 
 
+
 def main():
     
-    texfile = TexFile()
+    texfile = TexFile(classfile=True)
     texfile.filename = "spam.tex"
     print(texfile)
-
-    print(texfile.write("."))
 
 
 if __name__ == '__main__':
