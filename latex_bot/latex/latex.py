@@ -7,6 +7,7 @@
 
 from datetime import datetime
 import copy
+from pathlib import Path
 
 __all__ = ["TexFile"]
 
@@ -402,6 +403,25 @@ class TexFile:
 
     def copy(self):
         return copy.deepcopy(self)
+    
+    def write(self, tex_dir:Path):
+        """
+        Writes the TexFile() into the given directory `tex_dir`
+        and returns the TeX file path
+
+        Parameter:
+        ----------
+        `tex_dir`: `Path`
+                  The directory where to create the TeX file
+        Returns:
+        --------
+        TeX file path: `Path`
+        """
+        texfilepath = Path(tex_dir) / (self.filename + self.file_extension)
+        with open(texfilepath, 'w') as f:
+            f.write(self.body)
+
+        return texfilepath
 
 
 
@@ -410,6 +430,8 @@ def main():
     texfile = TexFile()
     texfile.filename = "spam.tex"
     print(texfile)
+
+    print(texfile.write("."))
 
 
 if __name__ == '__main__':
