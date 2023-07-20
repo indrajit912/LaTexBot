@@ -44,14 +44,6 @@ class TexFile:
     classfile : :class: `bool`
         If this is true then the TexFile will be assumed to be a class file like `sty`, `cls` etc.
         In `True` case the above attributes will be '' and `body_text` can be updated.
-
-    Optional Parameters:
-    ---------------------
-    title : :class:`str`
-        Title of the TeX document
-    pdfsubject : :class:`str`
-    pdfkeywords : :class:`str`
-    pdfcreator : :class:`str`
     """
 
     default_documentclass = r"\documentclass[12pt, twoside]{article}"
@@ -145,9 +137,9 @@ class TexFile:
             else TexFile.default_author
         )
 
-        self.classfile = classfile
+        self._classfile = classfile
 
-        if self.classfile:
+        if self._classfile:
             self._documentclass = self._preamble = self._post_doc_commands = \
                                                         self._pre_doc_commands = ''
 
@@ -163,35 +155,39 @@ class TexFile:
                                 f"%\tAuthor: {self._author}\n" + \
                                 f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
         
-        self.body = (
-            self._fileinfo
-            + "\n"
-            + self._documentclass
-        )
+        self.body = self._fileinfo
         
-        if not self.classfile:
+        if not self._classfile:
             self.body += (
-                "%\n\n"
+                "\n"
+                + self._documentclass
+                + "%\n%\n"
                 + self._pre_doc_commands
                 +"%\n"
                 + self._preamble
-                + "%\n"
+                + "%\n%\n"
                 + r"\begin{document}"
+                + "%\n"
             )
 
-        self.body += (
-            "%\n"
-            + self._body_text
-            + "%\n"
-        )
+        self.body += self._body_text
 
-        if not self.classfile:
+        if not self._classfile:
             self.body += (
-                self._post_doc_commands
+                "%\n"
+                + self._post_doc_commands
                 + "%\n"
                 + r"\end{document}"
                 + "%\n"
             )
+
+        self.body += (
+            "\n"
+            + "%" * 60 + "\n"
+            + f"%\t\tEnd of `{self._filename}{self._file_extension}`\n"
+            + "%" * 60 + "\n"
+        )
+
 
     def __str__(self):
         return self.body
@@ -366,6 +362,15 @@ class TexFile:
         self._filename = newname.split('.')[0]
         self._rebuild()
 
+    @property
+    def classfile(self):
+        return self._classfile
+    
+    @classfile.setter
+    def classfile(self, new:bool):
+        self._classfile = new
+        self._rebuild()
+
 
     def copy(self):
         return copy.deepcopy(self)
@@ -434,7 +439,9 @@ class TexFile:
 def main():
     file = TexFile()
     file.filename = "main"
-    
+    file.classfile = True
+    print(file)
+
     
 
 
