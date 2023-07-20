@@ -7,6 +7,9 @@
 
 from latex import *
 from pathlib import Path
+from datetime import datetime
+
+TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
 
 class Author:
@@ -149,6 +152,21 @@ class Author:
                 fine_lst.append(e)
         
         return "\\\\".join(fine_lst)
+    
+    @staticmethod
+    def join_authors(lst_authors:list):
+        """
+        Joins the list of authors and return appropriate `str`
+
+        Parameter:
+        ----------
+            `list[Author(), ..., Author()]`
+
+        Returns:
+        -------
+            `str`
+        """
+        return ", ".join([ath._name for ath in lst_authors])
 
 
 class AmsArticle:
@@ -157,6 +175,11 @@ class AmsArticle:
 
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
+
+    Parameter(s):
+    -------------
+        `packages`: `list[TexPackage(), ..., TexPackage()]`
+        `sections`: `list[TexFile(), ..., TexFile()]`
 
     """
     default_title = "\\AmS-art \\TeX\\ Template"
@@ -175,8 +198,9 @@ class AmsArticle:
             dedicatory:str = None,
             keywords:str = None,
             date:str = None,
-            preamble:str = None,
-            sections:list = None,
+            packages:list = None, # `list` of `TexPackage`s
+            sections:list = None, # `list` of `TexFile`s
+            references:list = None, # `list` of reference entries
             project_dir:Path = None,
             *,
             pdfsubject:str = "Mathematics",
@@ -204,6 +228,24 @@ class AmsArticle:
         self._short_title:str = (
             self._title if short_title is None
             else short_title
+        )
+
+        self._packages:list = (
+            packages
+            if packages is not None
+            else self._default_amsart_packages()
+        )
+
+        self._sections:list = (
+            sections
+            if sections is not None
+            else self._default_amsart_sections
+        )
+
+        self._references:list = (
+            references
+            if references is not None
+            else self._default_references()
         )
 
         self._subject_class:str = subjectclass
@@ -235,12 +277,235 @@ class AmsArticle:
         # Setting up AMS Project components
         self._sections_dir:Path = self._project_dir / "sections"
 
+        # Updating the article:
+        # The following function call will create/update `preamble`, 
+        # `sections` etc
+        self._update()
+
+
+    def _update(self):
+        """
+        Updates the `article`. This method should be called
+        whenever an attr is set.
+
+        This method calls the following methods:
+            self._update_preamble()
+            self._update_main_tex() TODO: create this method
+            self._update_reference_bib()
+        """
+        self._update_preamble()
+        self._update_reference_bib()
+
+
+    def _update_preamble(self):
+        """
+        TODO: Add math constants to preamble
+        Updates the preamble.
+        If at any  moment `self._authors` gets updated this function 
+        should be called to update the `self._preamble`.
+        """
+
+        _preamble_body_text = ""
+
+        _pkg_initial_text = r"""
+
+%%-----------------------------------------------------------------
+%%		Packages for the project
+%%-----------------------------------------------------------------
+
+"""
+        _preamble_body_text += _pkg_initial_text + sum(self._packages)
+
+        self.preamble:TexFile = TexFile(
+            filename="preamble",
+            classfile=True,
+            file_extension=".tex",
+            body_text=_preamble_body_text
+        )
+
+    def _update_reference_bib(self):
+        """
+        Updates reference
+        """
+        _ref_body_text = ""
+        for ref in self._references:
+            _ref_body_text += ref
+
+        self.reference_bib = TexFile(
+            filename="references",
+            classfile=True,
+            file_extension=".bib",
+            body_text=_ref_body_text
+        )
+
+    def add_package(self, package:TexPackage):
+        """
+        Appends `package` to `self._packages`
+        """
+        self._packages.append(package)
+        self._update()
+
+    def add_reference(self, ref:str):
+        """
+        Appends `ref` to `self._references`
+        """
+        self._references.append(ref)
+        self._update()
+
+
+    @staticmethod
+    def _default_amsart_packages():
+        """
+        Returns a `list` of default `TexPackage`s which Indrajit 
+        uses for `amsart`
+
+        Returns:
+        --------
+            `list[TexPackage(), ..., TexPackage()]`
+        """
+        return [
+            TexPackage(
+                name="geometry",
+                options=[
+                    "top=0.9in",
+                    "bottom=1in",
+                    "left=1in",
+                    "right=1in"
+                ]
+            ),
+            TexPackage(
+                name=["amsmath", "amssymb", "amsthm"],
+                comment= "amssymb internally loads amsfonts"
+            ),
+            TexPackage(name="inputenc", options=["utf8"]),
+            TexPackage(name="mathtools"),
+            TexPackage(name="mathrsfs", comment="renders \mathscr cmd"),
+            TexPackage(name="xfrac", comment="renders diagonal frac notation: use \\sfrac{}{}"),   
+        ]
+    
+
+    @staticmethod
+    def _default_amsart_sections():
+        """
+        Returns a `list` of default `TexFile`s which Indrajit 
+        uses for `amsart` sections
+
+        Returns:
+        --------
+            `list[TexFile(), ..., TexFile()]`
+        """
+        intro = TexFile(
+            filename="introduction",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"""
+\lipsum[1-2]
+\begin{equation} 
+\mathcolor{red}{\sum_{k=0}^n k = 1 + 2 + 3 + \cdots + n = \dfrac{n(n+1)}{2}}
+\label{eq_Pn}
+\end{equation}
+"""
+        )
+
+        abstract = TexFile(
+            classfile=True,
+            filename="abstract",
+            body_text=r"\lipsum[1]" + "\n",
+            file_extension=".tex"
+        )
+
+        sec1 = TexFile(
+            filename="section1",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"""
+\lipsum[1-2]
+\begin{theorem}
+    The set of $\N$ is unbounded.
+\end{theorem}
+\begin{proof}
+    The proof is obvious.
+\end{proof}
+"""
+        )
+
+        sec2 = TexFile(
+            filename="section2",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"\lipsum[1-2]" + "\n"
+        )
+
+        return [intro, abstract, sec1, sec2]
+    
+    
+    @staticmethod
+    def _default_references():
+        """
+        Returns:
+        --------
+            `list[`str`, ..., `str`]`
+        """
+        ref1 = r"""
+@Book{konrad_unbdd,
+ Author = {Schm{\"u}dgen, Konrad},
+ Title = {Unbounded self-adjoint operators on {Hilbert} space},
+ FSeries = {Graduate Texts in Mathematics},
+ Series = {Grad. Texts Math.},
+ ISSN = {0072-5285},
+ Volume = {265},
+ ISBN = {978-94-007-4752-4; 978-94-007-4753-1},
+ Year = {2012},
+ Publisher = {Dordrecht: Springer},
+ Language = {English},
+ Keywords = {47-01,47B25,81Q10,47Axx,47E05,47F05,35Pxx},
+ zbMATH = {6046473},
+ Zbl = {1257.47001}
+}
+
+"""
+        ref2 = r"""
+@Article{kaufman,
+ Author = {Kaufman, William E.},
+ Title = {Representing a closed operator as a quotient of continuous operators},
+ FJournal = {Proceedings of the American Mathematical Society},
+ Journal = {Proc. Am. Math. Soc.},
+ ISSN = {0002-9939},
+ Volume = {72},
+ Pages = {531--534},
+ Year = {1978},
+ Language = {English},
+ DOI = {10.2307/2042466},
+ Keywords = {47A10,47A55},
+ zbMATH = {3627811},
+ Zbl = {0404.47001}
+}
+
+"""
+        ref3 = r"""
+@Article{lennon,
+ Author = {Lennon, M. J. J.},
+ Title = {On sums and products of unbounded operators in {Hilbert} space},
+ FJournal = {Transactions of the American Mathematical Society},
+ Journal = {Trans. Am. Math. Soc.},
+ ISSN = {0002-9947},
+ Volume = {198},
+ Pages = {273--285},
+ Year = {1974},
+ Language = {English},
+ DOI = {10.2307/1996759},
+ Keywords = {47A65,47C99},
+ zbMATH = {3467887},
+ Zbl = {0298.47012}
+}
+"""
+        return [ref1, ref2, ref3]
 
 
 def main():
     
-    p = TexPackage("amsmath")
-    print(p)
+    article = AmsArticle()
+    print(article.reference_bib)
 
 
 if __name__ == '__main__':
