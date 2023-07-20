@@ -29,11 +29,20 @@ class TexPackage:
             else ""
         )
 
+
     def __str__(self):
         if self._options == '':
             return r"\usepackage{" + self._name + r"}" + "%\n"
         else:
             return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + "%\n"
+    
+    def __add__(self, right):
+        return self.__str__() + right.__str__()
+    
+    def __radd__(self, left):
+        if isinstance(left, str):
+            return left.__add__("\n" + self.__str__())
+        
 
 
 class TexFile:
