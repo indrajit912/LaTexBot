@@ -53,12 +53,14 @@ class TexPackage:
         if self._options == '':
             return r"\usepackage{" + self._name + r"}" + f"% {self._comment}\n"
         else:
-            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + "% {self._comment}\n"
+            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + f"% {self._comment}\n"
     
     def __add__(self, right):
         return self.__str__() + right.__str__()
     
     def __radd__(self, left):
+        if left == 0:
+            return self
         if isinstance(left, str):
             return left.rstrip().__add__("\n" + self.__str__())
         
