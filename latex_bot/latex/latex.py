@@ -9,9 +9,31 @@ from datetime import datetime
 import copy, re, tempfile
 from pathlib import Path
 
-__all__ = ["TexFile"]
+__all__ = ["TexFile", "TexPackage"]
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
+
+
+class TexPackage:
+    """
+    A class to represent a `LaTeX` Package
+
+    Author: Indrajit Ghosh
+    Date: Jul 20, 2023
+    """
+    def __init__(self, name:str, options:list=None):
+        self._name = name
+        self._options = (
+            ",".join(options) 
+            if options is not None
+            else ""
+        )
+
+    def __str__(self):
+        if self._options == '':
+            return r"\usepackage{" + self._name + r"}" + "%\n"
+        else:
+            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + "%\n"
 
 
 class TexFile:
