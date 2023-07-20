@@ -8,3 +8,4 @@ latex_bot/__pycache__/
 latex_bot/tex_templates/__pycache__/
 latex_bot/garbage/
 latex_bot/testings.py
+latex_bot/latex/__pycache__/

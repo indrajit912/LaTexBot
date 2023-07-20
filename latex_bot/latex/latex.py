@@ -6,9 +6,8 @@
 #
 
 from datetime import datetime
-import copy, re
+import copy, re, tempfile
 from pathlib import Path
-from pprint import pprint
 
 __all__ = ["TexFile"]
 
@@ -434,12 +433,23 @@ class TexFile:
         return regex.sub(
             lambda match: tex_conversion[match.group()], text
         )
+    
+    def _compile(self, tex_dir:Path):
+        """
+        TODO: This function tries to compile the TexFile inside the `_tmp_path`
+        """
+        # Create `_tmp_path`
+        # _tmp_path = tempfile.mkdtemp(prefix="latexbot-tmp.")
+
+        # Write the TexFile inside the _tmp_path
+        # self.write(tex_dir=_tmp_path)
+
+        # print(_tmp_path)
 
 
 def main():
     file = TexFile()
     file.filename = "main"
-    print(file)
 
 
 if __name__ == '__main__':
