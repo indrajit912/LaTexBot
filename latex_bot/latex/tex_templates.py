@@ -160,40 +160,87 @@ class AmsArticle:
 
     """
     default_title = "\\AmS-art \\TeX\\ Template"
-    default_authors = ["Indrajit Ghosh"]
+    default_authors = [Author()]
+    default_date = r"\today"
+    default_project_dir = Path.cwd() / "new_ams_art"
+
+    TEX_NONE = ['', '  ', '\t']
 
     def __init__(
             self,
             title:str = None,
             authors:list = None,
-            addresses:list = None,
-            current_addresses:list = None,
-            emails:list = None,
-            supports:list = None,
             short_title:str = None,
             subjectclass:str = None,
             dedicatory:str = None,
             keywords:str = None,
             date:str = None,
+            preamble:str = None,
+            sections:list = None,
             project_dir:Path = None,
             *,
-            pdftitle:str = None,
-            pdfauthor:str = None,
-            pdfsubject:str = None,
-            pdfkeywords:str = None,
-            pdfcreator:str = None,
+            pdfsubject:str = "Mathematics",
+            pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
+            pdfcreator:str = "MixTeX",
             pdfcreationdate:str = r"\today",
             pdfcolorlink:bool = True,
             pdflinkcolor:str = "cyan",
             pdfurlcolor:str = "blue",
             pdfcitecolor:str = "magenta",
+            papersize:str = "a4paper",
+            fontsize:str = "12pt",
+            **kwargs
     ):
-        pass
+        self._title:str = (
+            title if title is not None
+            else self.default_title
+        )
+
+        self._authors:list = (
+            authors if authors is not None
+            else self.default_authors
+        )
+
+        self._short_title:str = (
+            self._title if short_title is None
+            else short_title
+        )
+
+        self._subject_class:str = subjectclass
+        self._dedicatory:str = dedicatory
+        self._keywords:str = keywords
+        self._date:str = (
+            self.default_date if date is None
+            else date
+        )
+        self._project_dir:Path = (
+            self.default_project_dir if project_dir is None
+            else Path(project_dir)
+        )
+        
+        # PDF info
+        self._pdftitle = title
+        self._pdfauthor = ", ".join([ath.name for ath in self._authors])
+        self._pdfsubject = pdfsubject
+        self._pdfkeywords = pdfkeywords
+        self._pdfcreator = pdfcreator
+        self._pdfcreationdate = pdfcreationdate
+        self._pdfcolorlink = pdfcolorlink
+        self._pdflinkcolor = pdflinkcolor
+        self._pdfurlcolor = pdfurlcolor
+        self._pdfcitecolor = pdfcitecolor
+        self._papersize = papersize
+        self._fontsize = fontsize
+
+        # Setting up AMS Project components
+        self._sections_dir:Path = self._project_dir / "sections"
+
 
 
 def main():
     
-    indra = Author()
+    p = TexPackage("amsmath")
+    print(p)
 
 
 if __name__ == '__main__':
