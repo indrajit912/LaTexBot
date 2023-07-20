@@ -6,8 +6,9 @@
 #
 
 from datetime import datetime
-import copy
+import copy, re
 from pathlib import Path
+from pprint import pprint
 
 __all__ = ["TexFile"]
 
@@ -83,12 +84,6 @@ class TexFile:
             filename:str=None,
             author:str=None,
             classfile:bool=False,
-            *,
-            title:str=None,
-            pdfsubject:str=None,
-            pdfkeywords:str=None,
-            pdfcreator:str=None,
-            **kwargs,
     ):
         self._tex_compiler = (
             tex_compiler
@@ -150,11 +145,6 @@ class TexFile:
             else TexFile.default_author
         )
 
-        self._title = title
-        self._pdfsubject = pdfsubject
-        self._pdfcreator = pdfcreator
-        self._pdfkeywords = pdfkeywords
-
         self.classfile = classfile
 
         if self.classfile:
@@ -176,31 +166,31 @@ class TexFile:
         self.body = (
             self._fileinfo
             + "\n"
-            + self._pre_doc_commands
+            + self._documentclass
         )
         
         if not self.classfile:
             self.body += (
-                "\n\n"
-                + self._documentclass
-                +"\n"
+                "%\n\n"
+                + self._pre_doc_commands
+                +"%\n"
                 + self._preamble
-                + "\n"
+                + "%\n"
                 + r"\begin{document}"
             )
 
         self.body += (
-            "\n"
+            "%\n"
             + self._body_text
-            + "\n"
+            + "%\n"
         )
 
         if not self.classfile:
             self.body += (
                 self._post_doc_commands
-                + "\n"
+                + "%\n"
                 + r"\end{document}"
-                + "\n"
+                + "%\n"
             )
 
     def __str__(self):
@@ -376,50 +366,6 @@ class TexFile:
         self._filename = newname.split('.')[0]
         self._rebuild()
 
-    @property
-    def title(self):
-        return self._title
-    
-    @title.setter
-    def title(self, new:str):
-        self._title = new
-        if self._title:
-            self._pre_doc_commands += r"\newcommand{\Title}{" + self._title + "}\n"
-        self._rebuild()
-
-    @property
-    def pdfsubject(self):
-        return self._pdfsubject
-    
-    @pdfsubject.setter
-    def pdfsubject(self, subject:str):
-        self._pdfsubject = subject
-        if self._pdfsubject:
-            self._pre_doc_commands += r"\newcommand{\PDFsubject}{" + self._pdfsubject + "}\n"
-        self._rebuild()
-
-    @property
-    def pdfcreator(self):
-        return self._pdfcreator
-    
-    @pdfcreator.setter
-    def pdfcreator(self, creator:str):
-        self._pdfcreator = creator
-        if self._pdfcreator:
-            self._pre_doc_commands += r"\newcommand{\PDFcreator}{" + self._pdfcreator + "}\n"
-        self._rebuild()
-
-    @property
-    def pdfkeywords(self):
-        return self._pdfkeywords
-    
-    @pdfkeywords.setter
-    def pdfkeywords(self, keywords:str):
-        self._pdfkeywords = keywords
-        if self._pdfkeywords:
-            self.pre_doc_commands += r"\newcommand{\PDFkeywords}{" + self._pdfkeywords + "}\n"
-        self._rebuild()
-
 
     def copy(self):
         return copy.deepcopy(self)
@@ -442,12 +388,54 @@ class TexFile:
             f.write(self.body)
 
         return texfilepath
+    
+    @staticmethod
+    def latex_escape(text:str):
+        """
+        This function accepts plain text and return the TeX escaped text.
+
+        Parameter:
+        ----------
+            `text`: `str`, a plain text message; This msg should not be any 
+                            standard LaTeX command such as `\begin{document}`.
+        
+        Returns:
+        --------
+            `str`; the message escaped to paste it into a `.tex` file
+        """
+        tex_conversion = {
+            '&': r'\&',
+            '%': r'\%',
+            '$': r'\$',
+            '#': r'\#',
+            '_': r'\_',
+            '{': r'\{',
+            '}': r'\}',
+            '~': r'\textasciitilde{}',
+            '^': r'\^{}',
+            '\\': r'\textbackslash{}',
+            '<': r'\textless{}',
+            '>': r'\textgreater{}',
+        }
+
+        regex = re.compile(
+            '|'.join(
+                re.escape(str(key)) for key in sorted(
+                    tex_conversion.keys(), key=lambda item : -len(item)
+                )
+            )
+        )
+
+        return regex.sub(
+            lambda match: tex_conversion[match.group()], text
+        )
 
 
 def main():
     file = TexFile()
     file.filename = "main"
-    print(file)
+    
+    
 
 
 if __name__ == '__main__':
