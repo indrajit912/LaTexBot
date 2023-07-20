@@ -21,27 +21,46 @@ class TexPackage:
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
     """
-    def __init__(self, name:str, options:list=None):
-        self._name = name
+    def __init__(
+            self, 
+            name, 
+            options:list=None,
+            comment:str=None
+    ):
+        
+        if isinstance(name, str):
+            self._name = name
+        elif isinstance(name, list):
+            self._name = ",".join(name)
+        else:
+            raise TypeError(
+                f"The `name` attr of an {self.__class__.__name__} object \ can be of type `str` or `list`.\n"
+            )
+        
         self._options = (
             ",".join(options) 
             if options is not None
+            else ""
+        )
+        self._comment = (
+            comment
+            if comment
             else ""
         )
 
 
     def __str__(self):
         if self._options == '':
-            return r"\usepackage{" + self._name + r"}" + "%\n"
+            return r"\usepackage{" + self._name + r"}" + f"% {self._comment}\n"
         else:
-            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + "%\n"
+            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + "% {self._comment}\n"
     
     def __add__(self, right):
         return self.__str__() + right.__str__()
     
     def __radd__(self, left):
         if isinstance(left, str):
-            return left.__add__("\n" + self.__str__())
+            return left.rstrip().__add__("\n" + self.__str__())
         
 
 
