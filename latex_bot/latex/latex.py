@@ -439,10 +439,7 @@ class TexFile:
 def main():
     file = TexFile()
     file.filename = "main"
-    file.classfile = True
     print(file)
-
-    
 
 
 if __name__ == '__main__':
