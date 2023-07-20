@@ -6,6 +6,7 @@
 #
 
 from .latex import *
+import tempfile
 
 
 
