@@ -331,7 +331,7 @@ class AmsArticle:
 
         This method calls the following methods:
             self._update_preamble()
-            self._update_main_tex() TODO: create this method
+            self._update_main_tex()
             self._update_reference_bib()
         """
         self._update_preamble()
@@ -500,23 +500,10 @@ class AmsArticle:
         If at any  moment `self._authors` gets updated this function 
         should be called to update the `self._preamble`.
         """
-
-        _preamble_body_text = ""
-
-        _pkg_initial_text = r"""
-
-%%-----------------------------------------------------------------
-%%		Packages for the project
-%%-----------------------------------------------------------------
-
-"""
-        _preamble_body_text += _pkg_initial_text + sum(self._packages)
-
-        self.preamble:TexFile = TexFile(
+        # TODO: Adjust `theorem_style` and `custom_commands` attr for preamble
+        self.preamble:Preamble = Preamble(
             filename="preamble",
-            classfile=True,
-            file_extension=".tex",
-            body_text=_preamble_body_text,
+            packages=self._packages,
             author=self._pdfauthor
         )
 
