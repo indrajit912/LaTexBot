@@ -221,8 +221,6 @@ class TexFile:
                 + "%\n"
             )
 
-        self.body += self._body_text
-
         if not self._classfile:
             self.body += (
                 "%\n"

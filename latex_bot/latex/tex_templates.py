@@ -275,7 +275,7 @@ class AmsArticle:
         self._sections:list = (
             sections
             if sections is not None
-            else self._default_amsart_sections
+            else self._default_amsart_sections()
         )
 
         self._references:list = (
@@ -423,11 +423,74 @@ class AmsArticle:
 
         main_pre_cmds += "-"*80 + "\n\n"
 
-        main_preamble = ""
-        main_body_text = ""
+        self._main_preamble = r"\input{" + self.preamble.filename + "}\n"
+        self._main_post_doc_cmds = (
+            r"\title[\ShortTitle]{\Title}%"
+            + "\n"
+            + authors_inside
+            + "\n"
+            + r"\date{\Date}%"
+            + "\n"
+        )
 
-        self.main_pre_doc_cmds = main_pre_cmds
+        if self._dedicatory:
+            self._main_post_doc_cmds += r"\dedicatory{\Dedicatory}%" + "\n"
+        if self._subject_class:
+            self._main_post_doc_cmds += r"\subjclass{\SubjectClassText}%" + "\n"
+        if self._keywords:
+            self._main_post_doc_cmds += r"\keywords{\Keywords}%" + "\n"
 
+        self._main_body_text = ""
+        if self._sections:
+            if 'abstract' in [sec._filename for sec in self._sections]:
+                # Abstract is there
+                self._main_body_text += r"""
+\begin{abstract}
+    \label{sec:abstract}
+    \input{sections/abstract}
+\end{abstract}
+
+"""
+            
+            for sec in self._sections:
+                if not sec._filename == "abstract":
+                    self._main_body_text += (
+                        r"\section{" + sec._filename.title() + "}%\n"
+                        + r"\label{sec:" + sec._filename.replace(' ', '') + "}%\n"
+                        + r"\input{" + self._sections_dir.name + "/" + sec._filename
+                        + "}%\n\n"
+                    )
+        else:
+            self._main_body_text = r"\lipsum[1-2]"
+
+        
+        self._main_body_text += r"""
+\medskip
+\nocite{*}
+
+\bibliographystyle{amsalpha} % Also use `amsplain`
+"""
+        self._main_body_text += r"\bibliography{" + self.reference_bib.filename + "}%\n"
+
+        self._main_pre_doc_cmds = main_pre_cmds
+
+        self.main_tex = TexFile(
+            tex_compiler="pdflatex",
+            output_format=".pdf",
+            documentclass= (
+                "\\documentclass["
+                + self._fontsize + ","
+                + self._papersize
+                + "]{amsart}%"
+            ),
+            preamble=self._main_preamble,
+            pre_doc_commands=self._main_pre_doc_cmds,
+            post_doc_commands=self._main_post_doc_cmds,
+            body_text=self._main_body_text,
+            file_extension=".tex",
+            filename="main",
+            classfile=False
+        )
 
 
     def _update_preamble(self):
@@ -806,8 +869,9 @@ def main():
         dedicatory="This paper is dedicated to my Mother",
         keywords="Mathematics, Operator Algebras"
     )
+
+    print(article.main_tex)
     
-    print(article.main_pre_doc_cmds)
 
 
 if __name__ == '__main__':
