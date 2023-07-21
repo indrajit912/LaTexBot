@@ -219,16 +219,16 @@ class TexFile:
                 + "%\n%\n"
                 + r"\begin{document}"
                 + "%\n"
-            )
-
-        if not self._classfile:
-            self.body += (
-                "%\n"
+                + "%\n"
                 + self._post_doc_commands
                 + "%\n"
+                + self._body_text
+                + "\n\n"
                 + r"\end{document}"
                 + "%\n"
             )
+        else:
+            self.body += self._body_text + "%\n\n"
 
         self.body += (
             "\n"
