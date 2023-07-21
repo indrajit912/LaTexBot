@@ -192,7 +192,7 @@ class TexFile:
 
         if self._classfile:
             self._documentclass = self._preamble = self._post_doc_commands = \
-                                                        self._pre_doc_commands = ''
+                            self._pre_doc_commands = self._output_format = ''
 
         self._rebuild()
 
@@ -203,7 +203,7 @@ class TexFile:
         """
 
         self._fileinfo = "\n" + "%"*60 + f"\n%\t{self._filename}{self._file_extension}\n" + \
-                                f"%\tAuthor: {self._author}\n" + \
+                                f"%\tAuthor(s): {self._author}\n" + \
                                 f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
         
         self.body = self._fileinfo
