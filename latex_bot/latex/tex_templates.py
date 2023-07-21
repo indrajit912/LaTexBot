@@ -715,7 +715,7 @@ class AmsArticle:
             TexPackage(name="inputenc", options=["utf8"]),
             TexPackage(name="mathtools"),
             TexPackage(name="mathrsfs", comment="renders \mathscr cmd"),
-            TexPackage(name="xfrac", comment="renders diagonal frac notation: use \\sfrac{}{}"),   
+            TexPackage(name="hyperref")  
         ]
     
 
@@ -857,7 +857,7 @@ def main():
         keywords="Mathematics, Operator Algebras"
     )
 
-    print(article.preamble)
+    print(article.main_tex)
     
 
 if __name__ == '__main__':
