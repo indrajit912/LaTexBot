@@ -870,9 +870,8 @@ def main():
         keywords="Mathematics, Operator Algebras"
     )
 
-    print(article.main_tex)
+    print(article.reference_bib)
     
-
 
 if __name__ == '__main__':
     main()
