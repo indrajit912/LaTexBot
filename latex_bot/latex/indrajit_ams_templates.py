@@ -7,7 +7,7 @@
 
 from latex import TexPackage
 
-
+# TODO: Add all your AMS packages here
 class IndraAMS:
     """
     Packages I usually use for `amsart`
