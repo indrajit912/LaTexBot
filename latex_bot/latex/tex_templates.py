@@ -125,6 +125,14 @@ class Author:
     def current_address(self, new:list):
         self._curr_addr = new
 
+    @property
+    def support(self):
+        return self._support
+    
+    @support.setter
+    def support(self, new:str):
+        self._support = new
+
 
     @staticmethod
     def _add_texlinebreak_to_list(lst:list):
@@ -417,7 +425,7 @@ class AmsArticle:
          `tuple`: _author_outside_begin_doc, _author_inside_begin_doc
 
             _author_outside_begin_doc = r'''
-                    \newcommand{\AuthorOne}{<AUTHORS>}
+                    \newcommand{\AuthorOne}{<AUTHOR>}
                     \newcommand{\AuthorOneAddr}{%
                         <ADDR>
                     }
@@ -448,7 +456,87 @@ class AmsArticle:
             else AmsArticle.num_to_word(_index).title()
         )
 
-        print(_index)
+        _auth_initial = "\\newcommand{\\" + "Author" + _index 
+        _author_outside_begin_doc = (
+            "\n"
+            + _auth_initial + r"}{" + author.name + r"}"
+            + "%\n"
+        )
+
+        _author_inside_begin_doc = (
+            "\n"
+            + f"% Author {_index} information"
+            + "\n"
+            + r"\author{\Author" + _index + "}%"
+            + "\n"
+        )
+
+        if author.address:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Addr}{%"
+                + "\n"
+                + author._amsAddrTeX
+                + "\n"
+                + r"}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} address"
+                + "\n"
+                + r"\address{\Author" + _index + "Addr}%"
+                + "\n"
+            )
+
+        if author.current_address:
+            _author_outside_begin_doc += (
+                _auth_initial + r"CurrAddr}{%"
+                + "\n"
+                + author._currAddrTeX
+                + "\n}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} current address"
+                + "\n"
+                + r"\curraddr{\Author" + _index + "CurrAddr}%"
+                + "\n"
+            )
+
+        if author.email:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Email}{%"
+                + "\n"
+                + author.email
+                + "\n}%"
+                + "\n"
+            )
+            
+            _author_inside_begin_doc += (
+                f"% Author {_index} email"
+                + "\n"
+                + r"\email{\Author" + _index + "Email}%"
+                + "\n"
+            )
+
+        if author.support:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Thanks}{%"
+                + "\n"
+                + author.support
+                + "\n}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} support"
+                + "\n"
+                + r"\thanks{\Author" + _index + "Thanks}%"
+                + "\n"
+            )
+
+        return _author_outside_begin_doc, _author_inside_begin_doc
 
 
     @staticmethod
@@ -613,10 +701,16 @@ def main():
     # )
     # print(article.preamble)
 
-    indra = Author()
+    indra = Author(current_address=["Calcutta University", "Kolkata, India"],
+                   email="indrajit@gmail.com",
+                   support="This paper is supported by ISI"
+                   )
 
 
-    print(indra._amsAddrTeX)
+    AmsArticle._get_authors_main_tex_info(
+        author=indra,
+        _index=1
+    )
 
 
 if __name__ == '__main__':
