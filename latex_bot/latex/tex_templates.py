@@ -1,7 +1,6 @@
 # A library of LaTeX templates.
 #
 # Author: Indrajit Ghosh
-#
 # Created on: Jul 20, 2023
 #
 
@@ -162,7 +161,7 @@ class Author:
         return "\\\\".join(fine_lst)
     
     @staticmethod
-    def _add_comma_to_list(lst:list):
+    def _add_comma_to_list(lst:list, _and:bool=True):
         """
         This function accepts a list and add `, ` in between each of its elements.
 
@@ -178,14 +177,17 @@ class Author:
         --------
         >>> lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
         >>> _add_texbackslash_to_list(lst)
-            r"Indrajit Ghosh, RS Hostel, ISI Bangalore"
+            r"Indrajit Ghosh, RS Hostel and ISI Bangalore"
         """
         fine_lst = []
         for e in lst:
             if e != "":
                 fine_lst.append(e)
+
+        if not _and:
+            return ", ".join(fine_lst)
         
-        return ", ".join(fine_lst)
+        return ", ".join(fine_lst[:-1]) + " and " + fine_lst[-1]
     
     @staticmethod
     def join_authors(lst_authors:list):
@@ -295,13 +297,18 @@ class AmsArticle:
         )
         
         # PDF info
-        self._pdftitle = title
-        self._pdfauthor = ", ".join([ath.name for ath in self._authors])
+        self._pdftitle = self._title
+        self._pdfauthor = Author._add_comma_to_list(
+            [ath._name for ath in self._authors]
+        )
         self._pdfsubject = pdfsubject
         self._pdfkeywords = pdfkeywords
         self._pdfcreator = pdfcreator
         self._pdfcreationdate = pdfcreationdate
-        self._pdfcolorlink = pdfcolorlink
+        self._pdfcolorlink = (
+            'true' if pdfcolorlink
+            else ''
+        )
         self._pdflinkcolor = pdflinkcolor
         self._pdfurlcolor = pdfurlcolor
         self._pdfcitecolor = pdfcitecolor
@@ -329,6 +336,98 @@ class AmsArticle:
         """
         self._update_preamble()
         self._update_reference_bib()
+        self._update_main_tex()
+
+
+    def _update_main_tex(self):
+        """
+        This method will update main `TexFile` for the project
+        Updates the `self.main_tex` attr
+        """
+        authors_outside = authors_inside = ''
+
+        i = 1
+        for auth in self._authors:
+            auth_out, auth_in = self._get_authors_main_tex_info(
+                author = auth,
+                _index = i
+            )
+            authors_outside += auth_out
+            authors_inside += auth_in
+            i += 1
+
+        main_pre_cmds = (
+            r"\newcommand{\Title}{" + self._title + "}%"
+            + "\n"
+            r"\newcommand{\ShortTitle}{" + self._short_title + "}%"
+            + "\n\n"
+        )
+
+        main_pre_cmds += r"""
+%%--------------------------------------------------------------
+%%%	        Author(s) Information
+%%--------------------------------------------------------------
+"""
+        main_pre_cmds += authors_outside + "\n"
+        main_pre_cmds += "-"*80 + "\n\n"
+
+        if self._subject_class:
+            main_pre_cmds += (
+                r"\newcommand{\SubjectClassText}{"
+                + self._subject_class
+                + "}%"
+                + "\n"
+            )
+
+        if self._dedicatory:
+            main_pre_cmds += (
+                r"\newcommand{\Dedicatory}{"
+                + self._dedicatory
+                + "}%"
+                + "\n"
+            )
+
+        if self._keywords:
+            main_pre_cmds += (
+                r"\newcommand{\Keywords}{"
+                + self._keywords
+                + "}%"
+                + "\n"
+            )
+
+        main_pre_cmds += r"\newcommand{\Date}{" + self._date + "}%\n"
+        main_pre_cmds += r"""
+%%--------------------------------------------------------------
+%%%	       PDF Constants
+%%--------------------------------------------------------------
+\newcommand{\pdfLinkColor}{cyan}
+\newcommand{\pdfUrlColor}{blue}
+\newcommand{\pdfCiteColor}{magenta}
+"""
+        main_pre_cmds += (
+            r"\newcommand{\pdfTitle}{" + self._pdftitle + "}%"
+            + "\n"
+            r"\newcommand{\pdfAuthor}{" + self._pdfauthor + "}%"
+            + "\n"
+            + r"\newcommand{\pdfSubject}{" + self._pdfsubject + "}%"
+            + "\n"
+            + r"\newcommand{\pdfKeywords}{" + self._pdfkeywords + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreator}{" + self._pdfcreator + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreationDate}{" + self._pdfcreationdate + "}%"
+            + "\n"
+            + r"\newcommand{\pdfColorLink}{" + self._pdfcolorlink + "}%"
+            + "\n"
+        )
+
+        main_pre_cmds += "-"*80 + "\n\n"
+
+        main_preamble = ""
+        main_body_text = ""
+
+        self.main_pre_doc_cmds = main_pre_cmds
+
 
 
     def _update_preamble(self):
@@ -689,28 +788,26 @@ class AmsArticle:
 
 
 def main():
-    
-    # article = AmsArticle(
-    #     authors=[
-    #         Author(),
-    #         Author(
-    #             name="Soumyashant Nayak",
-    #             email="nsoum@gmail.com",
-    #         )
-    #     ]
-    # )
-    # print(article.preamble)
 
     indra = Author(current_address=["Calcutta University", "Kolkata, India"],
                    email="indrajit@gmail.com",
                    support="This paper is supported by ISI"
                    )
-
-
-    AmsArticle._get_authors_main_tex_info(
-        author=indra,
-        _index=1
+    
+    article = AmsArticle(
+        authors=[
+            indra,
+            Author(
+                name="Soumyashant Nayak",
+                email="nsoum@gmail.com",
+            )
+        ],
+        subjectclass="4bdjf, dkfsoi45, 23jJokL",
+        dedicatory="This paper is dedicated to my Mother",
+        keywords="Mathematics, Operator Algebras"
     )
+    
+    print(article.main_pre_doc_cmds)
 
 
 if __name__ == '__main__':
