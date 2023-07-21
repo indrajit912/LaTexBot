@@ -64,13 +64,13 @@ class Author:
 
         _fulladdr = [self._dept, self._institute] + self._addr
 
-        self._amsAddrTeX:str = self._add_texlinebreak_to_list(_fulladdr)
+        self._amsAddrTeX:str = self._add_comma_to_list(_fulladdr)
 
         self._email:str = email
         self._curr_addr:list = current_address
 
         self._currAddrTeX = (
-            self._add_texlinebreak_to_list(self._curr_addr)
+            self._add_comma_to_list(self._curr_addr)
             if self._curr_addr is not None
             else None
         )
@@ -152,6 +152,32 @@ class Author:
                 fine_lst.append(e)
         
         return "\\\\".join(fine_lst)
+    
+    @staticmethod
+    def _add_comma_to_list(lst:list):
+        """
+        This function accepts a list and add `, ` in between each of its elements.
+
+        Parameter(s):
+        -------------
+            `lst`: `list`
+
+        Returns:
+        --------
+            `str`
+
+        Example:
+        --------
+        >>> lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
+        >>> _add_texbackslash_to_list(lst)
+            r"Indrajit Ghosh, RS Hostel, ISI Bangalore"
+        """
+        fine_lst = []
+        for e in lst:
+            if e != "":
+                fine_lst.append(e)
+        
+        return ", ".join(fine_lst)
     
     @staticmethod
     def join_authors(lst_authors:list):
@@ -320,7 +346,8 @@ class AmsArticle:
             filename="preamble",
             classfile=True,
             file_extension=".tex",
-            body_text=_preamble_body_text
+            body_text=_preamble_body_text,
+            author=self._pdfauthor
         )
 
     def _update_reference_bib(self):
@@ -335,7 +362,8 @@ class AmsArticle:
             filename="references",
             classfile=True,
             file_extension=".bib",
-            body_text=_ref_body_text
+            body_text=_ref_body_text,
+            author=self._pdfauthor
         )
 
     def add_package(self, package:TexPackage):
@@ -351,6 +379,76 @@ class AmsArticle:
         """
         self._references.append(ref)
         self._update()
+
+    @staticmethod
+    def num_to_word(num:int):
+        """
+        # TODO: Write it properly
+        Converts a given `num` into english words.
+
+        Example:
+        --------
+        >>> num_to_word(78)
+            "seventy eight"
+
+        Reference:
+        ----------
+            "https://www.javatpoint.com/python-program-to-convert-a-given-number-into-words"
+        """
+        _ones = {
+            1 : "one",
+            2 : "two",
+            3 : "three",
+            4 : "four",
+            5 : "five",
+            6 : "six",
+            7 : "seven",
+            8 : "eight",
+            9 : "nine"
+        }
+
+        return _ones[num]
+    
+    @staticmethod
+    def _get_authors_main_tex_info(author:Author, _index:int=None):
+        """
+        Returns:
+        --------
+         `tuple`: _author_outside_begin_doc, _author_inside_begin_doc
+
+            _author_outside_begin_doc = r'''
+                    \newcommand{\AuthorOne}{<AUTHORS>}
+                    \newcommand{\AuthorOneAddr}{%
+                        <ADDR>
+                    }
+                    \newcommand{\AuthorOneCurrAddr}{%
+                        <CURR_ADDR>
+                    }
+                    \newcommand{\AuthorOneEmail}{%
+                        <EMAIL>
+                    }
+                    \newcommand{\AuthorOneThanks}{%
+                        <THANKS>
+                    }
+                '''
+
+            _author_inside_begin_doc = r'''
+                %  Information for author <_index>
+                \author{\Author<_index>}
+                \address{\Author<_index>Addr}
+                \curraddr{\Author<_index>CurrAddr}
+                \email{\Author<_index>Email}
+                \thanks{\Author<_index>Thanks}
+            '''
+
+
+        """
+        _index = (
+            '' if _index is None
+            else AmsArticle.num_to_word(_index).title()
+        )
+
+        print(_index)
 
 
     @staticmethod
@@ -504,8 +602,21 @@ class AmsArticle:
 
 def main():
     
-    article = AmsArticle()
-    print(article.reference_bib)
+    # article = AmsArticle(
+    #     authors=[
+    #         Author(),
+    #         Author(
+    #             name="Soumyashant Nayak",
+    #             email="nsoum@gmail.com",
+    #         )
+    #     ]
+    # )
+    # print(article.preamble)
+
+    indra = Author()
+
+
+    print(indra._amsAddrTeX)
 
 
 if __name__ == '__main__':
