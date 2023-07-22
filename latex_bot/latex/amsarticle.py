@@ -302,6 +302,12 @@ class PlainArticle:
             tex_dir=self._project_dir
         )
 
+    def add_packages(self):
+        """
+        TODO: Adds package to `self._packages`
+        """
+        pass
+
 
     def _update_main_tex(self):
         """
