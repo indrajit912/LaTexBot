@@ -1,3 +1,3 @@
 from .latex import *
-from .tex_templates import *
+from .amsarticle import *
 from .indrajit_ams_templates import IndraAMS

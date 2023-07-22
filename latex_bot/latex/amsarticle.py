@@ -1,4 +1,4 @@
-# A library of LaTeX templates.
+# A module for AMS Article Template.
 #
 # Author: Indrajit Ghosh
 # Created on: Jul 20, 2023
