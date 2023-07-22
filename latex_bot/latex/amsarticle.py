@@ -10,7 +10,7 @@ from datetime import datetime
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
-__all__ = ["Author", "AmsArticle"]
+__all__ = ["Author", "PlainArticle", "AmsArticle"]
 
 class Author:
     """
@@ -65,6 +65,7 @@ class Author:
         _fulladdr = [self._dept, self._institute] + self._addr
 
         self._amsAddrTeX:str = self._add_comma_to_list(_fulladdr)
+        self._artAddrTeX:str = self._add_texlinebreak_to_list(_fulladdr)
 
         self._email:str = email
         self._curr_addr:list = current_address
@@ -204,6 +205,121 @@ class Author:
             `str`
         """
         return ", ".join([ath._name for ath in lst_authors])
+    
+
+class PlainArticle:
+    """
+    A class representing Plain Article LaTeX document.
+
+    Author: Indrajit Ghosh
+    Date: Jul 22, 2023
+    """
+    default_title = "\\AmS-art \\TeX\\ Template"
+    default_authors = [Author()]
+    default_date = r"\today"
+    default_project_dir = Path.cwd() / "new_plain_art"
+
+    def __init__(
+            self,
+            title:str=None,
+            authors:list=None,
+            date:str=None,
+            packages:list=None,
+            *,
+            pdfsubject:str = "Mathematics",
+            pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
+            pdfcreator:str = "MixTeX",
+            pdfcreationdate:str = r"\today",
+            pdfcolorlink:bool = True,
+            pdflinkcolor:str = "cyan",
+            pdfurlcolor:str = "blue",
+            pdfcitecolor:str = "magenta",
+            papersize:str = "a4paper",
+            fontsize:str = "11pt",
+            
+    ):
+        self._title:str = (
+            title if title is not None
+            else self.default_title
+        )
+
+        self._authors:list = (
+            authors if authors is not None
+            else self.default_authors
+        )
+
+        self._packages:list = (
+            packages
+            if packages is not None
+            else self._get_default_packages()
+        )
+
+        self._date:str = (
+            self.default_date if date is None
+            else date
+        )
+
+        # PDF info
+        self._pdftitle = self._title
+        self._pdfauthor = Author._add_comma_to_list(
+            [ath._name for ath in self._authors]
+        )
+        self._pdfsubject = pdfsubject
+        self._pdfkeywords = pdfkeywords
+        self._pdfcreator = pdfcreator
+        self._pdfcreationdate = pdfcreationdate
+        self._pdfcolorlink = (
+            'true' if pdfcolorlink
+            else ''
+        )
+        self._pdflinkcolor = pdflinkcolor
+        self._pdfurlcolor = pdfurlcolor
+        self._pdfcitecolor = pdfcitecolor
+        self._papersize = papersize
+        self._fontsize = fontsize
+
+
+        # TODO: Setting up `main.tex` TexFile
+        self._main_tex = TexFile(
+            tex_compiler="pdflatex",
+            output_format=".pdf",
+            documentclass=r"\documentclass[12pt, twoside]{article}",
+            filename="main",
+            file_extension=".tex"
+        )
+
+
+    @staticmethod
+    def _get_default_packages():
+        """
+        Returns a list of packages for Plain Article
+        """
+        return [
+            TexPackage(name="inputenc", options=['utf8']),
+            TexPackage(name="fontenc", options=['T1']),
+            TexPackage(
+                name="lmodern",
+                comment="To get high quality fonts"
+            ),
+            TexPackage(
+                name="geometry",
+                options=["top=1in", "bottom=1in", "left=1in", "right=1in"]
+            ),
+            TexPackage(
+                name="authblk",
+                comment="For Author Titling and affiliating Purpose"
+            ),
+            TexPackage(name="lipsum"),
+            TexPackage(
+                name="titling",
+                comment="Customizing the title section",
+                associated_cmds=r"""\setlength{\droptitle}{-4\baselineskip} % Move the title up
+\pretitle{\begin{center}\LARGE\bfseries} % Article title formatting
+	\posttitle{\end{center}} % Article title closing formatting
+"""
+            ),
+        ]
+
 
 
 class AmsArticle:
