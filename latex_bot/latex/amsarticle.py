@@ -215,14 +215,14 @@ class PlainArticle:
     Date: Jul 22, 2023
     """
     default_title = "\\AmS-art \\TeX\\ Template"
-    default_authors = [Author()]
+    default_author = Author()
     default_date = r"\today"
     default_project_dir = Path.cwd() / "new_plain_art"
 
     def __init__(
             self,
             title:str=None,
-            authors:list=None,
+            author:Author=None,
             date:str=None,
             packages:list=None,
             *,
@@ -243,9 +243,9 @@ class PlainArticle:
             else self.default_title
         )
 
-        self._authors:list = (
-            authors if authors is not None
-            else self.default_authors
+        self._author:Author = (
+            author if author is not None
+            else self.default_author
         )
 
         self._packages:list = (
@@ -261,9 +261,7 @@ class PlainArticle:
 
         # PDF info
         self._pdftitle = self._title
-        self._pdfauthor = Author._add_comma_to_list(
-            [ath._name for ath in self._authors]
-        )
+        self._pdfauthor = self._author
         self._pdfsubject = pdfsubject
         self._pdfkeywords = pdfkeywords
         self._pdfcreator = pdfcreator
@@ -278,14 +276,100 @@ class PlainArticle:
         self._papersize = papersize
         self._fontsize = fontsize
 
+        self._update_main_tex()
 
-        # TODO: Setting up `main.tex` TexFile
-        self._main_tex = TexFile(
+
+    def _update_main_tex(self):
+        """
+        Updates the `main.tex`
+        """
+        _main_preamble = ""
+        _main_preamble += sum(pkg for pkg in self._packages)
+        _main_pre_doc_cmds = (
+            "\n\n"
+            + r"\newcommand{\Title}{" + self._title + "}%"
+            + "\n"
+            + r"\newcommand{\Author}{" + self._author.name + "}%"
+            + "\n"
+            + r"\newcommand{\Department}{" + self._author.department + "}%"
+            + "\n"
+            + r"\newcommand{\Institute}{" + self._author.institute + "}%"
+            + "\n"
+            + r"\newcommand{\Date}{" + self._date + "}%"
+            + "\n"
+        )
+
+        _main_pre_doc_cmds += r"""
+%%--------------------------------------------------------------
+%%%	       PDF Constants
+%%--------------------------------------------------------------
+\newcommand{\pdfLinkColor}{cyan}
+\newcommand{\pdfUrlColor}{blue}
+\newcommand{\pdfCiteColor}{magenta}
+"""
+        _main_pre_doc_cmds += (
+            r"\newcommand{\pdfTitle}{" + self._pdftitle + "}%"
+            + "\n"
+            r"\newcommand{\pdfAuthor}{" + self._pdfauthor.name + "}%"
+            + "\n"
+            + r"\newcommand{\pdfSubject}{" + self._pdfsubject + "}%"
+            + "\n"
+            + r"\newcommand{\pdfKeywords}{" + self._pdfkeywords + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreator}{" + self._pdfcreator + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreationDate}{" + self._pdfcreationdate + "}%"
+            + "\n"
+            + r"\newcommand{\pdfColorLink}{" + self._pdfcolorlink + "}%"
+            + "\n"
+        )
+
+        _main_pre_doc_cmds += "%" + "-"*80 + "\n\n"
+
+        _main_pre_doc_cmds += r"""\hypersetup{
+	pdftitle={\Title},
+	pdfauthor={\Author},
+	pdfsubject={\PDFsubject},
+	pdfcreationdate={\today},
+	pdfcreator={\PDFcreator},
+	pdfkeywords={\PDFkeywords},
+	colorlinks=true,
+	linkcolor={cyan},
+	%    filecolor=magenta,      
+	urlcolor=blue,
+	citecolor=magenta,
+	pdfpagemode=UseOutlines,
+}
+"""
+        _main_post_doc_cmds = (
+            r"\title{\Title}%"
+            + "\n"
+            + r"\author{\textsc{\Author}}%"
+            + "\n"
+            + r"\affil{\normalsize \Department\\ \normalsize \Institute}%"
+            + "\n"
+            + r"\date{\Date}%"
+            + "\n"
+            + r"\maketitle%"
+            + "\n"
+            + r"\thispagestyle{empty}%"
+            + "\n"
+
+        )
+        _main_body_text = r"\lipsum % Write your article here"
+
+        # Setting up `main.tex` TexFile
+        self.main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
             documentclass=r"\documentclass[12pt, twoside]{article}",
             filename="main",
-            file_extension=".tex"
+            file_extension=".tex",
+            preamble= _main_preamble,
+            pre_doc_commands=_main_pre_doc_cmds,
+            body_text=_main_body_text,
+            post_doc_commands=_main_post_doc_cmds,
+            classfile=False
         )
 
 
@@ -318,6 +402,7 @@ class PlainArticle:
 	\posttitle{\end{center}} % Article title closing formatting
 """
             ),
+            TexPackage(name="hyperref"),
         ]
 
 
@@ -992,21 +1077,12 @@ def main():
                    support="This paper is supported by ISI"
                    )
     
-    article = AmsArticle(
-        authors=[
-            indra,
-            Author(
-                name="Soumyashant Nayak",
-                email="nsoum@gmail.com",
-            )
-        ],
-        subjectclass="4bdjf, dkfsoi45, 23jJokL",
-        dedicatory="This paper is dedicated to my Mother",
-        keywords="Mathematics, Operator Algebras",
-        project_dir=Path.home() / "Desktop" / "new_ams_art"
+    article = PlainArticle(
+        title="Plain Article",
+        author=indra
     )
 
-    article.create()
+    print(article.main_tex)
 
 
 if __name__ == '__main__':
