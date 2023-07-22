@@ -47,6 +47,14 @@ class TexPackage:
             if comment
             else ""
         )
+        if associated_cmds is not None:
+            if isinstance(associated_cmds, str):
+                associated_cmds = [associated_cmds]
+            if isinstance(associated_cmds, list):
+                pass
+            else:
+                raise Exception("The attr `associated_cmds` of a `TexPackage` should be of type `list`.")
+            
         self._associated_cmds = (
             "%\n".join(associated_cmds)
             if associated_cmds is not None
