@@ -24,7 +24,8 @@ class TexPackage:
             self, 
             name, 
             options:list=None,
-            comment:str=None
+            comment:str=None,
+            associated_cmds:list=None
     ):
         
         if isinstance(name, str):
@@ -46,13 +47,25 @@ class TexPackage:
             if comment
             else ""
         )
+        self._associated_cmds = (
+            "%\n".join(associated_cmds)
+            if associated_cmds is not None
+            else ""
+        )
 
 
     def __str__(self):
+        _pkg_str = ''
+
         if self._options == '':
-            return r"\usepackage{" + self._name + r"}" + f"% {self._comment}\n"
+            _pkg_str += r"\usepackage{" + self._name + r"}" + f"% {self._comment}\n"
         else:
-            return r"\usepackage[" + self._options + r"]{" + self._name + r"}" + f"% {self._comment}\n"
+            _pkg_str += r"\usepackage[" + self._options + r"]{" + self._name + r"}" + f"% {self._comment}\n"
+
+        _pkg_str += self._associated_cmds
+
+        return _pkg_str
+
     
     def __add__(self, right):
         return self.__str__() + right.__str__()
