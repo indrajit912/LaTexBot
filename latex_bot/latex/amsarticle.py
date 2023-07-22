@@ -225,6 +225,7 @@ class PlainArticle:
             author:Author=None,
             date:str=None,
             packages:list=None,
+            project_dir:list=None,
             *,
             pdfsubject:str = "Mathematics",
             pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
@@ -259,6 +260,11 @@ class PlainArticle:
             else date
         )
 
+        self._project_dir:Path = (
+            self.default_project_dir if project_dir is None
+            else Path(project_dir)
+        )
+
         # PDF info
         self._pdftitle = self._title
         self._pdfauthor = self._author
@@ -277,6 +283,24 @@ class PlainArticle:
         self._fontsize = fontsize
 
         self._update_main_tex()
+
+    def create(self):
+        """
+        Creates the PlainArticle in `self._project_dir`
+        """
+        self._update_main_tex()
+
+        # Creating `self._project_dir`
+        if not self._project_dir.exists():
+            print("\n\n - Creating the project directory...")
+            self._project_dir.mkdir()
+        else:
+            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
+
+        print(f" - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...\n")
+        self.main_tex.write(
+            tex_dir=self._project_dir
+        )
 
 
     def _update_main_tex(self):
@@ -326,21 +350,6 @@ class PlainArticle:
 
         _main_pre_doc_cmds += "%" + "-"*80 + "\n\n"
 
-        _main_pre_doc_cmds += r"""\hypersetup{
-	pdftitle={\Title},
-	pdfauthor={\Author},
-	pdfsubject={\PDFsubject},
-	pdfcreationdate={\today},
-	pdfcreator={\PDFcreator},
-	pdfkeywords={\PDFkeywords},
-	colorlinks=true,
-	linkcolor={cyan},
-	%    filecolor=magenta,      
-	urlcolor=blue,
-	citecolor=magenta,
-	pdfpagemode=UseOutlines,
-}
-"""
         _main_post_doc_cmds = (
             r"\title{\Title}%"
             + "\n"
@@ -402,7 +411,25 @@ class PlainArticle:
 	\posttitle{\end{center}} % Article title closing formatting
 """
             ),
-            TexPackage(name="hyperref"),
+            TexPackage(
+                name="hyperref",
+                associated_cmds=r"""
+\hypersetup{
+	pdftitle={\Title},
+	pdfauthor={\Author},
+	pdfsubject={\pdfSubject},
+	pdfcreationdate={\today},
+	pdfcreator={\pdfCreator},
+	pdfkeywords={\pdfKeywords},
+	colorlinks=true,
+	linkcolor={cyan},
+	%    filecolor=magenta,      
+	urlcolor=\pdfUrlColor,
+	citecolor=\pdfCiteColor,
+	pdfpagemode=UseOutlines,
+}
+"""
+            ),
         ]
 
 
@@ -1072,17 +1099,19 @@ class AmsArticle:
 
 def main():
 
-    indra = Author(current_address=["Calcutta University", "Kolkata, India"],
-                   email="indrajit@gmail.com",
-                   support="This paper is supported by ISI"
-                   )
+    indra = Author(
+        current_address=["Calcutta University", "Kolkata, India"],
+        email="indrajit@gmail.com",
+        support="This paper is supported by ISI"
+    )
     
     article = PlainArticle(
         title="Plain Article",
-        author=indra
+        author=indra,
+        project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
-    print(article.main_tex)
+    article.create()
 
 
 if __name__ == '__main__':
