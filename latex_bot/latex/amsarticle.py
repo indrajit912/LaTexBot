@@ -253,7 +253,7 @@ class AmsArticle:
             pdfurlcolor:str = "blue",
             pdfcitecolor:str = "magenta",
             papersize:str = "a4paper",
-            fontsize:str = "12pt",
+            fontsize:str = "11pt",
             **kwargs
     ):
         self._title:str = (
@@ -354,33 +354,35 @@ class AmsArticle:
             print(" - Creating `sections` dir ...\n")
             self._sections_dir.mkdir()
         else:
-            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`")
+            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
 
         # Writing LaTeX files
-        print(f"\n\n - Writing `{self.preamble.filename}.{self.preamble.file_extension}`...")
+        print(f" - Writing `{self.preamble.filename}.{self.preamble.file_extension}`...")
         self.preamble.write(
             tex_dir=self._project_dir
         )
 
-        print(f"\n - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...")
+        print(f" - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...")
         self.main_tex.write(
             tex_dir=self._project_dir
         )
 
 
-        print(f"\n - Writing `{self.reference_bib.filename}.{self.reference_bib.file_extension}`...")
+        print(f" - Writing `{self.reference_bib.filename}.{self.reference_bib.file_extension}`...")
         self.reference_bib.write(
             tex_dir=self._project_dir
         )
 
 
-        print("\n\n - Writing sections...")
+        print("\n - Writing sections...")
 
         for sec in self._sections:
             print(f"\n -- Writing `{sec.filename}.{sec.file_extension}`...")
             sec.write(
                 tex_dir = self._sections_dir
             )
+
+        print(f"\n\nProject Dir: `{self._project_dir}`\n")
         
 
 
