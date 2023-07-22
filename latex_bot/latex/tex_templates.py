@@ -235,6 +235,8 @@ class AmsArticle:
             keywords:str = None,
             date:str = None,
             packages:list = None, # `list` of `TexPackage`s
+            theorem_styles:str = None,
+            custom_commands:str = None,
             sections:list = None, # `list` of `TexFile`s
             references:list = None, # `list` of reference entries
             project_dir:Path = None,
@@ -269,7 +271,19 @@ class AmsArticle:
         self._packages:list = (
             packages
             if packages is not None
-            else self._default_amsart_packages()
+            else Preamble._default_amsart_packages()
+        )
+
+        self._theorem_styles:str = (
+            theorem_styles
+            if theorem_styles is not None
+            else Preamble._default_ams_theorem_styles()
+        )
+
+        self._custom_commands:str = (
+            custom_commands
+            if custom_commands is not None
+            else Preamble._default_ams_commands()
         )
 
         self._sections:list = (
@@ -495,7 +509,6 @@ class AmsArticle:
 
     def _update_preamble(self):
         """
-        TODO: Add math constants to preamble
         Updates the preamble.
         If at any  moment `self._authors` gets updated this function 
         should be called to update the `self._preamble`.
@@ -504,7 +517,9 @@ class AmsArticle:
         self.preamble:Preamble = Preamble(
             filename="preamble",
             packages=self._packages,
-            author=self._pdfauthor
+            theorem_styles=self._theorem_styles,
+            custom_commands=self._custom_commands,
+            author=self._pdfauthor,
         )
 
     def _update_reference_bib(self):
@@ -687,38 +702,6 @@ class AmsArticle:
 
         return _author_outside_begin_doc, _author_inside_begin_doc
 
-
-    @staticmethod
-    def _default_amsart_packages():
-        """
-        Returns a `list` of default `TexPackage`s which Indrajit 
-        uses for `amsart`
-
-        Returns:
-        --------
-            `list[TexPackage(), ..., TexPackage()]`
-        """
-        return [
-            TexPackage(
-                name="geometry",
-                options=[
-                    "top=0.9in",
-                    "bottom=1in",
-                    "left=1in",
-                    "right=1in"
-                ]
-            ),
-            TexPackage(
-                name=["amsmath", "amssymb", "amsthm"],
-                comment= "amssymb internally loads amsfonts"
-            ),
-            TexPackage(name="inputenc", options=["utf8"]),
-            TexPackage(name="mathtools"),
-            TexPackage(name="mathrsfs", comment="renders \mathscr cmd"),
-            TexPackage(name="hyperref")  
-        ]
-    
-
     @staticmethod
     def _default_amsart_sections():
         """
@@ -856,9 +839,8 @@ def main():
         dedicatory="This paper is dedicated to my Mother",
         keywords="Mathematics, Operator Algebras"
     )
+    print(article.preamble)
 
-    print(article.main_tex)
-    
 
 if __name__ == '__main__':
     main()
