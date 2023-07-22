@@ -377,7 +377,7 @@ class AmsArticle:
         print("\n - Writing sections...")
 
         for sec in self._sections:
-            print(f"\n -- Writing `{sec.filename}.{sec.file_extension}`...")
+            print(f" -- Writing `{sec.filename}.{sec.file_extension}`...")
             sec.write(
                 tex_dir = self._sections_dir
             )
