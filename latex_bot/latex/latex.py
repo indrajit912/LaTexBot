@@ -580,8 +580,6 @@ class Preamble(TexFile):
 """
         _preamble_body_text += _cmds + "\n" + "-"*70
 
-
-        # TODO: Create the `body_text` for the preamble
         super().__init__(
             tex_compiler='',
             output_format='.tex',
@@ -597,6 +595,12 @@ class Preamble(TexFile):
         Returns LaTeX packages that I usually use in `amsart` doc.
         """
         return [
+            TexPackage(name="inputenc", options=['utf8']),
+            TexPackage(name="fontenc", options=['T1']),
+            TexPackage(
+                name="lmodern",
+                comment="To get high quality fonts"
+            ),
             TexPackage(
                 name="geometry",
                 options=[
@@ -607,13 +611,30 @@ class Preamble(TexFile):
                 ]
             ),
             TexPackage(
-                name=["amsmath", "amssymb", "amsthm"],
+                name=["amsmath", "amssymb", "amsthm", "amscd"],
                 comment= "amssymb internally loads amsfonts"
             ),
-            TexPackage(name="inputenc", options=["utf8"]),
-            TexPackage(name="mathtools"),
-            TexPackage(name="mathrsfs", comment="renders \mathscr cmd"),
-            TexPackage(name="xfrac", comment="renders diagonal frac notation: use \\sfrac{}{}"),   
+            TexPackage(
+            name="hyperref",
+            associated_cmds=[
+                r"""\hypersetup{
+	pdftitle={\pdfTitle},
+	pdfauthor={\pdfAuthor},
+	pdfsubject={\pdfSubject},
+	pdfcreationdate={\pdfCreationDate},
+	pdfcreator={\pdfCreator},
+	pdfkeywords={\pdfKeywords},
+	colorlinks=\pdfColorLink,
+	linkcolor={\pdfLinkColor},
+	%    filecolor=magenta,      
+	urlcolor=\pdfUrlColor,
+	citecolor=\pdfCiteColor,
+	pdfpagemode=UseOutlines,
+}"""
+            ]
+        ),
+        TexPackage(name="xcolor"),
+        TexPackage(name="lipsum"),
         ]
     
     @staticmethod
@@ -667,21 +688,6 @@ class Preamble(TexFile):
 % Operations
 \newcommand{\ds}{\displaystyle}
 \newcommand{\quotes}[1]{\textquotedblleft #1\textquotedblright}
-
-\hypersetup{
-	pdftitle={\pdfTitle},
-	pdfauthor={\pdfAuthor},
-	pdfsubject={\pdfSubject},
-	pdfcreationdate={\pdfCreationDate},
-	pdfcreator={\pdfCreator},
-	pdfkeywords={\pdfKeywords},
-	colorlinks=\pdfColorLink,
-	linkcolor={\pdfLinkColor},
-	%    filecolor=magenta,      
-	urlcolor=\pdfUrlColor,
-	citecolor=\pdfCiteColor,
-	pdfpagemode=UseOutlines,
-}
 """
 
 
