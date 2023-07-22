@@ -19,6 +19,12 @@ class IndraAMS:
     LaTeX packages that I usually use in `amsart` doc.
     """
     packages = [
+        TexPackage(name="inputenc", options=['utf8']),
+        TexPackage(name="fontenc", options=['T1']),
+        TexPackage(
+            name="lmodern",
+            comment="To get high quality fonts"
+        ),
         TexPackage(
             name="geometry",
             options=[
@@ -29,13 +35,56 @@ class IndraAMS:
             ]
         ),
         TexPackage(
-            name=["amsmath", "amssymb", "amsthm"],
+            name=["amsmath", "amssymb", "amsthm", "amscd"],
             comment= "amssymb internally loads amsfonts"
         ),
-        TexPackage(name="inputenc", options=["utf8"]),
+        TexPackage(
+            name="bbm",
+            comment="For typing `set of natural nums`, e.g - \mathbbm{N}"
+        ),
         TexPackage(name="mathtools"),
         TexPackage(name="mathrsfs", comment="renders \mathscr cmd"),
-        TexPackage(name="xfrac", comment="renders diagonal frac notation: use \\sfrac{}{}"),   
+        TexPackage(name="xfrac", comment="renders diagonal frac notation: use \\sfrac{}{}"),  
+        TexPackage(
+            name="hyperref",
+            associated_cmds=[
+                r"""\hypersetup{
+	pdftitle={\pdfTitle},
+	pdfauthor={\pdfAuthor},
+	pdfsubject={\pdfSubject},
+	pdfcreationdate={\pdfCreationDate},
+	pdfcreator={\pdfCreator},
+	pdfkeywords={\pdfKeywords},
+	colorlinks=\pdfColorLink,
+	linkcolor={\pdfLinkColor},
+	%    filecolor=magenta,      
+	urlcolor=\pdfUrlColor,
+	citecolor=\pdfCiteColor,
+	pdfpagemode=UseOutlines,
+}"""
+            ]
+        ),
+        TexPackage(name="array"),
+        TexPackage(
+            name="enumitem",
+            comment="Give extra customization on top of itemize and enumerate"
+        ),
+        TexPackage(
+            name="tikz-cd",
+            comment="Online editor: https://tikzcd.yichuanshen.de/"
+        ),
+        TexPackage(
+            name="microtype",
+            comment="To disable `ligatures` by using `\\DisableLigatures`.",
+            associated_cmds=[r"\DisableLigatures{encoding = *, family = *}"],
+        ),
+        TexPackage(name="graphicx"),
+        TexPackage(name="xcolor"),
+        TexPackage(name="lipsum"),
+        TexPackage(
+            name="dsfont",
+            comment="Renders '1' for characteristic function..."
+        ),
     ]
 
 
@@ -120,7 +169,7 @@ class IndraAMS:
 
     macros = r"""
 %Sets line spacing to 1 and a half
-%\linespread{1.1}
+\linespread{1}
 
 % Color constants : usages- \textcolor{<colorName>}{<text>}
 \definecolor{indraRed}{rgb}{0.593, 0.183, 0.183}
