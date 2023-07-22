@@ -213,9 +213,11 @@ class AmsArticle:
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
 
-    Parameter(s):
+    Attributes:
     -------------
         `packages`: `list[TexPackage(), ..., TexPackage()]`
+        `theorem_styles`: str
+        `custom_commands`: str
         `sections`: `list[TexFile(), ..., TexFile()]`
 
     """
@@ -339,6 +341,50 @@ class AmsArticle:
         self._update()
 
 
+    def create(self):
+        """
+        Creates the AMS project.
+        """
+        self._update()
+
+        # Creating `self._project_dir`
+        if not self._project_dir.exists():
+            print("\n\n - Creating the project directory...")
+            self._project_dir.mkdir()
+            print(" - Creating `sections` dir ...\n")
+            self._sections_dir.mkdir()
+        else:
+            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`")
+
+        # Writing LaTeX files
+        print(f"\n\n - Writing `{self.preamble.filename}.{self.preamble.file_extension}`...")
+        self.preamble.write(
+            tex_dir=self._project_dir
+        )
+
+        print(f"\n - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...")
+        self.main_tex.write(
+            tex_dir=self._project_dir
+        )
+
+
+        print(f"\n - Writing `{self.reference_bib.filename}.{self.reference_bib.file_extension}`...")
+        self.reference_bib.write(
+            tex_dir=self._project_dir
+        )
+
+
+        print("\n\n - Writing sections...")
+
+        for sec in self._sections:
+            print(f"\n -- Writing `{sec.filename}.{sec.file_extension}`...")
+            sec.write(
+                tex_dir = self._sections_dir
+            )
+        
+
+
+
     def _update(self):
         """
         Updates the `article`. This method should be called
@@ -384,7 +430,7 @@ class AmsArticle:
 %%--------------------------------------------------------------
 """
         main_pre_cmds += authors_outside + "\n"
-        main_pre_cmds += "-"*80 + "\n\n"
+        main_pre_cmds += "%" + "-"*80 + "\n\n"
 
         if self._subject_class:
             main_pre_cmds += (
@@ -436,7 +482,7 @@ class AmsArticle:
             + "\n"
         )
 
-        main_pre_cmds += "-"*80 + "\n\n"
+        main_pre_cmds += "%" + "-"*80 + "\n\n"
 
         self._main_preamble = r"\input{" + self.preamble.filename + "}\n"
         self._main_post_doc_cmds = (
@@ -455,7 +501,7 @@ class AmsArticle:
         if self._keywords:
             self._main_post_doc_cmds += r"\keywords{\Keywords}%" + "\n"
 
-        self._main_body_text = ""
+        self._main_body_text = r"\maketitle" + "%\n" + r"%\tableofcontents" + "\n\n"
         if self._sections:
             if 'abstract' in [sec._filename for sec in self._sections]:
                 # Abstract is there
@@ -838,9 +884,11 @@ def main():
         ],
         subjectclass="4bdjf, dkfsoi45, 23jJokL",
         dedicatory="This paper is dedicated to my Mother",
-        keywords="Mathematics, Operator Algebras"
+        keywords="Mathematics, Operator Algebras",
+        project_dir=Path.home() / "Desktop" / "new_ams_art"
     )
-    print(article.preamble)
+
+    article.create()
 
 
 if __name__ == '__main__':

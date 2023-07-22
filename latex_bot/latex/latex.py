@@ -560,7 +560,7 @@ class Preamble(TexFile):
 %%-----------------------------------------------------------------
 
 """
-        _preamble_body_text += sum(_packages) + "\n" + "-"*70
+        _preamble_body_text += sum(_packages) + "\n" + "%" + "-"*70
 
         _preamble_body_text += r"""
 
@@ -569,7 +569,7 @@ class Preamble(TexFile):
 %%-----------------------------------------------------------------
 
 """
-        _preamble_body_text += _thm_styles + "\n" + "-"*70
+        _preamble_body_text += _thm_styles + "\n" + "%" + "-"*70
 
         _preamble_body_text += r"""
 
@@ -578,7 +578,7 @@ class Preamble(TexFile):
 %%-----------------------------------------------------------------
 
 """
-        _preamble_body_text += _cmds + "\n" + "-"*70
+        _preamble_body_text += _cmds + "\n" + "%" + "-"*70
 
         super().__init__(
             tex_compiler='',
@@ -686,7 +686,7 @@ class Preamble(TexFile):
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 
 % Operations
-\newcommand{\ds}{\displaystyle}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\quotes}[1]{\textquotedblleft #1\textquotedblright}
 """
 
