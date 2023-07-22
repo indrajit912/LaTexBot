@@ -10,6 +10,7 @@ from datetime import datetime
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
+__all__ = ["Author", "AmsArticle"]
 
 class Author:
     """
