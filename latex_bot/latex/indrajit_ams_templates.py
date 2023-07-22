@@ -5,7 +5,8 @@
 # Date: Jul 21, 2023
 #
 
-from latex import TexPackage
+from latex import *
+
 
 # TODO: Add all your AMS packages here
 class IndraAMS:
@@ -13,10 +14,24 @@ class IndraAMS:
     Packages I usually use for `amsart`
     Author: Indrajit Ghosh
     Date: Jul 21, 2023
-    """
+    
+    LaTeX packages, thm style and macros that I usually use in `amsart` doc.
 
-    """
-    LaTeX packages that I usually use in `amsart` doc.
+    Attributes:
+    -----------
+        `packages`: Packages that I usually use in `amsart` document.
+                e.g.-   \usepackage[utf8]{inputenc}
+
+        `thmstyles` : Theorem Styles I use in `amsart`
+                e.g.-   \theoremstyle{plain}
+                        \newtheorem{theorem}{Theorem}[section]
+                        \newtheorem{prop}[theorem]{Proposition}
+                        \newtheorem{lem}[theorem]{Lemma}
+
+        `macros`: Macros I use in `amsart`
+                e.g.-   \newcommand{\C}{\mathbb{C}}
+                        \newcommand{\R}{\mathbb{R}}
+                        \newcommand{\N}{\mathbbm{N}}
     """
     packages = [
         TexPackage(name="inputenc", options=['utf8']),
@@ -332,20 +347,5 @@ class IndraAMS:
 \newcommand{\bB}{{\bf B}}
 \newcommand{\bE}{{\bf E}}
 \newcommand{\bN}{{\bf N}}
-
-\hypersetup{
-	pdftitle={\pdfTitle},
-	pdfauthor={\pdfAuthor},
-	pdfsubject={\pdfSubject},
-	pdfcreationdate={\pdfCreationDate},
-	pdfcreator={\pdfCreator},
-	pdfkeywords={\pdfKeywords},
-	colorlinks=\pdfColorLink,
-	linkcolor={\pdfLinkColor},
-	%    filecolor=magenta,      
-	urlcolor=\pdfUrlColor,
-	citecolor=\pdfCiteColor,
-	pdfpagemode=UseOutlines,
-}
 
 """
