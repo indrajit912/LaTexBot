@@ -217,6 +217,7 @@ class PlainArticle:
     default_title = "\\AmS-art \\TeX\\ Template"
     default_author = Author()
     default_date = r"\today"
+    default_body_text = r"\lipsum % Write something here!"
     default_project_dir = Path.cwd() / "new_plain_art"
 
     def __init__(
@@ -225,6 +226,7 @@ class PlainArticle:
             author:Author=None,
             date:str=None,
             packages:list=None,
+            body_text:str=None,
             project_dir:list=None,
             *,
             pdfsubject:str = "Mathematics",
@@ -253,6 +255,12 @@ class PlainArticle:
             packages
             if packages is not None
             else self._get_default_packages()
+        )
+
+        self._body_text = (
+            body_text
+            if body_text is not None
+            else self.default_body_text
         )
 
         self._date:str = (
@@ -284,6 +292,7 @@ class PlainArticle:
 
         self._update_main_tex()
 
+
     def create(self):
         """
         Creates the PlainArticle in `self._project_dir`
@@ -302,11 +311,12 @@ class PlainArticle:
             tex_dir=self._project_dir
         )
 
-    def add_packages(self):
+    def add_package(self, package:TexPackage):
         """
-        TODO: Adds package to `self._packages`
+        Appends `package` to `self._packages`
         """
-        pass
+        self._packages.append(package)
+        self._update_main_tex()
 
 
     def _update_main_tex(self):
@@ -371,20 +381,20 @@ class PlainArticle:
             + "\n"
 
         )
-        _main_body_text = r"\lipsum % Write your article here"
+        _main_body_text = self._body_text
 
         # Setting up `main.tex` TexFile
         self.main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
             documentclass=r"\documentclass[12pt, twoside]{article}",
+            pre_doc_commands=_main_pre_doc_cmds,
+            preamble= _main_preamble,
+            post_doc_commands=_main_post_doc_cmds,
+            body_text=_main_body_text,
+            author=self._author.name,
             filename="main",
             file_extension=".tex",
-            preamble= _main_preamble,
-            pre_doc_commands=_main_pre_doc_cmds,
-            body_text=_main_body_text,
-            post_doc_commands=_main_post_doc_cmds,
-            author=self._author.name,
             classfile=False
         )
 
