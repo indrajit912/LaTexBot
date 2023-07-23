@@ -384,6 +384,7 @@ class PlainArticle:
             pre_doc_commands=_main_pre_doc_cmds,
             body_text=_main_body_text,
             post_doc_commands=_main_post_doc_cmds,
+            author=self._author.name,
             classfile=False
         )
 
