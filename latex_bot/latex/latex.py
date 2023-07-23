@@ -254,7 +254,7 @@ class TexFile:
                                 f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
         
         self.body = self._fileinfo
-        
+        # TODO: Add ---- for every parts of the doc
         if not self._classfile:
             self.body += (
                 "\n"
@@ -279,11 +279,48 @@ class TexFile:
         else:
             self.body += self._body_text + "%\n\n"
 
-        self.body += (
+        self.body += self._add_dotted_lines(
+            msg=f"End of `{self._filename}{self._file_extension}`",
+            symbol="%"
+        )
+
+    @staticmethod
+    def _add_dotted_lines(
+        msg:str, heading:str=None, symbol:str="-", factor:int=80, _tex=True
+    ):
+        """
+        This function returns lines to the `msg`
+        
+        Example
+        --------
+        >>> TexFile._add_dotted_lines(heading="Hello World!", msg="Here is Text")
+
+                %--------------------------------------------%
+                %                Hello World!                
+                %--------------------------------------------%
+
+                Here is Text
+
+                %--------------------------------------------%
+        """
+        _factor = factor
+        _line = "%" + str(symbol) * _factor + "%"
+        heading = "" if heading is None else heading
+        _tex_symbol = "%" if _tex else ''
+
+        _head_line = "" if heading is "" else _line + "\n%"
+
+        return (
             "\n"
-            + "%" * 60 + "\n"
-            + f"%\t\tEnd of `{self._filename}{self._file_extension}`\n"
-            + "%" * 60 + "\n"
+            + _head_line
+            + str(heading)
+            + "\n"
+            + _line
+            + "\n\n"
+            + _tex_symbol + msg.center(_factor)
+            + "\n\n"
+            + _line
+            + "\n"
         )
 
 
