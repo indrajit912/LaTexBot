@@ -113,7 +113,12 @@ class TexFile:
         e.g. ``\\maketitle``
 
     body_text : :class:`str`
-        Text in between ``\\begin{document}`` and ``\\end{document}``
+        Texts in between `post_doc_commands` and `end_text`
+        e.g. "This is my first LaTeX document."
+
+    end_text : :class:`str`
+        This is mainly for `bibliography` related texts (in any) in the TeX file
+        This text is added just before "\\end{document}"
 
     file_extension : :class:`str`
         File extension, e.g. `.tex`, `.bib`, `.sty` etc
@@ -129,20 +134,23 @@ class TexFile:
         In `True` case the above attributes will be '' and `body_text` can be updated.
     """
 
-    default_documentclass = r"\documentclass[12pt, twoside]{article}"
-    default_preamble = r"""
-\usepackage[english]{babel}
-\usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
-"""
-    default_body_text = "\nYourTextHere\n"
     default_tex_compiler = "pdflatex"
     default_output_format = ".pdf"
-    default_pre_doc_commands = "\\date{\\today} % keep \\date{} for no date\n" + \
-                                            "\\newcommand{\\Author}{Indrajit Ghosh}\n"
-                                            
-    default_post_doc_commands = ""
+
+    default_documentclass = r"\documentclass[12pt, twoside]{article}"
+    default_pre_doc_commands = "\\newcommand{\\Title}{A \\LaTeX file}%\n" + \
+                                "\\newcommand{\\Author}{Indrajit Ghosh}%\n"
+    default_preamble = r"""
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
+"""
+    default_post_doc_commands = "\\maketitle"
+    default_body_text = "\nYourTextHere\n"
+    default_end_text = ""
+
+    default_filename = "untitled"                                     
     default_file_extension = ".tex"
-    default_filename = "untitled"
     default_author = "Indrajit Ghosh"
 
 
@@ -151,12 +159,13 @@ class TexFile:
             tex_compiler:str=None,
             output_format:str=None,
             documentclass:str=None,
-            preamble:str=None,
-            body_text:str=None,
             pre_doc_commands:str=None,
+            preamble:str=None,
             post_doc_commands:str=None,
-            file_extension:str=None,
+            body_text:str=None,
+            end_text:str=None,
             filename:str=None,
+            file_extension:str=None,
             author:str=None,
             classfile:bool=False,
     ):
@@ -178,22 +187,16 @@ class TexFile:
             else TexFile.default_documentclass
         )
 
-        self._preamble = (
-            preamble
-            if preamble is not None
-            else TexFile.default_preamble
-        )
-
-        self._body_text = (
-            body_text
-            if body_text is not None
-            else TexFile.default_body_text
-        )
-
         self._pre_doc_commands = (
             pre_doc_commands
             if pre_doc_commands is not None
             else TexFile.default_pre_doc_commands
+        )
+
+        self._preamble = (
+            preamble
+            if preamble is not None
+            else TexFile.default_preamble
         )
 
         self._post_doc_commands = (
@@ -202,16 +205,28 @@ class TexFile:
             else TexFile.default_post_doc_commands
         )
 
-        self._file_extension = (
-            file_extension
-            if file_extension is not None
-            else TexFile.default_file_extension
+        self._body_text = (
+            body_text
+            if body_text is not None
+            else TexFile.default_body_text
+        )
+
+        self._end_text = (
+            end_text
+            if end_text is not None
+            else TexFile.default_end_text
         )
 
         self._filename = (
             filename
             if filename is not None
             else TexFile.default_filename
+        )
+
+        self._file_extension = (
+            file_extension
+            if file_extension is not None
+            else TexFile.default_file_extension
         )
 
         self._author = (
@@ -224,7 +239,7 @@ class TexFile:
 
         if self._classfile:
             self._documentclass = self._preamble = self._post_doc_commands = \
-                            self._pre_doc_commands = self._output_format = ''
+                self._pre_doc_commands = self._output_format = self._end_text = ''
 
         self._rebuild()
 
@@ -255,6 +270,8 @@ class TexFile:
                 + self._post_doc_commands
                 + "%\n"
                 + self._body_text
+                + "%\n\n"
+                + self._end_text
                 + "\n\n"
                 + r"\end{document}"
                 + "%\n"
@@ -283,10 +300,10 @@ class TexFile:
             "tex_compiler": self._tex_compiler,
             "output_format": self._output_format,
             "documentclass": self._documentclass,
-            "preamble": self._preamble,
-            "body_text": self._body_text,
             "pre_doc_commands": self._pre_doc_commands,
+            "preamble": self._preamble,
             "post_doc_commands": self._post_doc_commands,
+            "body_text": self._body_text,
             "file_extension": self._file_extension,
             "filename": self._filename,
             "author": self._author
@@ -355,7 +372,7 @@ class TexFile:
         txt : :class:`str`
             String containing the text to be added.
         """
-        self._post_doc_commands += "\n" + txt + "\n"
+        self._body_text += "\n" + txt + "\n"
         self._rebuild()
 
 
@@ -713,7 +730,7 @@ class Preamble(TexFile):
 
 
 def main():
-    file = Preamble()
+    file = TexFile(end_text="This is the end text")
     print(file)
 
 
