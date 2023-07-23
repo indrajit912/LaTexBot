@@ -672,32 +672,26 @@ class Preamble(TexFile):
             else self._default_ams_commands()
         )
 
-        _preamble_body_text = r"""
+        _preamble_body_text = TexFile._add_dotted_lines(
+            heading="Required Packages",
+            msg=sum(_packages),
+            symbol='.',
+            factor=60
+        )
 
-%%-----------------------------------------------------------------
-%%		Packages for the project
-%%-----------------------------------------------------------------
+        _preamble_body_text += TexFile._add_dotted_lines(
+            heading="Theorem Styles",
+            msg=_thm_styles,
+            symbol='.',
+            factor=60
+        )
 
-"""
-        _preamble_body_text += sum(_packages) + "\n" + "%" + "-"*70
-
-        _preamble_body_text += r"""
-
-%%-----------------------------------------------------------------
-%%		Theorem and Environment Styles
-%%-----------------------------------------------------------------
-
-"""
-        _preamble_body_text += _thm_styles + "\n" + "%" + "-"*70
-
-        _preamble_body_text += r"""
-
-%%-----------------------------------------------------------------
-%%		Custom commands and macros
-%%-----------------------------------------------------------------
-
-"""
-        _preamble_body_text += _cmds + "\n" + "%" + "-"*70
+        _preamble_body_text += TexFile._add_dotted_lines(
+            heading="Custom Commands & Macros",
+            msg=_cmds,
+            symbol='.',
+            factor=60
+        )
 
         super().__init__(
             tex_compiler='',
@@ -812,7 +806,7 @@ class Preamble(TexFile):
 
 
 def main():
-    file = TexFile(end_text="This is the end text")
+    file = Preamble()
     print(file)
 
 
