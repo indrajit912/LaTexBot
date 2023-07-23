@@ -94,24 +94,36 @@ class TexFile:
     ----------
     tex_compiler : :class:`str`
         The TeX compiler to be used, e.g. ``latex``, ``pdflatex`` or ``lualatex``
+
     output_format : :class:`str`
         The output format resulting from compilation, e.g. ``.dvi`` or ``.pdf``
+
     documentclass : :class:`str`
-        The command defining the documentclass, e.g. ``\\documentclass[preview]{standalone}``
+        The command defining the documentclass, e.g. ``\\documentclass[11pt,a4paper]{amsart}``
+
+    pre_doc_commands : :class:`str`
+        Text to be inserted at the very begining of the file, 
+        e.g. ``\\newcommand{\Author}{Indrajit Ghosh}``
+
     preamble : :class:`str`
         The document's preamble, i.e. the part between ``\\documentclass`` and ``\\begin{document}``
+
+    post_doc_commands : :class:`str`
+        Text (definitions, commands) to be inserted at right after ``\\begin{document}``, 
+        e.g. ``\\maketitle``
+
     body_text : :class:`str`
         Text in between ``\\begin{document}`` and ``\\end{document}``
-    pre_doc_commands : :class:`str`
-        Text to be inserted at the very begining of the file, e.g. ``\\newcommand{\Author}{Indrajit Ghosh}``
-    post_doc_commands : :class:`str`
-        Text (definitions, commands) to be inserted at right after ``\\begin{document}``, e.g. ``\\boldmath``
+
     file_extension : :class:`str`
         File extension, e.g. `.tex`, `.bib`, `.sty` etc
+
     filename : :class: `str`
         Name of the TeX file, e.g. `main`, `bibliography` etc
+
     author : :class: `str`
         Author of the TexFile
+
     classfile : :class: `bool`
         If this is true then the TexFile will be assumed to be a class file like `sty`, `cls` etc.
         In `True` case the above attributes will be '' and `body_text` can be updated.
