@@ -302,7 +302,7 @@ class PlainArticle:
         """
         Adds `text` to `self._body_text`
         """
-        self._body_text += text
+        self._body_text += "\n" + text
         self._update_main_tex()
 
 
@@ -1140,6 +1140,10 @@ def main():
         author=indra,
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
+
+    print(article)
+
+    article.add_to_document("Hello My name is Indrajit")
 
     print(article)
 
