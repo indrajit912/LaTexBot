@@ -1,7 +1,8 @@
 # A module for LaTeX
 #
 # Author: Indrajit Ghosh
-# Date: Jun 17, 2023
+# Created On: Jun 17, 2023
+# Modified On: Jul 20, 2023
 #
 
 from datetime import datetime
@@ -283,7 +284,11 @@ class TexPackage:
 
 class TexFile:
     """
-    TeX templates used to create `plainarticle`, `article`, `amsarticle` etc
+    A class representing a LaTeX file
+    This is used to create `plainarticle`, `article`, `amsarticle` etc
+
+    Author: Indrajit Ghosh
+    Date: Jun 17, 2023
 
     Parameters
     ----------
