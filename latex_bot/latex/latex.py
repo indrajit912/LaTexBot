@@ -828,6 +828,40 @@ class TexFile:
         # print(_tmp_path)
 
 
+class TexEnvironment:
+    """
+    TODO: A class representing `LaTeX` environment
+
+    Author: Indrajit Ghosh
+    Date: 
+    """
+    pass
+
+
+class TexTable:
+    """
+    TODO: A class representing `LaTeX` table
+
+    Author: Indrajit Ghosh
+    Date: 
+
+    Reference(s):
+    -------------
+        [1] https://github.com/astanin/python-tabulate/blob/master/tabulate/__init__.py
+        [2] https://github.com/JelteF/PyLaTeX/blob/master/pylatex/table.py
+    """
+    pass
+
+class TexMatrix:
+    """
+    TODO: A class representing `LaTeX` matrix
+
+    Author: Indrajit Ghosh
+    Date:
+    """
+    pass
+
+
 
 class Preamble(TexFile):
     """
