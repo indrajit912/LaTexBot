@@ -214,7 +214,7 @@ class PlainArticle:
     Author: Indrajit Ghosh
     Date: Jul 22, 2023
     """
-    default_title = "\\AmS-art \\TeX\\ Template"
+    default_title = "Plain Article \\TeX\\ Template"
     default_author = Author()
     default_date = r"\today"
     default_body_text = r"\lipsum % Write something here!"
@@ -293,6 +293,27 @@ class PlainArticle:
         self._update_main_tex()
 
 
+    def __str__(self):
+        self._update_main_tex()
+        return self._main_tex.__str__()
+
+
+    def add_to_document(self, text:str):
+        """
+        Adds `text` to `self._body_text`
+        """
+        self._body_text += text
+        self._update_main_tex()
+
+
+    def add_package(self, package:TexPackage):
+        """
+        Appends `package` to `self._packages`
+        """
+        self._packages.append(package)
+        self._update_main_tex()
+
+
     def create(self):
         """
         Creates the PlainArticle in `self._project_dir`
@@ -307,16 +328,9 @@ class PlainArticle:
             raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
 
         print(f" - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...\n")
-        self.main_tex.write(
+        self._main_tex.write(
             tex_dir=self._project_dir
         )
-
-    def add_package(self, package:TexPackage):
-        """
-        Appends `package` to `self._packages`
-        """
-        self._packages.append(package)
-        self._update_main_tex()
 
 
     def _update_main_tex(self):
@@ -340,9 +354,9 @@ class PlainArticle:
         )
 
         _main_pre_doc_cmds += r"""
-%%--------------------------------------------------------------
+%%-------------------------------------------------
 %%%	       PDF Constants
-%%--------------------------------------------------------------
+%%-------------------------------------------------
 \newcommand{\pdfLinkColor}{cyan}
 \newcommand{\pdfUrlColor}{blue}
 \newcommand{\pdfCiteColor}{magenta}
@@ -364,8 +378,6 @@ class PlainArticle:
             + "\n"
         )
 
-        _main_pre_doc_cmds += "%" + "-"*80 + "\n\n"
-
         _main_post_doc_cmds = (
             r"\title{\Title}%"
             + "\n"
@@ -382,9 +394,10 @@ class PlainArticle:
 
         )
         _main_body_text = self._body_text
+        _main_end_text = ''
 
         # Setting up `main.tex` TexFile
-        self.main_tex = TexFile(
+        self._main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
             documentclass=r"\documentclass[12pt, twoside]{article}",
@@ -392,6 +405,7 @@ class PlainArticle:
             preamble= _main_preamble,
             post_doc_commands=_main_post_doc_cmds,
             body_text=_main_body_text,
+            end_text=_main_end_text,
             author=self._author.name,
             filename="main",
             file_extension=".tex",
@@ -1123,12 +1137,11 @@ def main():
     )
     
     article = PlainArticle(
-        title="Plain Article",
         author=indra,
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
-    article.create()
+    print(article)
 
 
 if __name__ == '__main__':
