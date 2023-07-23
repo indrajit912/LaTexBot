@@ -249,9 +249,16 @@ class TexFile:
         ``\\end{document}`` according to all settings and choices.
         """
 
-        self._fileinfo = "\n" + "%"*60 + f"\n%\t{self._filename}{self._file_extension}\n" + \
-                                f"%\tAuthor(s): {self._author}\n" + \
-                                f"%\tDate: {TODAY}\n" + "%"*60 + "\n\n"
+        _fileinfo = [
+            f"{self._filename}{self._file_extension}",
+            f"Author(s): {self._author}",
+            f"Date: {TODAY}"
+        ]
+        
+        self._fileinfo = self._add_dotted_lines(
+            heading=_fileinfo,
+            symbol="%"
+        )
         
         self.body = self._fileinfo
         # TODO: Add ---- for every parts of the doc
@@ -280,48 +287,61 @@ class TexFile:
             self.body += self._body_text + "%\n\n"
 
         self.body += self._add_dotted_lines(
-            msg=f"End of `{self._filename}{self._file_extension}`",
+            heading=f"End of `{self._filename}{self._file_extension}`",
             symbol="%"
         )
 
     @staticmethod
     def _add_dotted_lines(
-        msg:str, heading:str=None, symbol:str="-", factor:int=80, _tex=True
+        heading:str, msg:str=None, symbol:str="%", factor:int=80, _tex=True
     ):
         """
         This function returns lines to the `msg`
+
+        Attributes:
+        -----------
+            `heading`: `list` or `str`
+            `msg` : `str` : Optional
         
         Example
         --------
-        >>> TexFile._add_dotted_lines(heading="Hello World!", msg="Here is Text")
+        >>> TexFile._add_dotted_lines(msg="Here is Text", heading="Hello World!)
 
                 %--------------------------------------------%
-                %                Hello World!                
+                %                Hello World!     # heading           
                 %--------------------------------------------%
 
-                Here is Text
+                Here is Text # msg
 
                 %--------------------------------------------%
         """
         _factor = factor
         _line = "%" + str(symbol) * _factor + "%"
-        heading = "" if heading is None else heading
         _tex_symbol = "%" if _tex else ''
 
-        _head_line = "" if heading is "" else _line + "\n%"
+        if isinstance(heading, list):
+            heading = "\n%".join([el.center(_factor) for el in heading])
 
-        return (
+        _head = (
             "\n"
-            + _head_line
-            + str(heading)
-            + "\n"
-            + _line
-            + "\n\n"
-            + _tex_symbol + msg.center(_factor)
-            + "\n\n"
             + _line
             + "\n"
+            + _tex_symbol + heading.center(_factor)
+            + "\n"
+            + _line
         )
+        if msg is not None:
+            _tail = (
+                "\n\n"
+                + msg
+                + "\n\n"
+                + _line
+                + "\n"
+            )
+
+            return _head + _tail + "\n"
+        
+        return _head + "\n"
 
 
     def __str__(self):
