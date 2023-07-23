@@ -261,24 +261,49 @@ class TexFile:
         )
         
         self.body = self._fileinfo
-        # TODO: Add ---- for every parts of the doc
+        
         if not self._classfile:
             self.body += (
                 "\n"
                 + self._documentclass
                 + "%\n%\n"
-                + self._pre_doc_commands
+                + self._add_dotted_lines(
+                    heading="Pre Document Commands",
+                    msg=self._pre_doc_commands,
+                    symbol='-',
+                    factor=60
+                )
                 +"%\n"
-                + self._preamble
+                + self._add_dotted_lines(
+                    heading="Preamble",
+                    msg=self._preamble,
+                    symbol='-',
+                    factor=60
+                )
                 + "%\n%\n"
                 + r"\begin{document}"
                 + "%\n"
                 + "%\n"
-                + self._post_doc_commands
+                + self._add_dotted_lines(
+                    heading="Post Document Commands",
+                    msg=self._post_doc_commands,
+                    symbol='-',
+                    factor=60
+                )
                 + "%\n"
-                + self._body_text
+                + self._add_dotted_lines(
+                    heading="Body Text",
+                    msg=self._body_text,
+                    symbol='-',
+                    factor=60
+                )
                 + "%\n\n"
-                + self._end_text
+                + self._add_dotted_lines(
+                    heading="End Text",
+                    msg=self._end_text,
+                    symbol='-',
+                    factor=60
+                )
                 + "\n\n"
                 + r"\end{document}"
                 + "%\n"
