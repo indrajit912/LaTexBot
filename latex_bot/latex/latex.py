@@ -858,6 +858,10 @@ class TexMatrix:
 
     Author: Indrajit Ghosh
     Date:
+
+    Reference:
+    ----------
+        [1] https://github.com/indrajit912/LinearAlgebra/blob/master/linear_algebra.py
     """
     pass
 
