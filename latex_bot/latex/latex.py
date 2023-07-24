@@ -222,7 +222,7 @@ class TexPackage:
             name, 
             options:list=None,
             comment:str=None,
-            associated_cmds:list=None
+            associated_cmds=None
     ):
         
         if isinstance(name, str):

@@ -52,6 +52,7 @@ class PlainArticle:
             else self.default_title
         )
 
+        # TODO: Manage the case when `authors` is Author() class obj
         self._authors:list = (
             authors if authors is not None
             else self.default_authors
@@ -81,7 +82,9 @@ class PlainArticle:
 
         # PDF info
         self._pdftitle = self._title
-        self._pdfauthor = Author._add_comma_to_list(self._authors)
+        self._pdfauthor = Author._add_comma_to_list(
+            [ath.name for ath in self._authors]
+        )
         self._pdfsubject = pdfsubject
         self._pdfkeywords = pdfkeywords
         self._pdfcreator = pdfcreator
@@ -147,7 +150,18 @@ class PlainArticle:
         _main_preamble += sum(pkg for pkg in self._packages)
 
         # Getting author(s) info
-        _auths_outside, _auths_inside = self._get_authors_main_tex_info()
+        _auths_outside = _auths_inside = ''
+
+        # TODO: If there  are one author the command should be `\affil[]{\AuthorOne}`
+        i = 1
+        for auth in self._authors:
+            auth_out, auth_in = self._get_authors_main_tex_info(
+                author = auth,
+                _index = i
+            )
+            _auths_outside += auth_out
+            _auths_inside += auth_in
+            i += 1
 
         _main_pre_doc_cmds = (
             "\n\n"
@@ -197,14 +211,15 @@ class PlainArticle:
             + "\n"
 
         )
-        _amstract = r"""
-\begin{abstract}
+        _amstract = fr"""
+\begin{{abstract}}
 	\noindent  \lipsum[1]
 
-	\vspace{0.95cc}
-	\parbox{24cc}{{\it Key words and Phrases}:%Fill maximum 5 key words
-	}
-\end{abstract}
+	\vspace{{0.95cc}}
+	\parbox{{24cc}}{{
+        {{\it Keywords and Phrases}}: {self._pdfkeywords}
+	}}
+\end{{abstract}}
 """
         _main_body_text = _amstract + self._body_text
         _main_end_text = ''
@@ -219,7 +234,7 @@ class PlainArticle:
             post_doc_commands=_main_post_doc_cmds,
             body_text=_main_body_text,
             end_text=_main_end_text,
-            author=self._author.name,
+            author=self._pdfauthor,
             filename="main",
             file_extension=".tex",
             classfile=False
@@ -228,7 +243,6 @@ class PlainArticle:
     @staticmethod
     def _get_authors_main_tex_info(author:Author, _index:int=None):
         """
-        TODO: Modify it appropriately for Article
         Returns:
         --------
          `tuple`: _author_outside_begin_doc, _author_inside_begin_doc
@@ -238,28 +252,22 @@ class PlainArticle:
                     \newcommand{\AuthorOneAddr}{%
                         <ADDR>
                     }
-                    \newcommand{\AuthorOneCurrAddr}{%
-                        <CURR_ADDR>
-                    }
-                    \newcommand{\AuthorOneEmail}{%
-                        <EMAIL>
-                    }
-                    \newcommand{\AuthorOneThanks}{%
-                        <THANKS>
-                    }
                 '''
 
             _author_inside_begin_doc = r'''
                 %  Information for author <_index>
-                \author{\Author<_index>}
-                \address{\Author<_index>Addr}
-                \curraddr{\Author<_index>CurrAddr}
-                \email{\Author<_index>Email}
-                \thanks{\Author<_index>Thanks}
+                \author[1]{\textbf{\AuthorOne}}
+                \affil[1]{
+                    <\AuthorOneAddr>
+                }
             '''
 
 
         """
+        _index_val = (
+            '' if _index is None
+            else str(_index)
+        )
         _index = (
             '' if _index is None
             else AmsArticle.num_to_word(_index).title()
@@ -270,80 +278,36 @@ class PlainArticle:
             "\n"
             + _auth_initial + r"}{" + author.name + r"}"
             + "%\n"
-        )
-
-        _author_inside_begin_doc = (
-            "\n"
-            + f"% Author {_index} information"
+            + _auth_initial + r"Department}{"
+            + author.department + "}%"
             + "\n"
-            + r"\author{\Author" + _index + "}%"
+            + _auth_initial + r"Institute}{"
+            + author.institute + "}%"
             + "\n"
         )
 
         if author.address:
             _author_outside_begin_doc += (
-                _auth_initial + r"Addr}{%"
-                + "\n"
-                + author._amsAddrTeX
-                + "\n"
-                + r"}%"
-                + "\n"
-            )
-
-            _author_inside_begin_doc += (
-                f"% Author {_index} address"
-                + "\n"
-                + r"\address{\Author" + _index + "Addr}%"
-                + "\n"
-            )
-
-        if author.current_address:
-            _author_outside_begin_doc += (
-                _auth_initial + r"CurrAddr}{%"
-                + "\n"
-                + author._currAddrTeX
+                _auth_initial + r"Addr}{%" + "\n"
+                + Author._add_comma_to_list(author.address, _and=False) 
                 + "\n}%"
                 + "\n"
             )
-
-            _author_inside_begin_doc += (
-                f"% Author {_index} current address"
-                + "\n"
-                + r"\curraddr{\Author" + _index + "CurrAddr}%"
-                + "\n"
-            )
-
-        if author.email:
-            _author_outside_begin_doc += (
-                _auth_initial + r"Email}{%"
-                + "\n"
-                + author.email
-                + "\n}%"
-                + "\n"
-            )
+        
+        _author_inside_begin_doc = (
+            "\n"
+            + f"% Author {_index} information"
+            + "\n"
+            + r"\author[" + _index_val + r"]{\textbf{\Author" + _index + "}}%"
+            + "\n"
+            + r"\affil[" + _index_val + r"]"
+            + r"{\Author" + _index + "Department, "
+            + r"\Author" + _index + "Institute"
+            + r"\\ "
+            + r"\Author" + _index + "Addr}%"
+            + "\n"
+        )
             
-            _author_inside_begin_doc += (
-                f"% Author {_index} email"
-                + "\n"
-                + r"\email{\Author" + _index + "Email}%"
-                + "\n"
-            )
-
-        if author.support:
-            _author_outside_begin_doc += (
-                _auth_initial + r"Thanks}{%"
-                + "\n"
-                + author.support
-                + "\n}%"
-                + "\n"
-            )
-
-            _author_inside_begin_doc += (
-                f"% Author {_index} support"
-                + "\n"
-                + r"\thanks{\Author" + _index + "Thanks}%"
-                + "\n"
-            )
 
         return _author_outside_begin_doc, _author_inside_begin_doc
 
@@ -364,10 +328,6 @@ class PlainArticle:
                 name="geometry",
                 options=["top=1in", "bottom=1in", "left=1in", "right=1in"]
             ),
-            TexPackage(
-                name="authblk",
-                comment="For Author Titling and affiliating Purpose"
-            ),
             TexPackage(name="lipsum"),
             TexPackage(
                 name="titling",
@@ -378,13 +338,27 @@ class PlainArticle:
 """
             ),
             TexPackage(
+                name="authblk",
+                options=["blocks"],
+                comment="For Author Titling and affiliating Purpose",
+                associated_cmds=[
+                    r"\renewcommand\Authfont{\fontsize{11}{11}\selectfont}",
+                    r"\renewcommand\Affilfont{\fontsize{10}{10.8}\selectfont}",
+                    r"\renewcommand*{\Authsep}{, }",
+                    r"\renewcommand*{\Authand}{{\bfseries and }}",
+                    r"\renewcommand*{\Authands}{{\bfseries , and }}",
+                    r"\setlength{\affilsep}{1em}",
+                    r"\newsavebox\affbox"
+                ]
+            ),
+            TexPackage(
                 name="hyperref",
                 associated_cmds=r"""
 \hypersetup{
-	pdftitle={\Title},
-	pdfauthor={\Author},
+	pdftitle={\pdfTitle},
+	pdfauthor={\pdfAuthor},
 	pdfsubject={\pdfSubject},
-	pdfcreationdate={\today},
+	pdfcreationdate={\pdfCreationDate},
 	pdfcreator={\pdfCreator},
 	pdfkeywords={\pdfKeywords},
 	colorlinks=true,
@@ -1065,19 +1039,25 @@ class AmsArticle:
 
 def main():
 
-    indra = Author(
-        current_address=["Calcutta University", "Kolkata, India"],
-        email="indrajit@gmail.com",
-        support="This paper is supported by ISI"
+    indra = Author()
+
+    nsoum = Author(
+        name="Soumyashant Nayak",
+        department="SMU",
+        institute="Indian Statistical Institute Bangalore",
+        address=[
+            "8th Mile, Mysore Road",
+            "Bengaluru 560 059",
+            "India"
+        ]
     )
     
     article = PlainArticle(
-        author=indra,
+        authors=[indra],
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
-    article.create()
-
+    print(article)
 
 if __name__ == '__main__':
     main()
