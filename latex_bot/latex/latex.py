@@ -994,26 +994,34 @@ class Preamble(TexFile):
         """
         Returns ams theorem style that I usually use.
         """
-        return r"""
+        return r"""\theoremstyle{plain} %% This is the default, anyway
+\begingroup % Confine the \theorembodyfont command
+\theorembodyfont{\sl}
+\newtheorem{bigthm}{Theorem} % Numbered separately, as A, B, etc.
+\newtheorem{thm}{Theorem}[section] % Numbered within each section
+\newtheorem{cor}[thm]{Corollary} % Numbered along with thm
+\newtheorem{lem}[thm]{Lemma} % Numbered along with thm
+\newtheorem{prop}[thm]{Proposition} % Numbered along with thm
+\endgroup
 
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{prop}[theorem]{Proposition}
-\newtheorem{lem}[theorem]{Lemma}
-\newtheorem{cor}[theorem]{Corollary}
-\newtheorem{notation}[theorem]{Notation}
-\renewcommand\qedsymbol{$\blacksquare$}
+%%% We need to do the following outside of any group,
+%%% since it’s not \global:
+\renewcommand{\thebigthm}{\Alph{bigthm}} % Number as "Theorem A."
 
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{xca}[theorem]{Exercise}
-
+\newtheorem{defn}[thm]{Definition} % Numbered along with thm
 \theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
+\newtheorem{rem}[thm]{Remark} % Numbered along with thm
+\newtheorem{ex}[thm]{Example} % Numbered along with thm
+\newtheorem{notation}{Notation}
+\renewcommand{\thenotation}{} % to make the notation environment unnumbered
+\newtheorem{terminology}{Terminology}
+\renewcommand{\theterminology}{} % to make the terminology environment unnumbered
 
+%%% The following causes equations to be numbered within sections:
 \numberwithin{equation}{section}
 
+\renewcommand\qedsymbol{$\blacksquare$} % To change the qed symbol
 """
     
     @staticmethod
@@ -1040,8 +1048,8 @@ class Preamble(TexFile):
 % Operations
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\quotes}[1]{\textquotedblleft #1\textquotedblright}
+\newcommand{\tensor}{\otimes}
 """
-
 
 
 def main():
