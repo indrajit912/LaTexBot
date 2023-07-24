@@ -133,7 +133,7 @@ class PlainArticle:
         else:
             raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
 
-        print(f" - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...\n")
+        print(f" - Writing `{self._main_tex.filename}.{self._main_tex.file_extension}`...\n")
         self._main_tex.write(
             tex_dir=self._project_dir
         )
@@ -947,7 +947,7 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
-    print(article)
+    article.create()
 
 
 if __name__ == '__main__':
