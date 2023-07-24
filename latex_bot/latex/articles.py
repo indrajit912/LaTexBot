@@ -627,7 +627,7 @@ class AmsArticle:
         If at any  moment `self._authors` gets updated this function 
         should be called to update the `self._preamble`.
         """
-        # TODO: Adjust `theorem_style` and `custom_commands` attr for preamble
+        # Adjust `theorem_style` and `custom_commands` attr for preamble
         self.preamble:Preamble = Preamble(
             filename="preamble",
             packages=self._packages,
