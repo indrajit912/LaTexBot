@@ -206,7 +206,7 @@ class PlainArticle:
         self._main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
-            documentclass=r"\documentclass[12pt, twoside]{article}",
+            documentclass=r"\documentclass[12pt,twoside]{article}",
             pre_doc_commands=_main_pre_doc_cmds,
             preamble= _main_preamble,
             post_doc_commands=_main_post_doc_cmds,
