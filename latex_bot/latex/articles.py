@@ -21,7 +21,7 @@ class PlainArticle:
     Date: Jul 22, 2023
     """
     default_title = "Plain Article \\TeX\\ Template"
-    default_author = Author()
+    default_authors = [Author()]
     default_date = r"\today"
     default_body_text = r"\lipsum % Write something here!"
     default_project_dir = Path.cwd() / "new_plain_art"
@@ -29,7 +29,7 @@ class PlainArticle:
     def __init__(
             self,
             title:str=None,
-            author:Author=None,
+            authors:list=None,
             date:str=None,
             packages:list=None,
             body_text:str=None,
@@ -52,9 +52,9 @@ class PlainArticle:
             else self.default_title
         )
 
-        self._author:Author = (
-            author if author is not None
-            else self.default_author
+        self._authors:list = (
+            authors if authors is not None
+            else self.default_authors
         )
 
         self._packages:list = (
@@ -81,7 +81,7 @@ class PlainArticle:
 
         # PDF info
         self._pdftitle = self._title
-        self._pdfauthor = self._author
+        self._pdfauthor = Author._add_comma_to_list(self._authors)
         self._pdfsubject = pdfsubject
         self._pdfkeywords = pdfkeywords
         self._pdfcreator = pdfcreator
@@ -145,15 +145,15 @@ class PlainArticle:
         """
         _main_preamble = ""
         _main_preamble += sum(pkg for pkg in self._packages)
+
+        # Getting author(s) info
+        _auths_outside, _auths_inside = self._get_authors_main_tex_info()
+
         _main_pre_doc_cmds = (
             "\n\n"
             + r"\newcommand{\Title}{" + self._title + "}%"
             + "\n"
-            + r"\newcommand{\Author}{" + self._author.name + "}%"
-            + "\n"
-            + r"\newcommand{\Department}{" + self._author.department + "}%"
-            + "\n"
-            + r"\newcommand{\Institute}{" + self._author.institute + "}%"
+            + _auths_outside
             + "\n"
             + r"\newcommand{\Date}{" + self._date + "}%"
             + "\n"
@@ -170,7 +170,7 @@ class PlainArticle:
         _main_pre_doc_cmds += (
             r"\newcommand{\pdfTitle}{" + self._pdftitle + "}%"
             + "\n"
-            r"\newcommand{\pdfAuthor}{" + self._pdfauthor.name + "}%"
+            r"\newcommand{\pdfAuthor}{" + self._pdfauthor + "}%"
             + "\n"
             + r"\newcommand{\pdfSubject}{" + self._pdfsubject + "}%"
             + "\n"
@@ -187,9 +187,7 @@ class PlainArticle:
         _main_post_doc_cmds = (
             r"\title{\Title}%"
             + "\n"
-            + r"\author{\textsc{\Author}}%"
-            + "\n"
-            + r"\affil{\normalsize \Department\\ \normalsize \Institute}%"
+            + _auths_inside
             + "\n"
             + r"\date{\Date}%"
             + "\n"
@@ -199,7 +197,16 @@ class PlainArticle:
             + "\n"
 
         )
-        _main_body_text = self._body_text
+        _amstract = r"""
+\begin{abstract}
+	\noindent  \lipsum[1]
+
+	\vspace{0.95cc}
+	\parbox{24cc}{{\it Key words and Phrases}:%Fill maximum 5 key words
+	}
+\end{abstract}
+"""
+        _main_body_text = _amstract + self._body_text
         _main_end_text = ''
 
         # Setting up `main.tex` TexFile
@@ -217,6 +224,128 @@ class PlainArticle:
             file_extension=".tex",
             classfile=False
         )
+
+    @staticmethod
+    def _get_authors_main_tex_info(author:Author, _index:int=None):
+        """
+        TODO: Modify it appropriately for Article
+        Returns:
+        --------
+         `tuple`: _author_outside_begin_doc, _author_inside_begin_doc
+
+            _author_outside_begin_doc = r'''
+                    \newcommand{\AuthorOne}{<AUTHOR>}
+                    \newcommand{\AuthorOneAddr}{%
+                        <ADDR>
+                    }
+                    \newcommand{\AuthorOneCurrAddr}{%
+                        <CURR_ADDR>
+                    }
+                    \newcommand{\AuthorOneEmail}{%
+                        <EMAIL>
+                    }
+                    \newcommand{\AuthorOneThanks}{%
+                        <THANKS>
+                    }
+                '''
+
+            _author_inside_begin_doc = r'''
+                %  Information for author <_index>
+                \author{\Author<_index>}
+                \address{\Author<_index>Addr}
+                \curraddr{\Author<_index>CurrAddr}
+                \email{\Author<_index>Email}
+                \thanks{\Author<_index>Thanks}
+            '''
+
+
+        """
+        _index = (
+            '' if _index is None
+            else AmsArticle.num_to_word(_index).title()
+        )
+
+        _auth_initial = "\\newcommand{\\" + "Author" + _index 
+        _author_outside_begin_doc = (
+            "\n"
+            + _auth_initial + r"}{" + author.name + r"}"
+            + "%\n"
+        )
+
+        _author_inside_begin_doc = (
+            "\n"
+            + f"% Author {_index} information"
+            + "\n"
+            + r"\author{\Author" + _index + "}%"
+            + "\n"
+        )
+
+        if author.address:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Addr}{%"
+                + "\n"
+                + author._amsAddrTeX
+                + "\n"
+                + r"}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} address"
+                + "\n"
+                + r"\address{\Author" + _index + "Addr}%"
+                + "\n"
+            )
+
+        if author.current_address:
+            _author_outside_begin_doc += (
+                _auth_initial + r"CurrAddr}{%"
+                + "\n"
+                + author._currAddrTeX
+                + "\n}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} current address"
+                + "\n"
+                + r"\curraddr{\Author" + _index + "CurrAddr}%"
+                + "\n"
+            )
+
+        if author.email:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Email}{%"
+                + "\n"
+                + author.email
+                + "\n}%"
+                + "\n"
+            )
+            
+            _author_inside_begin_doc += (
+                f"% Author {_index} email"
+                + "\n"
+                + r"\email{\Author" + _index + "Email}%"
+                + "\n"
+            )
+
+        if author.support:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Thanks}{%"
+                + "\n"
+                + author.support
+                + "\n}%"
+                + "\n"
+            )
+
+            _author_inside_begin_doc += (
+                f"% Author {_index} support"
+                + "\n"
+                + r"\thanks{\Author" + _index + "Thanks}%"
+                + "\n"
+            )
+
+        return _author_outside_begin_doc, _author_inside_begin_doc
 
 
     @staticmethod
