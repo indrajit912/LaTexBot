@@ -105,37 +105,56 @@ class IndraAMS:
 
     thmstyles = r"""
 
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{prop}[theorem]{Proposition}
-\newtheorem{lem}[theorem]{Lemma}
-\newtheorem{cor}[theorem]{Corollary}
-\newtheorem{notation}[theorem]{Notation}
-\renewcommand\qedsymbol{$\blacksquare$}
-
-%\newtheorem{conj}[thm]{Conjecture} 
-
-%%% 
-%%% The following gives definition type environments (which only differ
-%%% from theorem type environments in the choices of fonts).  The
-%%% numbering is still tied to the theorem counter.
-%%% 
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{xca}[theorem]{Exercise}
-
-%%% 
-%%% The following gives remark type environments (which only differ
-%%% from theorem type environments in the choices of fonts).  The
-%%% numbering is still tied to the theorem counter.
-%%% 
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-
+%%
+%%%         The Theorem environments:
+%%
 %%%
-%%% The following, if uncommented, numbers equations within sections.
-\numberwithin{equation}{section}
+%%% The following commands set it up so that:
+%%%
+%%% All Theorems, Corollaries, Lemmas, Propositions, Definitions,
+%%% Remarks, and Examples will be numbered in a single sequence, and
+%%% the numbering will be within each section.
+%%%
+%%% Anything called ‘bigthm’ in the TeXfile will be printed as
+%%% Theorem, but will be numbered in a separate sequence, named
+%%% Theorem A, Theorem B, Theorem C, etc.
+%%%
+%%%
+%%% Notations and Terminologies will not be numbered.
+%%%
+%%% Theorems, Propositions, Lemmas, and Corollaries will have the most
+%%% formal typesetting.
+%%%
+%%% Definitions will have the next level of formality.
+%%%
+%%% Remarks, Examples, Notations, and Terminologies will be the least
+%%% formal.
+%%%
+%%% Theorem environments
+
+\theoremstyle{plain} %% This is the default, anyway
+\begingroup % Confine the \theorembodyfont command
+\theorembodyfont{\sl}
+\newtheorem{bigthm}{Theorem} % Numbered separately, as A, B, etc.
+\newtheorem{thm}{Theorem}[section] % Numbered within each section
+\newtheorem{cor}[thm]{Corollary} % Numbered along with thm
+\newtheorem{lem}[thm]{Lemma} % Numbered along with thm
+\newtheorem{prop}[thm]{Proposition} % Numbered along with thm
+\endgroup
+%%% We need to do the following outside of any group,
+%%% since it’s not \global:
+\renewcommand{\thebigthm}{\Alph{bigthm}} % Number as "Theorem A."
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % Numbered along with thm
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark} % Numbered along with thm
+\newtheorem{ex}[thm]{Example} % Numbered along with thm
+\newtheorem{notation}{Notation}
+\renewcommand{\thenotation}{} % to make the notation environment unnumbered
+\newtheorem{terminology}{Terminology}
+\renewcommand{\theterminology}{} % to make the terminology environment unnumbered
+
+%%%-------------------------------------------------------------------
 
 %%
 %%% My custom theorem styles
@@ -180,10 +199,15 @@ class IndraAMS:
 %\newenvironment{nam}[args]{begdef}{enddef}
 \newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
 
+%%% The following causes equations to be numbered within sections:
+\numberwithin{equation}{section}
+
+\renewcommand\qedsymbol{$\blacksquare$} % To change the qed symbol
+
 """
 
     macros = r"""
-%Sets line spacing to 1 and a half
+% Sets line spacing to 1 and a half
 \linespread{1}
 
 % Color constants : usages- \textcolor{<colorName>}{<text>}
