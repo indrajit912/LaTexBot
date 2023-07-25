@@ -14,7 +14,7 @@ __all__ = ["Author", "TexPackage", "TexFile", "Preamble"]
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
 class Author:
-    """
+    r"""
     A class representing an Article author
 
     Author: Indrajit Ghosh

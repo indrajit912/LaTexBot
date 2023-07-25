@@ -10,7 +10,7 @@ from latex import *
 
 # TODO: Add all your AMS packages here
 class IndraAMS:
-    """
+    r"""
     Packages I usually use for `amsart`
     Author: Indrajit Ghosh
     Date: Jul 21, 2023

@@ -1193,7 +1193,7 @@ def main():
     article = PlainArticle(
         authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
-        amsartstyle=False,
+        amsartstyle=True,
     )
 
     amsart = AmsArticle(
@@ -1201,7 +1201,7 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    print(article)
+    article.create()
 
 if __name__ == '__main__':
     main()
