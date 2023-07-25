@@ -23,6 +23,7 @@ class PlainArticle:
     default_title = "Plain Article \\TeX\\ Template"
     default_authors = [Author()]
     default_date = r"\today"
+    default_abstract = ""
     default_body_text = r"\lipsum % Write something here!"
     default_project_dir = Path.cwd() / "new_plain_art"
 
@@ -35,6 +36,7 @@ class PlainArticle:
             body_text:str=None,
             project_dir:list=None,
             amsartstyle:bool=False,
+            abstract:str=None,
             *,
             pdfsubject:str = "Mathematics",
             pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
@@ -69,6 +71,12 @@ class PlainArticle:
             packages
             if packages is not None
             else self._get_default_packages()
+        )
+
+        self._abstract = (
+            abstract
+            if abstract
+            else self.default_abstract
         )
 
         self._body_text = (
@@ -304,17 +312,23 @@ class PlainArticle:
             + "\n"
 
         )
-        _abstract = r"""
-\begin{abstract}
-	\noindent  \lipsum[1]
 
-	\vspace{0.95cc}
-	\parbox{24cc}{
-        {\it Keywords and Phrases}: \pdfKeywords
-	}
-\end{abstract}
+        _abst_tex = fr"""
+\begin{{abstract}}
+	\noindent  {self._abstract}
+
+	\vspace{{0.95cc}}
+	\parbox{{24cc}}{{
+        {{\it Keywords and Phrases}}: \pdfKeywords
+	}}
+\end{{abstract}}
 """
-        _main_body_text = _abstract + self._body_text
+        _abst = (
+            ""
+            if self._abstract == ''
+            else _abst_tex
+        )
+        _main_body_text = _abst + self._body_text
         _main_end_text = (
             None if not self._amsartstyle
             else "\\Addresses"
@@ -1178,7 +1192,7 @@ def main():
     article = PlainArticle(
         authors=[indra],
         project_dir=Path.home() / "Desktop" / "new_plain_art",
-        amsartstyle=True
+        amsartstyle=True,
     )
 
     amsart = AmsArticle(
@@ -1197,7 +1211,7 @@ We'll study them in this article.
 """
     )
 
-    print(article)
+    article.create()
 
 if __name__ == '__main__':
     main()
