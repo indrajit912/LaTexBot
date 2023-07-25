@@ -19,6 +19,7 @@ class IndraAMS:
 
     Attributes:
     -----------
+        `indrajit`: `Author`; Indrajit's details
         `packages`: Packages that I usually use in `amsart` document.
                 e.g.-   \usepackage[utf8]{inputenc}
 
@@ -33,7 +34,18 @@ class IndraAMS:
                         \newcommand{\R}{\mathbb{R}}
                         \newcommand{\N}{\mathbbm{N}}
     """
-    packages = [
+    indrajit:Author = Author(
+        name="Indrajit Ghosh",
+        department="Statistics and Mathematics Unit",
+        institute="Indian Statistical Institute",
+        address=[
+            "8th Mile, Mysore Road",
+            "RVCE Post, Bengaluru",
+            "Karnataka - 560 059, India"
+        ],
+        email="rs\\_math1902@isibang.ac.in"
+    )
+    packages:list = [
         TexPackage(name="inputenc", options=['utf8']),
         TexPackage(name="fontenc", options=['T1']),
         TexPackage(
