@@ -519,7 +519,7 @@ class TexFile:
 
     @staticmethod
     def _add_dotted_lines(
-        heading:str, msg:str=None, symbol:str="%", factor:int=80, _tex=True
+        heading:str, msg:str=None, symbol:str="%", factor:int=70, _tex=True
     ):
         """
         This function returns lines to the `msg`

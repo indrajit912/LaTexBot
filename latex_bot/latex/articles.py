@@ -34,6 +34,7 @@ class PlainArticle:
             packages:list=None,
             body_text:str=None,
             project_dir:list=None,
+            amsartstyle:bool=False,
             *,
             pdfsubject:str = "Mathematics",
             pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
@@ -85,6 +86,8 @@ class PlainArticle:
             self.default_project_dir if project_dir is None
             else Path(project_dir)
         )
+
+        self._amsartstyle = amsartstyle # If true, prints authors addresses at the end of article
 
         # PDF info
         self._pdftitle = self._title
@@ -158,21 +161,95 @@ class PlainArticle:
         # Getting author(s) info
         _auths_outside = _auths_inside = ''
 
-        # If there  are one author the command should be `\affil[]{\AuthorOne}`
-        if len(self._authors) == 1:
-            _auths_outside, _auths_inside = self._get_authors_main_tex_info(
-                author=self._authors[0]
+        if self._amsartstyle:
+            # AMS art style addresses
+            _auths_inside = (
+                "\n% Author(s) information:\n"
+                + r"\author{\textbf{%"
+                + "\n"
             )
-        else:
+
+            _addresses_cmd = (
+                "\n\n"
+                + r"\newcommand{\Addresses}{{%" 
+                + "\n"
+                + "\\bigskip"
+                + "\n"
+                + "\\footnotesize"
+                + "\n"
+            )
+
+            _temp_auth_cmd_list = []
+            _temp_addrs_cmd_list = []
+
             i = 1
             for auth in self._authors:
-                auth_out, auth_in = self._get_authors_main_tex_info(
-                    author = auth,
-                    _index = i
+                _auth_out, _ = self._get_authors_main_tex_info(
+                    author=auth,
+                    _index=i,
+                    _ams_style=True
                 )
-                _auths_outside += auth_out
-                _auths_inside += auth_in
+
+                _auths_outside += _auth_out
+
+                _auth_word = AmsArticle.num_to_word(i).title()
+                _temp_auth_cmd_list.append(
+                    r"\Author"
+                    + _auth_word
+                )
+
+                _temp_addrs_append = (
+                    r"\textsc{\Author"
+                    + _auth_word
+                    + "Department"
+                    + ", "
+                    + r"\Author"
+                    + _auth_word
+                    + "Institute"
+                    + ", "
+                    + r"\Author"
+                    + _auth_word
+                    + "Addr"
+                    + r"}\par\nopagebreak"
+                    + "\n"
+                    + r"\textit{E-mail address}: \texttt{"
+                    + r"\Author"
+                    + _auth_word
+                    + "Email"
+                    + "}\n"
+                    + "\\medskip"
+                    + "\n"
+                )
+                _temp_addrs_cmd_list.append(_temp_addrs_append)
+
                 i += 1
+            
+            _tmp = ", ".join(_temp_auth_cmd_list[:-1])
+            _tmp += "\\ and " + _temp_auth_cmd_list[-1]
+
+            _temp_addrs = "\n".join(_temp_addrs_cmd_list)
+            _addresses_cmd += _temp_addrs + "\n}}%\n"
+
+            _auths_outside += _addresses_cmd
+
+            _auths_inside += _tmp + "\n}}%\n"
+
+        else:
+            # If there  are one author the command should be `\affil[]{\AuthorOne}`
+            if len(self._authors) == 1:
+                _auths_outside, _auths_inside = self._get_authors_main_tex_info(
+                    author=self._authors[0]
+                )
+            else:
+                i = 1
+                for auth in self._authors:
+                    auth_out, auth_in = self._get_authors_main_tex_info(
+                        author = auth,
+                        _index = i
+                    )
+                    _auths_outside += auth_out
+                    _auths_inside += auth_in
+                    i += 1
 
         _main_pre_doc_cmds = (
             "\n\n"
@@ -222,7 +299,7 @@ class PlainArticle:
             + "\n"
 
         )
-        _amstract = r"""
+        _abstract = r"""
 \begin{abstract}
 	\noindent  \lipsum[1]
 
@@ -232,8 +309,11 @@ class PlainArticle:
 	}
 \end{abstract}
 """
-        _main_body_text = _amstract + self._body_text
-        _main_end_text = ''
+        _main_body_text = _abstract + self._body_text
+        _main_end_text = (
+            None if not self._amsartstyle
+            else "\\Addresses"
+        )
 
         _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
 
@@ -254,7 +334,7 @@ class PlainArticle:
         )
 
     @staticmethod
-    def _get_authors_main_tex_info(author:Author, _index:int=None):
+    def _get_authors_main_tex_info(author:Author, _index:int=None, _ams_style:bool=False):
         """
         Returns:
         --------
@@ -307,19 +387,32 @@ class PlainArticle:
                 + "\n"
             )
         
-        _author_inside_begin_doc = (
-            "\n"
-            + f"% Author {_index} information"
-            + "\n"
-            + r"\author[" + _index_val + r"]{\textbf{\Author" + _index + "}}%"
-            + "\n"
-            + r"\affil[" + _index_val + r"]"
-            + r"{\Author" + _index + "Department, "
-            + r"\Author" + _index + "Institute"
-            + r"\\ "
-            + r"\Author" + _index + "Addr}%"
-            + "\n"
-        )
+
+        if author.email:
+            _author_outside_begin_doc += (
+                _auth_initial + r"Email}{%"
+                + "\n"
+                + author.email
+                + "\n}%"
+                + "\n"
+            )
+
+        if not _ams_style:
+            _author_inside_begin_doc = (
+                "\n"
+                + f"% Author {_index} information"
+                + "\n"
+                + r"\author[" + _index_val + r"]{\textbf{\Author" + _index + "}}%"
+                + "\n"
+                + r"\affil[" + _index_val + r"]"
+                + r"{\Author" + _index + "Department, "
+                + r"\Author" + _index + "Institute"
+                + r"\\ "
+                + r"\Author" + _index + "Addr}%"
+                + "\n"
+            )
+        else:
+            _author_inside_begin_doc = ''
             
 
         return _author_outside_begin_doc, _author_inside_begin_doc
@@ -1063,7 +1156,7 @@ class AmsArticle:
 
 def main():
 
-    indra = Author()
+    indra = Author(email="indrajitghosh912@gmail.com")
 
     nsoum = Author(
         name="Soumyashant Nayak",
@@ -1073,20 +1166,22 @@ def main():
             "8th Mile, Mysore Road",
             "Bengaluru 560 059",
             "India"
-        ]
+        ],
+        email="soumyashant@gmail.com"
     )
     
     article = PlainArticle(
         authors=[indra, nsoum],
         project_dir=Path.home() / "Desktop" / "new_plain_art",
+        amsartstyle=True
     )
 
     amsart = AmsArticle(
         authors=[indra, nsoum],
-        project_dir=Path.home() / "Desktop" / "new_plain_art",
+        project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    amsart.create()
+    article.create()
 
 if __name__ == '__main__':
     main()
