@@ -979,9 +979,9 @@ class AmsArticle:
             file_extension=".tex",
             body_text=r"""
 \lipsum[1-2]
-\begin{theorem}
+\begin{thm}
     The set of $\N$ is unbounded.
-\end{theorem}
+\end{thm}
 \begin{proof}
     The proof is obvious.
 \end{proof}
@@ -1081,7 +1081,12 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_plain_art",
     )
 
-    article.create()
+    amsart = AmsArticle(
+        authors=[indra, nsoum],
+        project_dir=Path.home() / "Desktop" / "new_plain_art",
+    )
+
+    amsart.create()
 
 if __name__ == '__main__':
     main()

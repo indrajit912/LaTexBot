@@ -997,7 +997,7 @@ class Preamble(TexFile):
         """
         return r"""\theoremstyle{plain} %% This is the default, anyway
 \begingroup % Confine the \theorembodyfont command
-\theorembodyfont{\sl}
+%\theorembodyfont{\sl}
 \newtheorem{bigthm}{Theorem} % Numbered separately, as A, B, etc.
 \newtheorem{thm}{Theorem}[section] % Numbered within each section
 \newtheorem{cor}[thm]{Corollary} % Numbered along with thm
