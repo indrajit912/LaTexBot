@@ -6,7 +6,7 @@
 #
 
 from datetime import datetime
-import copy, re, tempfile
+import copy, re
 from pathlib import Path
 
 __all__ = ["Author", "TexPackage", "TexFile", "Preamble"]
@@ -20,13 +20,13 @@ class Author:
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
     """
-    _default_name = "Indrajit Ghosh"
-    _default_dept = "Statistics and Mathematics Unit"
-    _default_institute = "Indian Statistical Institute"
+    _default_name = "Author Name"
+    _default_dept = "Dept. of the Author"
+    _default_institute = "Institute of the Author"
     _default_addr = [
-        "8th Mile, Mysore Road",
-        "RVCE Post, Bengaluru",
-        "Karnataka - 560 059, India"
+        "Street No, Name Road",
+        "Post Office, City",
+        "State - XXX XXX, Country"
     ]
 
     def __init__(

@@ -7,6 +7,7 @@
 from latex import *
 from pathlib import Path
 from datetime import datetime
+from indrajit_ams_templates import IndraAMS
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -1190,7 +1191,7 @@ def main():
     )
     
     article = PlainArticle(
-        authors=[indra],
+        authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
         amsartstyle=False,
     )
