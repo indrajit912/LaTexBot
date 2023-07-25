@@ -158,16 +158,21 @@ class PlainArticle:
         # Getting author(s) info
         _auths_outside = _auths_inside = ''
 
-        # TODO: If there  are one author the command should be `\affil[]{\AuthorOne}`
-        i = 1
-        for auth in self._authors:
-            auth_out, auth_in = self._get_authors_main_tex_info(
-                author = auth,
-                _index = i
+        # If there  are one author the command should be `\affil[]{\AuthorOne}`
+        if len(self._authors) == 1:
+            _auths_outside, _auths_inside = self._get_authors_main_tex_info(
+                author=self._authors[0]
             )
-            _auths_outside += auth_out
-            _auths_inside += auth_in
-            i += 1
+        else:
+            i = 1
+            for auth in self._authors:
+                auth_out, auth_in = self._get_authors_main_tex_info(
+                    author = auth,
+                    _index = i
+                )
+                _auths_outside += auth_out
+                _auths_inside += auth_in
+                i += 1
 
         _main_pre_doc_cmds = (
             "\n\n"
@@ -1067,11 +1072,11 @@ def main():
     )
     
     article = PlainArticle(
-        authors=indra,
+        authors=[indra, nsoum],
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
-    print(article)
+    article.create()
 
 if __name__ == '__main__':
     main()
