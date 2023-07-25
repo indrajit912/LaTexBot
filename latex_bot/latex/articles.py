@@ -331,7 +331,7 @@ class PlainArticle:
         _main_body_text = _abst + self._body_text
         _main_end_text = (
             None if not self._amsartstyle
-            else "\\Addresses"
+            else "\n\\mbox{}%\n\\vfill%\n\\Addresses%"
         )
 
         _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
@@ -1192,7 +1192,7 @@ def main():
     article = PlainArticle(
         authors=[indra],
         project_dir=Path.home() / "Desktop" / "new_plain_art",
-        amsartstyle=True,
+        amsartstyle=False,
     )
 
     amsart = AmsArticle(
@@ -1200,18 +1200,7 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    article._body_text = r"""
-Hello there, I am Indrajit Ghosh.
-"""
-
-    article.add_to_document(
-        r"""
-Strongly closed subalgebras of $\mathcal{B}(\mathcal{H})$ are known as \emph{von-Neumann algebras}.
-We'll study them in this article.
-"""
-    )
-
-    article.create()
+    print(article)
 
 if __name__ == '__main__':
     main()
