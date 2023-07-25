@@ -1078,7 +1078,7 @@ def main():
     
     article = PlainArticle(
         authors=[indra, nsoum],
-        project_dir=Path.home() / "Desktop" / "new_plain_art"
+        project_dir=Path.home() / "Desktop" / "new_plain_art",
     )
 
     article.create()

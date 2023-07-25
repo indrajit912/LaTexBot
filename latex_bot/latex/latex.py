@@ -64,10 +64,8 @@ class Author:
         )
 
         _fulladdr = [self._dept, self._institute] + self._addr # `dept\\addr`
-        _fulladdr2 = [self._dept + ', ' + self._institute] + self._addr # `dept, addr`
 
         self._amsAddrTeX:str = self._add_comma_to_list(_fulladdr)
-        self._artAddrTeX:str = self._add_texlinebreak_to_list(_fulladdr2)
 
         self._email:str = email
         self._curr_addr:list = current_address
