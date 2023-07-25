@@ -224,8 +224,13 @@ class PlainArticle:
 
                 i += 1
             
-            _tmp = ", ".join(_temp_auth_cmd_list[:-1])
-            _tmp += "\\ and " + _temp_auth_cmd_list[-1]
+            _tmp = "" # In this we'll concat "\AuthorOne, \AuthorTwo\ and \AuthorThree"
+
+            if len(_temp_auth_cmd_list) == 1:
+                _tmp += _temp_auth_cmd_list[0]
+            else:
+                _tmp = ", ".join(_temp_auth_cmd_list[:-1])
+                _tmp += "\\ and " + _temp_auth_cmd_list[-1]
 
             _temp_addrs = "\n".join(_temp_addrs_cmd_list)
             _addresses_cmd += _temp_addrs + "\n}}%\n"
@@ -1171,17 +1176,28 @@ def main():
     )
     
     article = PlainArticle(
-        authors=[indra, nsoum],
+        authors=[indra],
         project_dir=Path.home() / "Desktop" / "new_plain_art",
         amsartstyle=True
     )
 
     amsart = AmsArticle(
-        authors=[indra, nsoum],
+        authors=indra,
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    article.create()
+    article._body_text = r"""
+Hello there, I am Indrajit Ghosh.
+"""
+
+    article.add_to_document(
+        r"""
+Strongly closed subalgebras of $\mathcal{B}(\mathcal{H})$ are known as \emph{von-Neumann algebras}.
+We'll study them in this article.
+"""
+    )
+
+    print(article)
 
 if __name__ == '__main__':
     main()
