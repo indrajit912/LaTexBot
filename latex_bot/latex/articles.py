@@ -235,11 +235,13 @@ class PlainArticle:
         _main_body_text = _amstract + self._body_text
         _main_end_text = ''
 
+        _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
+
         # Setting up `main.tex` TexFile
         self._main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
-            documentclass=r"\documentclass[12pt,twoside]{article}",
+            documentclass=_documentclass,
             pre_doc_commands=_main_pre_doc_cmds,
             preamble= _main_preamble,
             post_doc_commands=_main_post_doc_cmds,
