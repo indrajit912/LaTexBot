@@ -222,15 +222,15 @@ class PlainArticle:
             + "\n"
 
         )
-        _amstract = fr"""
-\begin{{abstract}}
+        _amstract = r"""
+\begin{abstract}
 	\noindent  \lipsum[1]
 
-	\vspace{{0.95cc}}
-	\parbox{{24cc}}{{
-        {{\it Keywords and Phrases}}: {self._pdfkeywords}
-	}}
-\end{{abstract}}
+	\vspace{0.95cc}
+	\parbox{24cc}{
+        {\it Keywords and Phrases}: \pdfKeywords
+	}
+\end{abstract}
 """
         _main_body_text = _amstract + self._body_text
         _main_end_text = ''
@@ -345,10 +345,12 @@ class PlainArticle:
             TexPackage(
                 name="titling",
                 comment="Customizing the title section",
-                associated_cmds=r"""\setlength{\droptitle}{-4\baselineskip} % Move the title up
-\pretitle{\begin{center}\LARGE\bfseries} % Article title formatting
-	\posttitle{\end{center}} % Article title closing formatting
-"""
+                associated_cmds=[
+                    r"\setlength{\droptitle}{-4\baselineskip} % Move the title up",
+                    r"\pretitle{\begin{center}\LARGE\bfseries} % Article title formatting",
+                    r"\posttitle{\end{center}} % Article title closing formatting",
+                    "\n"
+                ]
             ),
             TexPackage(
                 name="authblk",
@@ -358,10 +360,11 @@ class PlainArticle:
                     r"\renewcommand\Authfont{\fontsize{11}{11}\selectfont}",
                     r"\renewcommand\Affilfont{\fontsize{10}{10.8}\selectfont}",
                     r"\renewcommand*{\Authsep}{, }",
-                    r"\renewcommand*{\Authand}{{\bfseries and }}",
-                    r"\renewcommand*{\Authands}{{\bfseries , and }}",
+                    r"\renewcommand*{\Authand}{{\bfseries\ and }}",
+                    r"\renewcommand*{\Authands}{{\bfseries\ , and }}",
                     r"\setlength{\affilsep}{1em}",
-                    r"\newsavebox\affbox"
+                    r"\newsavebox\affbox",
+                    "\n"
                 ]
             ),
             TexPackage(
