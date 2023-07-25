@@ -52,11 +52,17 @@ class PlainArticle:
             else self.default_title
         )
 
-        # TODO: Manage the case when `authors` is Author() class obj
-        self._authors:list = (
-            authors if authors is not None
-            else self.default_authors
-        )
+        # Manage the case when `authors` is Author() class obj
+        if authors is None:
+            self._authors = self.default_authors
+        elif isinstance(authors, Author):
+            self._authors = [authors]
+        elif isinstance(authors, list):
+            self._authors = authors
+        else:
+            raise TypeError(
+                f"`{self.__class__.__name__}.authors` can be either of type `list` or `Author`\n"
+            )
 
         self._packages:list = (
             packages
@@ -399,7 +405,7 @@ class AmsArticle:
     def __init__(
             self,
             title:str = None,
-            authors:list = None,
+            authors = None,
             short_title:str = None,
             subjectclass:str = None,
             dedicatory:str = None,
@@ -429,10 +435,18 @@ class AmsArticle:
             else self.default_title
         )
 
-        self._authors:list = (
-            authors if authors is not None
-            else self.default_authors
-        )
+        # Manage the case when `authors` is Author() class obj
+        if authors is None:
+            self._authors = self.default_authors
+        elif isinstance(authors, Author):
+            self._authors = [authors]
+        elif isinstance(authors, list):
+            self._authors = authors
+        else:
+            raise TypeError(
+                f"`{self.__class__.__name__}.authors` can be either of type `list` or `Author`\n"
+            )
+        
 
         self._short_title:str = (
             self._title if short_title is None
@@ -1053,7 +1067,7 @@ def main():
     )
     
     article = PlainArticle(
-        authors=[indra],
+        authors=indra,
         project_dir=Path.home() / "Desktop" / "new_plain_art"
     )
 
