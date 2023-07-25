@@ -187,7 +187,9 @@ class Author:
         for e in lst:
             if e != "":
                 fine_lst.append(e)
-
+        if len(fine_lst) == 1:
+            return fine_lst[0]
+        
         if not _and:
             return ", ".join(fine_lst)
         
