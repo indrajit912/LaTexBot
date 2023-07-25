@@ -549,18 +549,18 @@ class AmsArticle:
             raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
 
         # Writing LaTeX files
-        print(f" - Writing `{self.preamble.filename}.{self.preamble.file_extension}`...")
+        print(f" - Writing `{self.preamble.filename}{self.preamble.file_extension}`...")
         self.preamble.write(
             tex_dir=self._project_dir
         )
 
-        print(f" - Writing `{self.main_tex.filename}.{self.main_tex.file_extension}`...")
+        print(f" - Writing `{self.main_tex.filename}{self.main_tex.file_extension}`...")
         self.main_tex.write(
             tex_dir=self._project_dir
         )
 
 
-        print(f" - Writing `{self.reference_bib.filename}.{self.reference_bib.file_extension}`...")
+        print(f" - Writing `{self.reference_bib.filename}{self.reference_bib.file_extension}`...")
         self.reference_bib.write(
             tex_dir=self._project_dir
         )
@@ -569,7 +569,7 @@ class AmsArticle:
         print("\n - Writing sections...")
 
         for sec in self._sections:
-            print(f" -- Writing `{sec.filename}.{sec.file_extension}`...")
+            print(f" -- Writing `{sec.filename}{sec.file_extension}`...")
             sec.write(
                 tex_dir = self._sections_dir
             )
