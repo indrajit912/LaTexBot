@@ -1189,19 +1189,20 @@ def main():
         ],
         email="soumyashant@gmail.com"
     )
-    
-    article = PlainArticle(
-        authors=IndraAMS.indrajit,
-        project_dir=Path.home() / "Desktop" / "new_plain_art",
-        amsartstyle=True,
-    )
 
     amsart = AmsArticle(
-        authors=indra,
+        authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    article.create()
+    article = PlainArticle(
+        authors=IndraAMS.indrajit,
+        project_dir=Path.home() / "Desktop" / "new_plain_art",
+        amsartstyle=False,
+    )
+
+    print(article)
+
 
 if __name__ == '__main__':
     main()
