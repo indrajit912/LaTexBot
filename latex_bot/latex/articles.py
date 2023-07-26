@@ -508,9 +508,503 @@ class Article:
 
     Author: Indrajit Ghosh
     Date: Jul 25, 2023
-    """
-    pass
+    
+    Attributes:
+    -------------
+        `packages`: `list[TexPackage(), ..., TexPackage()]`
+        `theorem_styles`: str
+        `custom_commands`: str
+        `sections`: `list[TexFile(), ..., TexFile()]`
 
+    """
+    default_title = "Article \\LaTeX\\ Template"
+    default_authors = [Author()]
+    default_date = r"\today"
+    default_project_dir = Path.cwd() / "new_article"
+
+
+    def __init__(
+            self,
+            title:str = None,
+            authors = None,
+            short_title:str = None,
+            keywords:str = None,
+            date:str = None,
+            packages:list = None, # `list` of `TexPackage`s
+            theorem_styles:str = None,
+            custom_commands:str = None,
+            sections:list = None, # `list` of `TexFile`s
+            references:list = None, # `list` of reference entries
+            amsartstyle:bool = False, # If true, prints authors addresses at the end of article
+            project_dir:Path = None,
+            *,
+            pdfsubject:str = "Mathematics",
+            pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
+            pdfcreator:str = "MixTeX",
+            pdfcreationdate:str = r"\today",
+            pdfcolorlink:bool = True,
+            pdflinkcolor:str = "cyan",
+            pdfurlcolor:str = "blue",
+            pdfcitecolor:str = "magenta",
+            papersize:str = "a4paper",
+            fontsize:str = "11pt",
+            **kwargs
+    ):
+        self._title:str = (
+            title if title is not None
+            else self.default_title
+        )
+
+        # Manage the case when `authors` is Author() class obj
+        if authors is None:
+            self._authors = self.default_authors
+        elif isinstance(authors, Author):
+            self._authors = [authors]
+        elif isinstance(authors, list):
+            self._authors = authors
+        else:
+            raise TypeError(
+                f"`{self.__class__.__name__}.authors` can be either of type `list` or `Author`\n"
+            )
+        
+
+        self._short_title:str = (
+            self._title if short_title is None
+            else short_title
+        )
+
+        self._packages:list = (
+            packages
+            if packages is not None
+            else self._default_article_packages()
+        )
+
+        self._theorem_styles:str = (
+            theorem_styles
+            if theorem_styles is not None
+            else ""
+        )
+
+        self._custom_commands:str = (
+            custom_commands
+            if custom_commands is not None
+            else ""
+        )
+
+        self._sections:list = (
+            sections
+            if sections is not None
+            else Article._default_article_sections()
+        )
+
+        self._references:list = (
+            references
+            if references is not None
+            else AmsArticle._default_references()
+        )
+
+        self._keywords:str = keywords
+        self._date:str = (
+            self.default_date if date is None
+            else date
+        )
+        self._project_dir:Path = (
+            self.default_project_dir if project_dir is None
+            else Path(project_dir)
+        )
+
+        self._amsartstyle = amsartstyle # If true, prints authors addresses at the end of article
+
+
+        # PDF info
+        self._pdftitle = self._title
+        self._pdfauthor = Author._add_comma_to_list(
+            [ath._name for ath in self._authors]
+        )
+        self._pdfsubject = pdfsubject
+        self._pdfkeywords = pdfkeywords
+        self._pdfcreator = pdfcreator
+        self._pdfcreationdate = pdfcreationdate
+        self._pdfcolorlink = (
+            'true' if pdfcolorlink
+            else ''
+        )
+        self._pdflinkcolor = pdflinkcolor
+        self._pdfurlcolor = pdfurlcolor
+        self._pdfcitecolor = pdfcitecolor
+        self._papersize = papersize
+        self._fontsize = fontsize
+
+        # Setting up Article Project components
+        self._sections_dir:Path = self._project_dir / "sections"
+
+        self._update()
+
+    def create(self):
+        """
+        Creates the Article
+        """
+        self._update()
+
+        # Creating `self._project_dir`
+        if not self._project_dir.exists():
+            print("\n\n - Creating the project directory...")
+            self._project_dir.mkdir()
+            print(" - Creating `sections` dir ...\n")
+            self._sections_dir.mkdir()
+        else:
+            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
+
+        # Writing LaTeX files
+        print(f" - Writing `{self.preamble.filename}{self.preamble.file_extension}`...")
+        self.preamble.write(
+            tex_dir=self._project_dir
+        )
+
+        print(f" - Writing `{self._main_tex.filename}{self._main_tex.file_extension}`...")
+        self._main_tex.write(
+            tex_dir=self._project_dir
+        )
+
+
+        print(f" - Writing `{self.reference_bib.filename}{self.reference_bib.file_extension}`...")
+        self.reference_bib.write(
+            tex_dir=self._project_dir
+        )
+
+
+        print("\n - Writing sections...")
+
+        for sec in self._sections:
+            print(f" -- Writing `{sec.filename}{sec.file_extension}`...")
+            sec.write(
+                tex_dir = self._sections_dir
+            )
+
+        print(f"\n\nProject Dir: `{self._project_dir}`\n")
+
+
+    def _update(self):
+        """
+        Updates the `article`. This method should be called
+        whenever an attr is set.
+
+        This method calls the following methods:
+            self._update_preamble()
+            self._update_main_tex()
+            self._update_reference_bib()
+        """
+        self._update_preamble()
+        self._update_reference_bib()
+        self._update_main_tex()
+
+
+    def _update_main_tex(self):
+        """
+        This method will update main `TexFile` for the project
+        Updates the `self.main_tex` attr
+        """
+
+        # Getting author(s) info
+        _auths_outside = _auths_inside = ''
+
+        if self._amsartstyle:
+            # AMS art style addresses
+            _auths_inside = (
+                "\n% Author(s) information:\n"
+                + r"\author{\textbf{%"
+                + "\n"
+            )
+
+            _addresses_cmd = (
+                "\n\n"
+                + r"\newcommand{\Addresses}{{%" 
+                + "\n"
+                + "\\bigskip"
+                + "\n"
+                + "\\footnotesize"
+                + "\n"
+            )
+
+            _temp_auth_cmd_list = []
+            _temp_addrs_cmd_list = []
+
+            i = 1
+            for auth in self._authors:
+                _auth_out, _ = PlainArticle._get_authors_main_tex_info(
+                    author=auth,
+                    _index=i,
+                    _ams_style=True
+                )
+
+                _auths_outside += _auth_out
+
+                _auth_word = AmsArticle.num_to_word(i).title()
+                _temp_auth_cmd_list.append(
+                    r"\Author"
+                    + _auth_word
+                )
+
+                _temp_addrs_append = (
+                    r"\textsc{\Author"
+                    + _auth_word
+                    + "Department"
+                    + ", "
+                    + r"\Author"
+                    + _auth_word
+                    + "Institute"
+                    + ", "
+                    + r"\Author"
+                    + _auth_word
+                    + "Addr"
+                    + r"}\par\nopagebreak"
+                    + "\n"
+                    + r"\textit{E-mail address}: \texttt{"
+                    + r"\Author"
+                    + _auth_word
+                    + "Email"
+                    + "}\n"
+                    + "\\medskip"
+                    + "\n"
+                )
+                _temp_addrs_cmd_list.append(_temp_addrs_append)
+
+                i += 1
+            
+            _tmp = "" # In this we'll concat "\AuthorOne, \AuthorTwo\ and \AuthorThree"
+
+            if len(_temp_auth_cmd_list) == 1:
+                _tmp += _temp_auth_cmd_list[0]
+            else:
+                _tmp = ", ".join(_temp_auth_cmd_list[:-1])
+                _tmp += "\\ and " + _temp_auth_cmd_list[-1]
+
+            _temp_addrs = "\n".join(_temp_addrs_cmd_list)
+            _addresses_cmd += _temp_addrs + "\n}}%\n"
+
+            _auths_outside += _addresses_cmd
+
+            _auths_inside += _tmp + "\n}}%\n"
+
+        else:
+            # If there  are one author the command should be `\affil[]{\AuthorOne}`
+            if len(self._authors) == 1:
+                _auths_outside, _auths_inside = PlainArticle._get_authors_main_tex_info(
+                    author=self._authors[0]
+                )
+            else:
+                i = 1
+                for auth in self._authors:
+                    auth_out, auth_in = PlainArticle._get_authors_main_tex_info(
+                        author = auth,
+                        _index = i
+                    )
+                    _auths_outside += auth_out
+                    _auths_inside += auth_in
+                    i += 1
+
+        _main_pre_doc_cmds = (
+            "\n\n"
+            + r"\newcommand{\Title}{" + self._title + "}%"
+            + "\n"
+            + _auths_outside
+            + "\n"
+            + r"\newcommand{\Date}{" + self._date + "}%"
+            + "\n"
+        )
+
+        _main_pre_doc_cmds += r"""
+%%-------------------------------------------------
+%%%	       PDF Constants
+%%-------------------------------------------------
+\newcommand{\pdfLinkColor}{cyan}
+\newcommand{\pdfUrlColor}{blue}
+\newcommand{\pdfCiteColor}{magenta}
+"""
+        _main_pre_doc_cmds += (
+            r"\newcommand{\pdfTitle}{" + self._pdftitle + "}%"
+            + "\n"
+            r"\newcommand{\pdfAuthor}{" + self._pdfauthor + "}%"
+            + "\n"
+            + r"\newcommand{\pdfSubject}{" + self._pdfsubject + "}%"
+            + "\n"
+            + r"\newcommand{\pdfKeywords}{" + self._pdfkeywords + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreator}{" + self._pdfcreator + "}%"
+            + "\n"
+            + r"\newcommand{\pdfCreationDate}{" + self._pdfcreationdate + "}%"
+            + "\n"
+            + r"\newcommand{\pdfColorLink}{" + self._pdfcolorlink + "}%"
+            + "\n"
+            + r"\newcommand{\bibFile}{"
+            + "references.bib" # TODO: set it to the attr `self._bibfile`
+            + "}%\n\n"
+        )
+
+        _main_preamble = r"\input{preamble}"
+
+        _main_post_doc_cmds = (
+            r"\title{\Title}%"
+            + "\n"
+            + _auths_inside
+            + "\n"
+            + r"\date{\Date}%"
+            + "\n"
+            + r"\maketitle%"
+            + "\n"
+            + r"\thispagestyle{empty}%"
+            + "\n"
+
+        )
+
+        _main_body_text = ""
+
+        if self._sections:
+            _sec_filenames = [sec._filename for sec in self._sections]
+            if 'abstract' in _sec_filenames:
+                # Abstract is there
+                _main_body_text += fr"""
+\begin{{abstract}}
+    \label{{sec:abstract}}
+    \input{{{self._sections_dir.name}/abstract}}
+\end{{abstract}}
+
+"""
+            if 'introduction' in _sec_filenames:
+                # Introduction is there
+                _main_body_text += (
+                        r"\section{Introduction}%\n"
+                        + r"\label{sec:introduction" + "\n"
+                        + r"\input{" + self._sections_dir.name + "/introduction"
+                        + "}%\n\n"
+                    )
+                
+            _special_sections = ["abstract", "introduction"]
+            for sec in self._sections:
+                if not sec._filename in _special_sections:
+                    _main_body_text += (
+                        r"\section{" + sec._filename.title() + "}%\n"
+                        + r"\label{sec:" + sec._filename.replace(' ', '') + "}%\n"
+                        + r"\input{" + self._sections_dir.name + "/" + sec._filename
+                        + "}%\n\n"
+                    )
+
+        else:
+            _main_body_text = r"\lipsum[1-2]"
+
+
+        _main_end_text = (
+            r"\nocite{*}"
+            + "\n"
+            + "\printbibliography[heading=bibintoc,title={References}]"
+            + "\n"
+        )
+
+        if self._amsartstyle:
+            _main_end_text += "\n\n\\mbox{}%\n\\vfill%\n\\Addresses%"
+
+        _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
+
+        # Setting up `main.tex` TexFile
+        self._main_tex = TexFile(
+            tex_compiler="pdflatex",
+            output_format=".pdf",
+            documentclass=_documentclass,
+            pre_doc_commands=_main_pre_doc_cmds,
+            preamble= _main_preamble,
+            post_doc_commands=_main_post_doc_cmds,
+            body_text=_main_body_text,
+            end_text=_main_end_text,
+            author=self._pdfauthor,
+            filename="main",
+            file_extension=".tex",
+            classfile=False
+        )
+
+
+    def _update_preamble(self):
+        """
+        Updates the preamble.
+        If at any  moment `self._authors` gets updated this function 
+        should be called to update the `self._preamble`.
+        """
+        # Adjust `theorem_style` and `custom_commands` attr for preamble
+        self.preamble:Preamble = Preamble(
+            filename="preamble",
+            packages=self._packages,
+            theorem_styles=self._theorem_styles,
+            custom_commands=self._custom_commands,
+            author=self._pdfauthor,
+        )
+        self.preamble.add_to_document(
+            r"\addbibresource{\bibFile}%"
+        )
+
+
+    def _update_reference_bib(self):
+        """
+        Updates reference
+        """
+        _ref_body_text = ""
+        for ref in self._references:
+            _ref_body_text += ref
+
+        self.reference_bib = TexFile(
+            filename="references",
+            classfile=True,
+            file_extension=".bib",
+            body_text=_ref_body_text,
+            author=self._pdfauthor
+        )
+
+
+    def add_package(self, package:TexPackage):
+        """
+        Appends `package` to `self._packages`
+        """
+        self._packages.append(package)
+        self._update()
+
+    def add_reference(self, ref:str):
+        """
+        Appends `ref` to `self._references`
+        """
+        self._references.append(ref)
+        self._update()
+
+    
+    @staticmethod
+    def _default_article_sections():
+        """
+        Returns a `list` of default `TexFile`s which I 
+        use for `article` sections
+
+        Returns:
+        --------
+            `list[TexFile(), ..., TexFile()]`
+        """
+        intro = TexFile(
+            filename="introduction",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"\lipsum[1-2]"
+        )
+
+        abstrat = TexFile(
+            filename="abstract",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"\lipsum[1]"
+        )
+
+        sec1 = TexFile(
+            filename="section1",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"\lipsum[1-3]"
+        )
+
+        return [intro, abstrat, sec1]
 
 
     @staticmethod
@@ -584,6 +1078,8 @@ class Article:
 	urlcolor=\pdfUrlColor,
 	citecolor=\pdfCiteColor,
 	pdfpagemode=UseOutlines,
+}%
+
 """
                 ]
             ),
@@ -601,7 +1097,8 @@ class Article:
                 name="biblatex",
                 options=[
                     "style=alphabetic",
-                    "sorting=ynt"
+                    "sorting=ynt",
+                    "backend=bibtex"
                 ]
             )
         ]
@@ -609,7 +1106,7 @@ class Article:
 
 
 class AmsArticle:
-    """
+    r"""
     A class representing AMS Aricle LaTeX document.
 
     Author: Indrajit Ghosh
@@ -628,7 +1125,6 @@ class AmsArticle:
     default_date = r"\today"
     default_project_dir = Path.cwd() / "new_ams_art"
 
-    TEX_NONE = ['', '  ', '\t']
 
     def __init__(
             self,
@@ -793,8 +1289,6 @@ class AmsArticle:
             )
 
         print(f"\n\nProject Dir: `{self._project_dir}`\n")
-        
-
 
 
     def _update(self):
@@ -804,8 +1298,8 @@ class AmsArticle:
 
         This method calls the following methods:
             self._update_preamble()
-            self._update_main_tex()
             self._update_reference_bib()
+            self._update_main_tex()
         """
         self._update_preamble()
         self._update_reference_bib()
@@ -1307,7 +1801,13 @@ def main():
         abstract=True
     )
 
-    print(plainart)
+    art = Article(
+        authors=[IndraAMS.indrajit, nsoum],
+        project_dir=Path.home() / "Desktop" / "new_article",
+        amsartstyle=False,
+    )
+
+    art.create()
 
 
 if __name__ == '__main__':
