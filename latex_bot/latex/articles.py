@@ -8,6 +8,7 @@ from latex import *
 from pathlib import Path
 from datetime import datetime
 from indrajit_ams_templates import IndraAMS
+from tex_templates import *
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -38,6 +39,7 @@ class PlainArticle:
             project_dir:list=None,
             amsartstyle:bool=False,
             abstract:str=None,
+            tex_template:TexFile=None,
             *,
             pdfsubject:str = "Mathematics",
             pdfkeywords:str = "Operator Algebras, von-Neumann Algebras",
@@ -97,6 +99,8 @@ class PlainArticle:
         )
 
         self._amsartstyle = amsartstyle # If true, prints authors addresses at the end of article
+
+        self._tex_template = tex_template
 
         # PDF info
         self._pdftitle = self._title
@@ -338,6 +342,7 @@ class PlainArticle:
         _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
 
         # Setting up `main.tex` TexFile
+        
         self._main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
@@ -352,6 +357,14 @@ class PlainArticle:
             file_extension=".tex",
             classfile=False
         )
+
+        if self._tex_template:
+            # If TeX template is given then change self._main_tex accordingly
+            self._main_tex.tex_compiler = self._tex_template.tex_compiler
+            self._main_tex.output_format = self._tex_template.output_format
+            self._main_tex.add_to_preamble(
+                self._tex_template.preamble
+            )
 
     @staticmethod
     def _get_authors_main_tex_info(author:Author, _index:int=None, _ams_style:bool=False):
@@ -1868,7 +1881,8 @@ def main():
         authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
         amsartstyle=False,
-        abstract=True
+        abstract=True,
+        tex_template=TexFontTemplates.american_typewriter
     )
 
     art = Article(
@@ -1876,6 +1890,8 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_article",
         amsartstyle=True,
     )
+
+    # print(plainart)
 
 
 
