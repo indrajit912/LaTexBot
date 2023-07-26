@@ -500,6 +500,111 @@ class PlainArticle:
 """
             ),
         ]
+    
+
+class Article:
+    r"""
+    A class representing an Article LaTeX document.
+
+    Author: Indrajit Ghosh
+    Date: Jul 25, 2023
+    """
+    pass
+
+
+
+    @staticmethod
+    def _default_article_packages():
+        """
+        Returns LaTeX packages that I usually use in `article` doc.
+        """
+        return [
+            TexPackage(name="inputenc", options=['utf8']),
+            TexPackage(name="fontenc", options=['T1']),
+            TexPackage(
+                name="geometry",
+                options=[
+                    "top=0.9in",
+                    "bottom=1in",
+                    "left=1in",
+                    "right=1in"
+                ]
+            ),
+            TexPackage(name="xcolor"),
+            TexPackage(name="lipsum"),
+            TexPackage(
+                name="lastpage",
+                comment="To get the last page and total number of pages"
+            ),
+            TexPackage(
+                name="babel",
+                options=["english"]
+            ),
+            TexPackage(
+                name="titling",
+                associated_cmds=[
+                    r"\setlength{\droptitle}{-4\baselineskip} % Move the title up",
+                    r"\pretitle{\begin{center}\LARGE\bfseries} % Article title formatting",
+                    r"\posttitle{\end{center}} % Article title closing formatting"
+                ]
+            ),
+            TexPackage(
+                name="authblk",
+                options=["blocks"],
+                associated_cmds=[
+                    r"\renewcommand\Authfont{\fontsize{11}{11}\selectfont}",
+                    r"\renewcommand\Affilfont{\fontsize{10}{10.8}\selectfont}%",
+                    r"\renewcommand*{\Authsep}{, }",
+                    r"\renewcommand*{\Authand}{{\bfseries\ and }}",
+                    r"\renewcommand*{\Authands}{{\bfseries\ , and }}",
+                    r"\setlength{\affilsep}{1em}",
+                    r"\newsavebox\affbox"
+                ]
+            ),
+            TexPackage(
+                name="abstract",
+                associated_cmds=[
+                    r"\renewcommand{\abstractnamefont}{\normalfont\bfseries}",
+                    r"\renewcommand{\abstracttextfont}{\normalfont\small\itshape}",
+                ]
+            ),
+            TexPackage(
+                name="hyperref",
+                associated_cmds=[
+                    r"""\hypersetup{
+	pdftitle={\pdfTitle},
+	pdfauthor={\pdfAuthor},
+	pdfsubject={\pdfSubject},
+	pdfcreationdate={\pdfCreationDate},
+	pdfcreator={\pdfCreator},
+	pdfkeywords={\pdfKeywords},
+	colorlinks=\pdfColorLink,
+	linkcolor={\pdfLinkColor},
+	%    filecolor=magenta,      
+	urlcolor=\pdfUrlColor,
+	citecolor=\pdfCiteColor,
+	pdfpagemode=UseOutlines,
+"""
+                ]
+            ),
+            TexPackage(
+                name="csquotes",
+                options=["autostyle=true"],
+                comment="Required to generate language-dependent quotes in the bibliography",
+            ),
+            TexPackage(
+                name="tocbibind",
+                options=["nottoc"],
+                comment="To add bibliogrphy to the table of content"
+            ),
+            TexPackage(
+                name="biblatex",
+                options=[
+                    "style=alphabetic",
+                    "sorting=ynt"
+                ]
+            )
+        ]
 
 
 
@@ -1195,13 +1300,14 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
-    article = PlainArticle(
+    plainart = PlainArticle(
         authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
         amsartstyle=False,
+        abstract=True
     )
 
-    print(article)
+    print(plainart)
 
 
 if __name__ == '__main__':
