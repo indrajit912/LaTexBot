@@ -9,6 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from indrajit_ams_templates import IndraAMS
 from tex_templates import *
+from utils import open_file
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -1881,8 +1882,7 @@ def main():
         authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
         amsartstyle=False,
-        abstract=True,
-        tex_template=TexFontTemplates.american_typewriter
+        abstract=True
     )
 
     art = Article(
@@ -1890,8 +1890,6 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_article",
         amsartstyle=True,
     )
-
-    # print(plainart)
 
 
 

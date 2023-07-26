@@ -3,7 +3,8 @@
 # Date: Jul 20, 2023
 #
 
-import tempfile, shutil
+import tempfile, shutil, platform, subprocess, os
+from tex_templates import *
 
 def make_temp_dir():
     """
@@ -32,3 +33,25 @@ def rm_temp_dir():
     if _tmp_path:
         shutil.rmtree(_tmp_path)
         _tmp_path = None
+
+
+def open_file(file_path, in_browser=False):
+    current_os = platform.system()
+    if current_os == "Windows":
+        os.startfile(file_path if not in_browser else file_path.parent)
+    else:
+        if current_os == "Linux":
+            commands = ["xdg-open"]
+            file_path = file_path if not in_browser else file_path.parent
+        elif current_os.startswith("CYGWIN"):
+            commands = ["cygstart"]
+            file_path = file_path if not in_browser else file_path.parent
+        elif current_os == "Darwin":
+            
+                commands = ["open"] if not in_browser else ["open", "-R"]
+        else:
+            raise OSError("Unable to identify your operating system...")
+        commands.append(file_path)
+        subprocess.Popen(commands)
+
+
