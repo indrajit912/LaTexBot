@@ -584,13 +584,13 @@ class Article:
         self._theorem_styles:str = (
             theorem_styles
             if theorem_styles is not None
-            else ""
+            else Preamble._default_ams_theorem_styles()
         )
 
         self._custom_commands:str = (
             custom_commands
             if custom_commands is not None
-            else ""
+            else r"\newcommand{\N}{\mathbb{N}}"
         )
 
         self._sections:list = (
@@ -995,7 +995,14 @@ class Article:
             filename="introduction",
             classfile=True,
             file_extension=".tex",
-            body_text=r"\lipsum[1-2]"
+            body_text=r"""\lipsum[1]
+\begin{thm}
+    The set of all natural numbers, $\N$, is unbounded.
+\end{thm}
+\begin{proof}
+    The proof is obvious and left to the reader!
+\end{proof}
+"""
         )
 
         abstrat = TexFile(
@@ -1038,6 +1045,10 @@ class Article:
                     "left=1in",
                     "right=1in"
                 ]
+            ),
+            TexPackage(
+                name=["amsmath", "amssymb", "amsthm", "amscd"],
+                comment= "amssymb internally loads amsfonts"
             ),
             TexPackage(name="xcolor"),
             TexPackage(name="lipsum"),
