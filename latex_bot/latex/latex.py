@@ -681,7 +681,7 @@ class TexFile:
     @output_format.setter
     def output_format(self, new_format:str):
         self._output_format = new_format
-        self._output_format()
+        self._rebuild()
 
     @property
     def documentclass(self):
