@@ -911,7 +911,7 @@ class Article:
         if self._amsartstyle:
             _main_end_text += "\n\n\\mbox{}%\n\\vfill%\n\\Addresses%"
 
-        _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
+        _documentclass = f"\\documentclass[{self._fontsize},{self._papersize},twoside]{{article}}"
 
         # Setting up `main.tex` TexFile
         self._main_tex = TexFile(
@@ -1016,14 +1016,43 @@ class Article:
             filename="section1",
             classfile=True,
             file_extension=".tex",
-            body_text=r"\lipsum[1-3]"
+            body_text=r"""\lipsum[3]
+\[
+\mathcal L_{\mathcal T}(\vec{\lambda})
+= \sum_{(\mathbf{x},\mathbf{s})\in \mathcal T}
+    \log P(\mathbf{s}\mid\mathbf{x}) - \sum_{i=1}^m
+    \frac{\lambda_i^2}{2\sigma^2}
+\]
+\lipsum[5]
+\[
+ z = \overbrace{
+   \underbrace{x}_\text{\textcolor{blue}{real}} + i
+   \underbrace{y}_\text{imaginary}
+  }^\text{\textcolor{red}{complex number}}
+\]
+"""
         )
 
         sec2 = TexFile(
             filename="section2",
             classfile=True,
             file_extension=".tex",
-            body_text=r"\lipsum[1-2]"
+            body_text=r"""\lipsum[9]
+\[
+ \lim_{x\to 0}{\frac{e^x-1}{2x}}
+ \overset{\left[\frac{0}{0}\right]}{\underset{\mathrm{H}}{=}}
+ \lim_{x\to 0}{\frac{e^x}{2}}={\frac{1}{2}}
+\]
+\lipsum[6]
+Heat Equation:
+\[
+ \frac{\partial u}{\partial t}
+   = h^2 \left( \frac{\partial^2 u}{\partial x^2}
+      + \frac{\partial^2 u}{\partial y^2}
+      + \frac{\partial^2 u}{\partial z^2} \right) 
+\]
+\lipsum[10-13]
+"""
         )
 
         return [intro, abstrat, sec1, sec2]
@@ -1086,6 +1115,19 @@ class Article:
                 associated_cmds=[
                     r"\renewcommand{\abstractnamefont}{\normalfont\bfseries}",
                     r"\renewcommand{\abstracttextfont}{\normalfont\small\itshape}",
+                ]
+            ),
+            TexPackage(
+                name="fancyhdr",
+                associated_cmds=[
+                    r"\pagestyle{fancy}",
+                    r"\fancyhf{}",
+                    r"\fancyhead[CO]{\small\scshape\pdfTitle}", # TODO: Make it `\shortTitle`
+                    r"\fancyhead[CE]{\small\scshape\pdfAuthor}",
+                    r"\fancyfoot[R]{\footnotesize Page \ \thepage \ of \pageref{LastPage}}",
+                    r"\renewcommand{\headrulewidth}{0.5pt}",
+                    r"\renewcommand{\footrulewidth}{0pt}",
+                    r"\setlength{\headheight}{13.59999pt}"
                 ]
             ),
             TexPackage(
