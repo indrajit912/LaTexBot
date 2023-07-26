@@ -269,6 +269,12 @@ class TexPackage:
 
         _pkg_str += self._associated_cmds
 
+        _pkg_str = (
+            _pkg_str
+            if self._associated_cmds == ""
+            else "\n" + _pkg_str + "\n"
+        )
+
         return _pkg_str
 
     
