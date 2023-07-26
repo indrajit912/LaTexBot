@@ -815,6 +815,8 @@ class Article:
             "\n\n"
             + r"\newcommand{\Title}{" + self._title + "}%"
             + "\n"
+            + r"\newcommand{\ShortTitle}{" + self._short_title + "}%"
+            + "\n"
             + _auths_outside
             + "\n"
             + r"\newcommand{\Date}{" + self._date + "}%"
@@ -1122,7 +1124,7 @@ Heat Equation:
                 associated_cmds=[
                     r"\pagestyle{fancy}",
                     r"\fancyhf{}",
-                    r"\fancyhead[CO]{\small\scshape\pdfTitle}", # TODO: Make it `\shortTitle`
+                    r"\fancyhead[CO]{\small\scshape\ShortTitle}",
                     r"\fancyhead[CE]{\small\scshape\pdfAuthor}",
                     r"\fancyfoot[R]{\footnotesize Page \ \thepage \ of \pageref{LastPage}}",
                     r"\renewcommand{\headrulewidth}{0.5pt}",
