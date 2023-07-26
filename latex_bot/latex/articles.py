@@ -520,6 +520,7 @@ class Article:
     default_title = "Article \\LaTeX\\ Template"
     default_authors = [Author()]
     default_date = r"\today"
+    default_bibfile = "references.bib"
     default_project_dir = Path.cwd() / "new_article"
 
 
@@ -535,6 +536,7 @@ class Article:
             custom_commands:str = None,
             sections:list = None, # `list` of `TexFile`s
             references:list = None, # `list` of reference entries
+            bibfile:str=None,
             amsartstyle:bool = False, # If true, prints authors addresses at the end of article
             project_dir:Path = None,
             *,
@@ -601,6 +603,12 @@ class Article:
             references
             if references is not None
             else AmsArticle._default_references()
+        )
+
+        self._bibfile:str = (
+            bibfile
+            if bibfile is not None
+            else self.default_bibfile
         )
 
         self._keywords:str = keywords
@@ -837,7 +845,7 @@ class Article:
             + r"\newcommand{\pdfColorLink}{" + self._pdfcolorlink + "}%"
             + "\n"
             + r"\newcommand{\bibFile}{"
-            + "references.bib" # TODO: set it to the attr `self._bibfile`
+            + self._bibfile
             + "}%\n\n"
         )
 
@@ -1004,7 +1012,14 @@ class Article:
             body_text=r"\lipsum[1-3]"
         )
 
-        return [intro, abstrat, sec1]
+        sec2 = TexFile(
+            filename="section2",
+            classfile=True,
+            file_extension=".tex",
+            body_text=r"\lipsum[1-2]"
+        )
+
+        return [intro, abstrat, sec1, sec2]
 
 
     @staticmethod
@@ -1804,7 +1819,7 @@ def main():
     art = Article(
         authors=[IndraAMS.indrajit, nsoum],
         project_dir=Path.home() / "Desktop" / "new_article",
-        amsartstyle=False,
+        amsartstyle=True,
     )
 
     art.create()
