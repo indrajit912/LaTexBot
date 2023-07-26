@@ -1877,7 +1877,6 @@ def main():
         amsartstyle=True,
     )
 
-    art.create()
 
 
 if __name__ == '__main__':
