@@ -228,8 +228,7 @@ def main():
     garbage_dir = './garbage/'
     generate_fonts_tex_file(garbage_dir)
     # generate_sample_tex_file(garbage_dir + 'spam.tex')
-    pass
-
+    
 
 if __name__ == '__main__':
     main()
