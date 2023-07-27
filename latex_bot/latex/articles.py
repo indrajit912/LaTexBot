@@ -1501,8 +1501,7 @@ class AmsArticle:
     \input{sections/abstract}
 \end{abstract}
 
-"""
-            
+"""                 
             for sec in self._sections:
                 if not sec._filename == "abstract":
                     self._main_body_text += (
@@ -1859,11 +1858,10 @@ class AmsArticle:
 
 def main():
 
-    indra = Author(email="indrajitghosh912@gmail.com")
 
     nsoum = Author(
         name="Soumyashant Nayak",
-        department="SMU",
+        department="St",
         institute="Indian Statistical Institute Bangalore",
         address=[
             "8th Mile, Mysore Road",
@@ -1874,7 +1872,8 @@ def main():
     )
 
     amsart = AmsArticle(
-        authors=IndraAMS.indrajit,
+        authors=[IndraAMS.indrajit, nsoum],
+        keywords="von-Neumann Algebras, Affiliated Operators",
         project_dir=Path.home() / "Desktop" / "new_ams_art",
     )
 
@@ -1891,6 +1890,7 @@ def main():
         amsartstyle=True,
     )
 
+    amsart.create()
 
 
 if __name__ == '__main__':

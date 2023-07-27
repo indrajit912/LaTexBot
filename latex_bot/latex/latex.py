@@ -346,7 +346,7 @@ class TexFile:
     default_tex_compiler = "pdflatex"
     default_output_format = ".pdf"
 
-    default_documentclass = r"\documentclass[12pt, twoside]{article}"
+    default_documentclass = r"\documentclass[12pt,twoside]{article}"
     default_pre_doc_commands = "\\newcommand{\\Title}{A \\LaTeX file}%\n" + \
                                 "\\newcommand{\\Author}{Indrajit Ghosh}%\n"
     default_preamble = r"""
@@ -469,8 +469,14 @@ class TexFile:
             heading=_fileinfo,
             symbol="%"
         )
+
+        _tex_directive_compiler = (
+            f"% !TEX TS-program = {self._tex_compiler}\n"
+            if self._tex_compiler
+            else ''
+        )
         
-        self.body = self._fileinfo # TODO: # Add TEX directives
+        self.body = _tex_directive_compiler + self._fileinfo
     
         if not self._classfile:
             self.body += (
@@ -1118,7 +1124,7 @@ class Preamble(TexFile):
 
 
 def main():
-    file = Preamble()
+    file = TexFile()
     print(file)
 
 
