@@ -4,7 +4,6 @@
 #
 
 import tempfile, shutil, platform, subprocess, os
-from tex_templates import *
 
 def make_temp_dir():
     """

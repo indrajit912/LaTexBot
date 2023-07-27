@@ -8,6 +8,7 @@
 from datetime import datetime
 import copy, re, hashlib, subprocess, os
 from pathlib import Path
+from utils import open_file
 
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
@@ -347,14 +348,14 @@ class TexFile:
     default_output_format = ".pdf"
 
     default_documentclass = r"\documentclass[12pt,twoside]{article}"
-    default_pre_doc_commands = "\\newcommand{\\Title}{A \\LaTeX file}%\n" + \
+    default_pre_doc_commands = "\\newcommand{\\Title}{A \\LaTeX\ file}%\n" + \
                                 "\\newcommand{\\Author}{Indrajit Ghosh}%\n"
     default_preamble = r"""
 \usepackage[english]{babel}
 \usepackage{lmodern}
 \usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
 """
-    default_post_doc_commands = "\\maketitle"
+    default_post_doc_commands = "\\title{\Title}\n\\author{\Author}\n\\maketitle"
     default_body_text = "\nYourTextHere\n"
     default_end_text = ""
 
@@ -872,7 +873,7 @@ class TexFile:
             commands = [
                 tex_compiler,
                 "-interaction=batchmode",
-                f'-output-format="{output_format[1:]}"',
+                f'-output-format="{output_format}"',
                 "-halt-on-error",
                 f'-output-directory="{tex_dir.as_posix()}"',
                 f'"{tex_file.as_posix()}"'
@@ -896,6 +897,54 @@ class TexFile:
             raise ValueError(f"Tex compiler {tex_compiler} unknown.")
         
         return commands
+    
+
+    def _compile(self, tex_dir:Path=None, _open:bool=False):
+        """
+        Compiles the tex file inside the dir `tex_dir`
+
+        Returns:
+        --------
+            `Path` of the output .pdf or .dvi
+        """
+        tex_dir = (
+            TEX_DIR
+            if tex_dir is None
+            else Path(tex_dir)
+        )
+
+        # Write the TexFile inside `tex_dir`
+        if not tex_dir.exists():
+            tex_dir.mkdir()
+
+        _texfilepath = self.write(tex_dir=tex_dir)
+
+        # Change the directory
+        os.chdir(tex_dir)
+
+        # Compile TeX
+        res = subprocess.run(
+            [
+                self._tex_compiler, _texfilepath
+            ],
+            stdout=subprocess.PIPE
+        )
+
+        # Output file
+        output = _texfilepath.with_suffix(self._output_format)
+        _log_file = _texfilepath.with_suffix(".log")
+
+        if res.returncode != 0:
+            raise ValueError(
+                f"Error occured while compiling the LaTeX file {_texfilepath}.",
+                f"See the log file for more details: {_log_file}"
+            )
+        
+        else:
+            if _open:
+                open_file(output)
+
+            return output
     
 
 
@@ -1124,8 +1173,16 @@ class Preamble(TexFile):
 
 
 def main():
-    file = TexFile()
-    print(file)
+    _dir = Path.home() / "Desktop" / "newart"
+
+    texfile = TexFile()
+    texfile.add_to_document("Hello There I am Indrajit Ghosh")
+
+    texfile._compile(
+        tex_dir=_dir,
+        _open=True
+    )
+
 
 
 if __name__ == '__main__':
