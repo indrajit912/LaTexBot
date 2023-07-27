@@ -448,7 +448,8 @@ class TexFile:
 
         if self._classfile:
             self._documentclass = self._preamble = self._post_doc_commands = \
-                self._pre_doc_commands = self._output_format = self._end_text = ''
+                self._pre_doc_commands = self._output_format = self._end_text = \
+                                            self._tex_compiler = ''
 
         self._rebuild()
 
@@ -469,8 +470,8 @@ class TexFile:
             symbol="%"
         )
         
-        self.body = self._fileinfo
-        
+        self.body = self._fileinfo # TODO: # Add TEX directives
+    
         if not self._classfile:
             self.body += (
                 "\n"
