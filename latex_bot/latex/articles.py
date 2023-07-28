@@ -9,11 +9,10 @@ from pathlib import Path
 from datetime import datetime
 from indrajit_ams_templates import IndraAMS
 from tex_templates import *
-from utils import open_file
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
-__all__ = ["PlainArticle", "AmsArticle"]
+__all__ = ["PlainArticle", "Article", "AmsArticle"]
 
 
 class PlainArticle:
@@ -1684,7 +1683,7 @@ class AmsArticle:
             _author_inside_begin_doc += (
                 f"% Author {_index} address"
                 + "\n"
-                + r"\address{\Author" + _index + "Addr}%"
+                + r"\address[\Author" + _index + r"]{\Author" + _index + "Addr}%"
                 + "\n"
             )
 
