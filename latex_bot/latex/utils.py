@@ -4,6 +4,7 @@
 #
 
 import tempfile, shutil, platform, subprocess, os
+from pathlib import Path
 
 def make_temp_dir():
     """
@@ -54,3 +55,32 @@ def open_file(file_path, in_browser=False):
         subprocess.Popen(commands)
 
 
+def _clear_tex_output_files(tex_dir:Path):
+    """
+    This function deletes all output files such as `.aux`, `.bbl` etc 
+    from the given dir
+    """
+    _to_del = [
+        '.aux', '.bbl', '.blg', '.out', '.toc',
+        '.synctex.gz', '.gz', '.log'
+    ]
+    tex_dir = Path(tex_dir)
+
+    if not tex_dir.exists():
+        raise FileNotFoundError(f"No such dir found with location: {tex_dir}")
+    
+    
+    for f in tex_dir.glob("*"):
+        if f.is_file() and f.suffix in _to_del:
+            f.unlink()
+
+    print("\nAll LaTeX output files deleted!\n")
+
+
+def main():
+    _clear_tex_output_files(tex_dir=Path.cwd())
+
+
+if __name__ == '__main__':
+    main()
+    
