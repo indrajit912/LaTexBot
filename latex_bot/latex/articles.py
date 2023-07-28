@@ -1476,7 +1476,7 @@ class AmsArticle:
 
         self._main_preamble = r"\input{" + self.preamble.filename + "}\n"
         self._main_post_doc_cmds = (
-            r"\title[\ShortTitle]{\Title}%"
+            r"\title[\MakeUppercase\ShortTitle]{\MakeUppercase \Title}%"
             + "\n"
             + authors_inside
             + "\n"
