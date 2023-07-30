@@ -8,8 +8,6 @@ from latex import *
 from pathlib import Path
 from datetime import datetime
 from indrajit_ams_templates import IndraAMS
-from tex_templates import *
-import subprocess, os
 from utils import compile_tex
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
