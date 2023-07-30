@@ -127,7 +127,12 @@ def compile_tex(main_tex:str, tex_dir:Path, tex_compiler:str='pdflatex', bibtex:
     )
 
     print(f"\n- Compiling using `{tex_compiler}` ...")
-    subprocess.run(_cmds, stdout=subprocess.PIPE)
+    res = subprocess.run(_cmds, stdout=subprocess.PIPE)
+
+    if res.returncode != 0:
+        log_file = main_tex.with_suffix(".log")
+        raise RuntimeError(f"ERROR: some unexpected thing occured, check the `.log` file: {log_file}")
+
 
     if bibtex:
         print(f"- Compiling using `bibtex` ...")
@@ -136,7 +141,7 @@ def compile_tex(main_tex:str, tex_dir:Path, tex_compiler:str='pdflatex', bibtex:
         print(f"- Compiling using `{tex_compiler}` ...")
         subprocess.run(_cmds, stdout=subprocess.PIPE)
 
-        print(f"- Compiling using `{tex_compiler}` ...")
+        print(f"- Compiling using `{tex_compiler}` ...\n")
         subprocess.run(_cmds, stdout=subprocess.PIPE)
 
     

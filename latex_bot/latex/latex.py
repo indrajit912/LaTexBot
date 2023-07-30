@@ -8,7 +8,7 @@
 from datetime import datetime
 import copy, re, hashlib, subprocess, os
 from pathlib import Path
-from utils import open_file
+from .utils import open_file
 
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
