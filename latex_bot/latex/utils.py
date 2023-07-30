@@ -141,8 +141,11 @@ def compile_tex(main_tex:str, tex_dir:Path, tex_compiler:str='pdflatex', bibtex:
 
     if res.returncode != 0:
         log_file = main_tex.with_suffix(".log")
-        raise RuntimeError(f"ERROR: some unexpected thing occured, check the `.log` file: {log_file}")
-
+        _print_tex_error_from_log(
+            log_file=log_file,
+            tex_compiler=tex_compiler
+        )
+    
 
     if bibtex:
         print(f"- Compiling using `bibtex` ...")
