@@ -9,6 +9,8 @@ from pathlib import Path
 from datetime import datetime
 from indrajit_ams_templates import IndraAMS
 from tex_templates import *
+import subprocess, os
+from utils import compile_tex
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -145,7 +147,7 @@ class PlainArticle:
         self._update_main_tex()
 
 
-    def create(self):
+    def create(self, _compile:bool=True, **kwargs):
         """
         Creates the PlainArticle in `self._project_dir`
         """
@@ -162,6 +164,13 @@ class PlainArticle:
         self._main_tex.write(
             tex_dir=self._project_dir
         )
+
+        if _compile:
+            self._main_tex._compile(
+                tex_dir=self._project_dir,
+                _open = True,
+                **kwargs
+            )
 
 
     def _update_main_tex(self):
@@ -661,7 +670,7 @@ class Article:
 
         self._update()
 
-    def create(self):
+    def create(self, _compile:bool=True):
         """
         Creates the Article
         """
@@ -703,6 +712,17 @@ class Article:
             )
 
         print(f"\n\nProject Dir: `{self._project_dir}`\n")
+
+        if _compile:
+            _main_tex:Path = self._project_dir / (self._main_tex.filename + self._main_tex.file_extension)
+
+            compile_tex(
+                main_tex=_main_tex,
+                tex_dir=self._project_dir,
+                tex_compiler='pdflatex',
+                bibtex=True
+            )
+
 
 
     def _update(self):
@@ -1330,7 +1350,7 @@ class AmsArticle:
         self._update()
 
 
-    def create(self):
+    def create(self, _compile:bool=True, **kwargs):
         """
         Creates the AMS project.
         """
@@ -1371,7 +1391,20 @@ class AmsArticle:
                 tex_dir = self._sections_dir
             )
 
+
+        if _compile:
+            _main_tex:Path = self._project_dir / 'main.tex'
+
+            compile_tex(
+                main_tex=_main_tex,
+                tex_dir=self._project_dir,
+                tex_compiler='pdflatex',
+                bibtex=True
+            )
+        
+
         print(f"\n\nProject Dir: `{self._project_dir}`\n")
+
 
 
     def _update(self):
@@ -1879,8 +1912,8 @@ def main():
     plainart = PlainArticle(
         authors=IndraAMS.indrajit,
         project_dir=Path.home() / "Desktop" / "new_plain_art",
-        amsartstyle=False,
-        abstract=True
+        amsartstyle=True,
+        body_text=""
     )
 
     art = Article(
@@ -1890,6 +1923,7 @@ def main():
     )
 
     amsart.create()
+
 
 
 if __name__ == '__main__':
