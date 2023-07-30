@@ -21,6 +21,8 @@ class PlainArticle:
 
     Author: Indrajit Ghosh
     Date: Jul 22, 2023
+
+    TODO: Add doc
     """
     default_title = "Plain Article \\TeX\\ Template"
     default_authors = [Author()]
