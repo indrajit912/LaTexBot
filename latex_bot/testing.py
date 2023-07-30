@@ -10,10 +10,10 @@ def main():
 
     plainart = PlainArticle(
         project_dir=dir_,
-        tex_template=TexFontTemplates.helvetica_fourier_it
+        tex_template=TexFontTemplates.verdana_it
     )
 
-    plainart.create()
+    plainart.show_output()
 
 
 if __name__ == '__main__':

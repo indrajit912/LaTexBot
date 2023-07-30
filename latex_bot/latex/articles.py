@@ -8,9 +8,10 @@ from .latex import *
 from pathlib import Path
 from datetime import datetime
 from .indrajit_ams_templates import IndraAMS
-from .utils import compile_tex
+from .utils import compile_tex, open_file
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
+TEX_GARBAGE_DIR = Path(__file__).parent / "tex_garbage"
 
 __all__ = ["PlainArticle", "Article", "AmsArticle"]
 
@@ -171,6 +172,29 @@ class PlainArticle:
                 _open = True,
                 **kwargs
             )
+
+    def show_output(self):
+        """
+        This method shows the output without creating the project
+        It sets `self._project_dir` to `TEX_GARBAGE`
+        """
+        if not TEX_GARBAGE_DIR.exists():
+            TEX_GARBAGE_DIR.mkdir()
+
+        self._update_main_tex()
+
+        self._main_tex.filename = TexFile.tex_hash(self._main_tex.__str__())
+        self._project_dir = TEX_GARBAGE_DIR / self._main_tex.filename
+
+        if self._project_dir.exists():
+            output = self._project_dir / (self._main_tex.filename + self._main_tex.output_format)
+            if output.exists():
+                open_file(output)
+            else:
+                print("No Output file found.\n")
+        
+        else:
+            self.create()
 
 
     def _update_main_tex(self):
