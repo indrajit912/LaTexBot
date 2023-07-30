@@ -16,24 +16,9 @@ CWD = Path.cwd()
 
 
 def main():
-
-    article_title = "Your Article's Title Here" # TODO: Take input
-    author_name = "Your Name Here"
-    email = "someone@somewhere.com"
-    address = "Enter your address"
-
-    your_info = {
-        "title": article_title,
-        "author": author_name,
-        "email": email,
-        "address": address
-    }
-
-    informations = INDRAJIT # Don't forget to update here
-    informations.setdefault("title", article_title)
     
-    clear_terminal_screen()
     res = choose_from_list(TEX_TEMPLATES.values(), "Choose the template you want:")
+    clear_terminal_screen()
 
     if res == TEX_TEMPLATES['quit']:
         print("Thanks for visiting!")
@@ -58,14 +43,45 @@ def main():
 
     elif res == TEX_TEMPLATES['newart']:
         # TODO: Article
-        pass
+        newart = Article(
+            authors=[IndraAMS.indrajit],
+            amsartstyle=False,
+            project_dir=CWD / "new_article"
+        )
+        
+        # Create `Article()` object
+        newart.create()
 
     elif res == TEX_TEMPLATES['amsart']:
         # TODO: AMS article
-        pass
+        amsart = AmsArticle(
+            authors=[IndraAMS.indrajit],
+            packages=IndraAMS.packages,
+            theorem_styles=IndraAMS.thmstyles,
+            custom_commands=IndraAMS.macros,
+            project_dir=CWD / "new_ams_article"
+        )
+
+        # Create `AmsArticle()` object
+        amsart.create()
         
     else:
         # TODO: Else cases
+
+        article_title = "Your Article's Title Here" # TODO: Take input
+        author_name = "Your Name Here"
+        email = "someone@somewhere.com"
+        address = "Enter your address"
+
+        your_info = {
+            "title": article_title,
+            "author": author_name,
+            "email": email,
+            "address": address
+        }
+
+        informations = INDRAJIT # Don't forget to update here
+        informations.setdefault("title", article_title)
 
         output_dir_path = setup_output_directory(res)
 
