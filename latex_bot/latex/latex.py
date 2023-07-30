@@ -6,9 +6,9 @@
 #
 
 from datetime import datetime
-import copy, re, hashlib, subprocess, os
+import copy, re, hashlib, subprocess, os, sys
 from pathlib import Path
-from .utils import open_file
+from .utils import open_file, _print_tex_error_from_log
 
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
@@ -853,7 +853,7 @@ class TexFile:
         --------
             `Path` of the output .pdf or .dvi
 
-            pdflatex -halt-on-error -include-directory=DIR -output-directory=DIR -output-format=FORMAT
+            pdflatex -halt-on-error <tex_file>
         """
         tex_dir = (
             TEX_DIR
@@ -873,7 +873,7 @@ class TexFile:
         # Compile TeX
         res = subprocess.run(
             [
-                self._tex_compiler, _texfilepath
+                self._tex_compiler, '--halt-on-error', _texfilepath
             ],
             stdout=subprocess.PIPE
         )
@@ -883,11 +883,11 @@ class TexFile:
         _log_file = _texfilepath.with_suffix(".log")
 
         if res.returncode != 0:
-            raise ValueError(
-                f"Error occured while compiling the LaTeX file {_texfilepath}.",
-                f"See the log file for more details: {_log_file}"
+            _print_tex_error_from_log(
+                log_file=_log_file,
+                tex_compiler=self._tex_compiler
             )
-        
+            
         else:
             if _open:
                 open_file(output)

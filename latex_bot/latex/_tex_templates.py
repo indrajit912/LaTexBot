@@ -167,6 +167,14 @@ class TexTemplateLibrary:
 #
 #
 
+# Charter
+charter = _basic_ams_texfile()
+charter.description = "Charter"
+charter.add_to_preamble(
+    r"\renewcommand{\rmdefault}{" + "bch" + "}%"
+)
+
+
 # Latin Modern Typewriter Proportional
 lmtp = _basic_ams_texfile()
 lmtp.description = "Latin Modern Typewriter Proportional"
@@ -978,6 +986,8 @@ class TexFontTemplates:
     """Droid Serif"""
     droid_serif_px_it = italicdroidserifpx
     """Droid Serif (PX math symbols) (Italic)"""
+    charter = charter
+    """Charter"""
     ecf_augie = ecfaugieeg
     """ECF Augie (Euler Greek)"""
     ecf_jd = ecfjdtx

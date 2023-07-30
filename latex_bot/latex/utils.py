@@ -6,6 +6,16 @@
 import tempfile, shutil, platform, subprocess, os
 from pathlib import Path
 
+TEX_ERROR_FOUND = (
+    "\n"
+    + '\x1b[38;2;255;0;0m' # red
+    + '\033[5m' # blink
+    + '\033[1m' # bold
+    + "\t\t -- LaTeX ERROR -- " 
+    + '\033[0m'
+    + "\n"
+)
+
 def make_temp_dir():
     """
     Create a temporary directory if it doesn't exist.
@@ -148,6 +158,32 @@ def compile_tex(main_tex:str, tex_dir:Path, tex_compiler:str='pdflatex', bibtex:
     if main_pdf.exists():
         open_file(main_pdf)
 
+
+def _print_tex_error_from_log(log_file:Path, tex_compiler:str='pdflatex'):
+    """
+    Prints the TeX errors from the `log_file`
+    """
+    if not log_file.exists():
+        raise RuntimeError(
+            f"`{tex_compiler}` failed but did not produce a log file. "
+            "Check your LaTeX installation.",
+        )
+    
+    with log_file.open(encoding="utf-8") as f:
+        tex_log = f.readlines()
+    
+    err_index = None
+    for index, line in enumerate(tex_log):
+        if line.startswith("!"):
+            err_index = index
+            break
+
+    err_msg = (
+        TEX_ERROR_FOUND
+        + "".join(tex_log[err_index:])
+    )
+    
+    print(err_msg)
 
 
 def main():
