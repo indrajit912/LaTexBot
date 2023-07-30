@@ -3,14 +3,16 @@
 # Author: Indrajit Ghosh
 #
 # Date: May 24, 2022
+# Modified On: Jul 30, 2023
 #
 # Status: Ongoing
 #
 
-
+from latex import *
 from functions import *
 
 COMPILE_TEX_LIVES_HERE = Path(__file__).resolve().parent / 'compile_tex.py'
+CWD = Path.cwd()
 
 
 def main():
@@ -35,14 +37,40 @@ def main():
 
     if res == TEX_TEMPLATES['quit']:
         print("Thanks for visiting!")
+
+    elif res == TEX_TEMPLATES['plainart']:
+        # TODO: Use latex modules
+
+        # First Read `.yml` file for default config
+        # tex_dir = CWD or yml config
+
+        # Create `PlainArticle()` object
+        plainart = PlainArticle(
+            title="My Plain Aritle",
+            authors=[IndraAMS.indrajit],
+            body_text="Hello there! I'm using \\LaTeX.",
+            project_dir=CWD / "new_plain_art",
+            amsartstyle=False
+        )
+        
+        # Create plainart
+        plainart.create()
+
+    elif res == TEX_TEMPLATES['newart']:
+        # TODO: Article
+        pass
+
+    elif res == TEX_TEMPLATES['amsart']:
+        # TODO: AMS article
+        pass
         
     else:
+        # TODO: Else cases
 
         output_dir_path = setup_output_directory(res)
 
         # Creating tex, bib, ist etc files
-        if not res == TEX_TEMPLATES['plainart']:
-            write_indrapreamble_sty(tex_template=res, output_dir=output_dir_path)
+        write_indrapreamble_sty(tex_template=res, output_dir=output_dir_path)
         create_main_tex(tex_template=res, info=informations, output_dir=output_dir_path)
 
         # Compiling the `main.tex` file
