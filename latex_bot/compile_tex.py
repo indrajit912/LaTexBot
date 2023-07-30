@@ -7,31 +7,13 @@
 #
 
 from pathlib import Path
-import sys, os, platform
-import subprocess
+import sys
 
 
 HOME = Path.home()
 CWD = Path.cwd()
 
-from latex import open_file, compile_tex
-
-
-def _open_file(filepath:Path):
-    """
-    This function can open file at `filepath` using the platform's 
-    default application.
-    """
-    filepath = Path(filepath)
-    
-    if platform.system() == "Darwin":
-        subprocess.call(('open', filepath)) # MacOS
-
-    elif platform.system() == "Windows":
-        os.startfile(filepath)  # Windows
-
-    else:
-        subprocess.call(('xdg-open', filepath)) # Linux
+from latex import compile_tex
 
 
 def list_files(path):
