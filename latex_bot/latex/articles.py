@@ -183,11 +183,13 @@ class PlainArticle:
 
         self._update_main_tex()
 
-        self._main_tex.filename = TexFile.tex_hash(self._main_tex.__str__())
+        self._main_tex._filename = TexFile.tex_hash(self._main_tex.__str__())
         self._project_dir = TEX_GARBAGE_DIR / self._main_tex.filename
 
+        self._update_main_tex()
+
         if self._project_dir.exists():
-            output = self._project_dir / (self._main_tex.filename + self._main_tex.output_format)
+            output = self._project_dir / (self._main_tex._filename + self._main_tex._output_format)
             if output.exists():
                 open_file(output)
             else:

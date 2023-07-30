@@ -6,14 +6,11 @@ from latex import *
 
 def main():
 
-    dir_ = Path.home() / "Desktop" / "project_dir"
-
-    plainart = PlainArticle(
-        project_dir=dir_,
-        tex_template=TexFontTemplates.verdana_it
-    )
+    plainart = PlainArticle()
+    plainart._tex_template = TexFontTemplates.libris_adf_fourier
 
     plainart.show_output()
+    
 
 
 if __name__ == '__main__':
