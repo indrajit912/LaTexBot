@@ -8,12 +8,52 @@ from .latex import *
 from pathlib import Path
 from datetime import datetime
 from .indrajit_ams_templates import IndraAMS
+from .tex_templates import TexFontTemplates
 from .utils import compile_tex, open_file
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 TEX_GARBAGE_DIR = Path(__file__).parent / "tex_garbage"
 
 __all__ = ["PlainArticle", "Article", "AmsArticle"]
+
+
+class LaTexArticle:
+    """
+    A class representing `LaTeX Article`
+
+    Author: Indrajit Ghosh
+    Date: Jul 31, 2023
+
+    TODO: Add doc
+    """
+    def __init__(
+        self,
+        title:str="Untitled \\LaTeX\ Article",
+        authors:list=[IndraAMS.indrajit],
+        date:str=r"\today",
+        packages:list=None,
+        abstract:str="",
+        project_dir:Path=Path.cwd() / "new_latex_article",
+        amsartstyle:bool=False,
+        texfont_template:TexFile=None,
+    ):
+        self._title = title
+        self._authors = authors
+        self._date = date
+        self._packages = (
+            PlainArticle._get_default_packages()
+            if packages is None
+            else packages
+        )
+        self._abstract = abstract
+        self._project_dir = project_dir
+        self._amsartstyle = amsartstyle
+        self._texfont_template = (
+            TexFontTemplates.helvetica_fourier_it
+            if texfont_template is None
+            else texfont_template
+        )
+        
 
 
 class PlainArticle:
@@ -39,7 +79,7 @@ class PlainArticle:
             date:str=None,
             packages:list=None,
             body_text:str=None,
-            project_dir:list=None,
+            project_dir:Path=None,
             amsartstyle:bool=False,
             abstract:str=None,
             tex_template:TexFile=None,
