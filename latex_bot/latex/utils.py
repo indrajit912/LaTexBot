@@ -189,6 +189,24 @@ def _print_tex_error_from_log(log_file:Path, tex_compiler:str='pdflatex'):
     print(err_msg)
 
 
+def is_latex_installed():
+    """
+    This function checks whether a LaTeX distribution is installed on the system.
+    """
+    try:
+        # Attempt to execute pdflatex command
+        subprocess.run(['pdflatex', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        return True
+    except FileNotFoundError:
+        # pdflatex command not found, hence LaTeX distribution is not installed
+        return False
+    except subprocess.CalledProcessError:
+        # pdflatex command returned an error, but it means LaTeX is installed
+        # We assume that the command is installed but there might be some error in the execution.
+        return True
+
+
+
 def main():
     _clear_tex_output_files(tex_dir=Path.cwd())
 
