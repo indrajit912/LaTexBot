@@ -740,15 +740,14 @@ class Article:
         print(f"\n\nProject Dir: `{self._project_dir}`\n")
 
         if _compile:
-            _main_tex:Path = self._project_dir / (self._main_tex.filename + self._main_tex.file_extension)
+            _main_tex:Path = self._project_dir / (self._main_tex._filename + self._main_tex._file_extension)
 
             compile_tex(
-                main_tex=_main_tex,
-                tex_dir=self._project_dir,
+                texfile=_main_tex,
                 tex_compiler='pdflatex',
+                output_format='.pdf',
                 bibtex=True
             )
-
 
 
     def _update(self):
