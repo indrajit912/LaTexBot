@@ -696,6 +696,11 @@ class Article:
 
         self._update()
 
+    
+    def __str__(self):
+        self._update_main_tex()
+        return self._main_tex.__str__()
+
     def create(self, _compile:bool=True):
         """
         Creates the Article
@@ -1375,6 +1380,10 @@ class AmsArticle:
         self._update()
 
 
+    def __str__(self):
+        self._update_main_tex()
+        return self._main_tex.__str__()
+
     def create(self, _compile:bool=True, **kwargs):
         """
         Creates the AMS project.
@@ -1581,7 +1590,7 @@ class AmsArticle:
 
         self._main_pre_doc_cmds = main_pre_cmds
 
-        self.main_tex = TexFile(
+        self._main_tex = TexFile(
             tex_compiler="pdflatex",
             output_format=".pdf",
             documentclass= (
@@ -1946,8 +1955,6 @@ def main():
         project_dir=Path.home() / "Desktop" / "new_article",
         amsartstyle=True,
     )
-
-    amsart.create()
 
 
 
