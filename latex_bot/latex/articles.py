@@ -1421,9 +1421,9 @@ class AmsArticle:
             _main_tex:Path = self._project_dir / 'main.tex'
 
             compile_tex(
-                main_tex=_main_tex,
-                tex_dir=self._project_dir,
+                texfile=_main_tex,
                 tex_compiler='pdflatex',
+                output_format='.pdf',
                 bibtex=True
             )
         
