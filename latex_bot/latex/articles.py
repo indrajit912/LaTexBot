@@ -63,7 +63,7 @@ class PlainArticle:
     default_authors = [Author()]
     default_date = r"\today"
     default_abstract = ""
-    default_body_text = r"\lipsum % Write something here!"
+    default_body_text = ""
     default_project_dir = Path.cwd() / "new_plain_art"
 
     def __init__(
@@ -90,6 +90,8 @@ class PlainArticle:
             fontsize:str = "11pt",
             
     ):
+        self.INDEX = 1
+
         self._title:str = (
             title if title is not None
             else self.default_title
@@ -119,10 +121,21 @@ class PlainArticle:
             else self.default_abstract
         )
 
-        self._body_text = (
+        # `self._body_text` is important.
+        # All elements (e.g. \section, \subsection, \table etc)
+        # are to be added (concatenated) with it.
+        self._elements = {}
+        self._elements[self.INDEX] = (
             body_text
             if body_text is not None
             else self.default_body_text
+        )
+        self.INDEX += 1
+
+        self._body_text:str = (
+            "\n".join([e.__str__() for e in self._elements.values()])
+            if self._elements
+            else ""
         )
 
         self._date:str = (
@@ -158,17 +171,6 @@ class PlainArticle:
         self._papersize = papersize
         self._fontsize = fontsize
 
-        # The following list holds all elements that to be 
-        # appeared in the _body_text such as 
-        #   `\section`, 
-        #   `\subsection`
-        #   `table`, 
-        #   `list`, 
-        #   `figure`
-        #   `matrix`,
-        
-        self._body_elements = []
-
         self._update_main_tex()
 
 
@@ -177,11 +179,12 @@ class PlainArticle:
         return self._main_tex.__str__()
 
 
-    def add_to_document(self, text:str):
+    def add_text(self, text:str):
         """
         Adds `text` to `self._body_text`
         """
-        self._body_text += "\n" + text
+        self._elements[self.INDEX] = text
+        self.INDEX += 1
         self._update_main_tex()
 
 
@@ -195,7 +198,7 @@ class PlainArticle:
     
     def add_section(self, data:Union[TexSection, dict]):
         """
-        TODO: Adds a `\section` to the Article.
+        Adds a `\section` to the Article._body_text
 
         Attribute:
         ----------
@@ -208,6 +211,31 @@ class PlainArticle:
             if isinstance(data, dict)
             else data
         )
+        self._elements[self.INDEX] = section
+        self.INDEX += 1
+        self._update_main_tex()
+
+    
+    def add_subsection(self, heading:str, content:str):
+        """
+        Adds subsection to the Article
+        """
+        self._elements[self.INDEX] = (
+            "\n"
+            + r"\subsection{"
+            + heading
+            + "}%\n"
+            + content
+            + "\n"
+        )
+        self.INDEX += 1
+        self._update_main_tex()
+
+    
+    def add_table(self, data):
+        """
+        TODO: Adds table 
+        """
         pass
 
 
@@ -416,8 +444,6 @@ class PlainArticle:
 
         )
 
-        # TODO: create a function to get _main_body_text
-
         _abst_tex = fr"""
 \begin{{abstract}}
 	\noindent  {self._abstract}
@@ -433,6 +459,8 @@ class PlainArticle:
             if self._abstract == ''
             else _abst_tex
         )
+
+        self._body_text = "\n".join([e.__str__() for e in self._elements.values()])
         _main_body_text = _abst + self._body_text
         _main_end_text = (
             None if not self._amsartstyle
