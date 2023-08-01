@@ -147,17 +147,23 @@ def compile_tex(
     Compiles a `TeX` file and opens the output
     """
     
-    # Set up TeX file
-    texfile = Path(texfile)
-    if not texfile.exists():
-        raise FileNotFoundError(
-            f"No TeX file found: '{texfile}'\n"
+    try:
+        # Set up TeX file
+        texfile = Path(texfile)
+
+        if not texfile.exists():
+            raise FileNotFoundError(
+                f"No TeX file found: '{texfile}'\n"
+            )
+
+        _cmds = tex_compilation_commands(
+            tex_compiler=tex_compiler,
+            tex_file=texfile
         )
 
-    _cmds = tex_compilation_commands(
-        tex_compiler=tex_compiler,
-        tex_file=texfile
-    )
+    except FileNotFoundError as e:
+        print(f"NO_TEX_FILE_FOUND: {e}")
+        sys.exit(1)
 
     tex_compiler_cwd:Path = texfile.parent.resolve()
 

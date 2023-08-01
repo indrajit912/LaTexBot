@@ -38,30 +38,35 @@ def compile_texfile_to_pdf(texfile:Path):
     Use `compile_tex()` to compiles the given `texfile` and opens the generated pdf 
     """
     texfile = Path(texfile)
-
-    with open(texfile, 'r') as f:
-        if "metropolis" in f.read():
-            commented_metropolis = r"""%\usetheme{metropolis}""" in f.read()
-            _tex_compiler = 'pdflatex' if commented_metropolis else 'xelatex'
-        else:
-            _tex_compiler = 'pdflatex'
-
-    _bib_files = []
-    for f in texfile.parent.glob('*.bib'):
-        _bib_files.append(f)
+    try:
+        with open(texfile, 'r') as f:
+            if "metropolis" in f.read():
+                commented_metropolis = r"""%\usetheme{metropolis}""" in f.read()
+                _tex_compiler = 'pdflatex' if commented_metropolis else 'xelatex'
+            else:
+                _tex_compiler = 'pdflatex'
     
-    _use_bibtex = (
-        True
-        if _bib_files
-        else False
-    )
     
-    compile_tex(
-        texfile=texfile,
-        tex_compiler=_tex_compiler,
-        output_format='.pdf',
-        bibtex=_use_bibtex
-    )
+
+        _bib_files = []
+        for f in texfile.parent.glob('*.bib'):
+            _bib_files.append(f)
+
+        _use_bibtex = (
+            True
+            if _bib_files
+            else False
+        )
+
+        compile_tex(
+            texfile=texfile,
+            tex_compiler=_tex_compiler,
+            output_format='.pdf',
+            bibtex=_use_bibtex
+        )
+
+    except FileNotFoundError as e:
+        print(f"NO_TEX_FILE_FOUND: {e}")
 
 
 
