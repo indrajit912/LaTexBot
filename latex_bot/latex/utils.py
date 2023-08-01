@@ -131,8 +131,7 @@ def compile_tex(
     """
     Compiles a `TeX` file and opens the output
     """
-    # os.chdir(tex_dir)
-
+    
     # Set up TeX file
     texfile = Path(texfile)
     if not texfile.exists():

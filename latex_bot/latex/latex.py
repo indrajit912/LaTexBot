@@ -867,15 +867,17 @@ class TexFile:
 
         _texfilepath = self.write(tex_dir=tex_dir)
 
-        # Change the directory
-        os.chdir(tex_dir)
-
         # Compile TeX
         res = subprocess.run(
             [
-                self._tex_compiler, '--halt-on-error', _texfilepath
+                self._tex_compiler,
+                "-interaction=batchmode",
+                "-synctex=1",
+                '--halt-on-error', 
+                _texfilepath
             ],
-            stdout=subprocess.PIPE
+            stdout=subprocess.PIPE,
+            cwd=tex_dir
         )
 
         # Output file
