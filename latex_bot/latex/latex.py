@@ -12,7 +12,7 @@ from .utils import open_file, _print_tex_error_from_log
 
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
-__all__ = ["Author", "TexPackage", "TexFile", "Preamble"]
+__all__ = ["Author", "TexPackage", "TexFile", "TexSection", "Preamble"]
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -933,6 +933,69 @@ class TexMatrix:
     """
     pass
 
+
+class TexSection(TexFile):
+    """
+    A class representing a `LaTeX` section
+
+    Author: Indrajit Ghosh
+    Date: Aug 1, 2023
+    """
+
+    def __init__(
+            self,
+            heading:str="Untitled \\LaTeX\\ Section",
+            content:str="",
+            *,
+            filename:str=None,
+            author:str=None
+    ):
+        
+        self._heading:str = heading
+        self._content:str = content
+
+        super().__init__(
+            filename=filename,
+            author=author,
+            body_text=self.__str__(),
+            classfile=True
+        )
+
+    
+    @property
+    def content(self):
+        return self._content
+    
+    @content.setter
+    def content(self, new_content:str):
+        self._content = new_content
+        super().__setattr__("body_text", self.__str__())
+
+    
+    def add_subsection(self, heading:str, text:str):
+        """
+        Adds a subsection to the Section
+        """
+        self._content += (
+            "\n\n\\subsection{"
+            + heading
+            + "} %\n" 
+            + text 
+            + "\n"
+        )
+        super().__setattr__("body_text", self.__str__())
+
+
+    def __str__(self):
+        return (
+            "\\section{"
+            + self._heading
+            + "} %\n" 
+            + self._content 
+            + "\n\n"
+        )
+    
+    
 
 
 class Preamble(TexFile):
