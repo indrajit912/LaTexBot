@@ -5,7 +5,7 @@
 
 import tempfile, shutil, platform, subprocess, os
 from pathlib import Path
-import fnmatch
+import fnmatch, sys
 
 TEX_ERROR_FOUND = (
     "\n"
@@ -162,7 +162,7 @@ def compile_tex(
     tex_compiler_cwd:Path = texfile.parent.resolve()
 
     print(f"\n- Compiling using `{tex_compiler}` ...")
-    res = subprocess.run(_cmds, stdout=subprocess.PIPE, cwd=tex_compiler_cwd)
+    res = subprocess.run(_cmds, stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
     if res.returncode != 0:
         log_file = texfile.with_suffix('.log')
@@ -170,19 +170,20 @@ def compile_tex(
             log_file=log_file,
             tex_compiler=tex_compiler
         )
+        sys.exit(1)
     
     if bibtex:
         aux_file:Path = texfile.with_suffix('.aux').name
 
         # Run BibTeX on the generated .aux file
         print(f"- Compiling using `bibtex` ...")
-        subprocess.run(['bibtex', aux_file], stdout=subprocess.PIPE, cwd=tex_compiler_cwd)
+        subprocess.run(['bibtex', aux_file], stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
         print(f"- Compiling using `{tex_compiler}` ...")
-        subprocess.run(_cmds, stdout=subprocess.PIPE, cwd=tex_compiler_cwd)
+        subprocess.run(_cmds, stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
         print(f"- Compiling using `{tex_compiler}` ...\n")
-        subprocess.run(_cmds, stdout=subprocess.PIPE, cwd=tex_compiler_cwd)
+        subprocess.run(_cmds, stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
     
     output_file = texfile.with_suffix(output_format)
