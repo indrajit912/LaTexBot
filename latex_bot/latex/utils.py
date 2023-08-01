@@ -5,7 +5,7 @@
 
 import tempfile, shutil, platform, subprocess, os
 from pathlib import Path
-import fnmatch, sys
+import fnmatch, sys, re
 
 TEX_ERROR_FOUND = (
     "\n"
@@ -239,7 +239,7 @@ def is_latex_installed():
         # pdflatex command returned an error, but it means LaTeX is installed
         # We assume that the command is installed but there might be some error in the execution.
         return True
-
+    
 
 
 def main():
