@@ -187,11 +187,15 @@ class PlainArticle:
         self._update_main_tex()
 
 
-    def add_text(self, text:str):
+    def add_text(self, text:str, noindent=False):
         """
         Adds `text` to `self._elements`
         """
-        self._elements[self.INDEX] = text
+        self._elements[self.INDEX] = (
+            "\\noindent " + text
+            if noindent
+            else text
+        )
         self.INDEX += 1
         self._update_main_tex()
 

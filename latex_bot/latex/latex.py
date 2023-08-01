@@ -989,6 +989,7 @@ class TexSection(TexFile):
 
     def __str__(self):
         return (
+            "\n\n"
             "\\section{"
             + self._heading
             + "} %\n" 
