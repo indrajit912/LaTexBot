@@ -112,7 +112,8 @@ def tex_compilation_commands(tex_compiler:str, tex_file:Path):
     if tex_compiler in {"latex", "pdflatex", "luatex", "lualatex", "xelatex"}:
         commands = [
             tex_compiler,
-            # "-interaction=batchmode",
+            "-interaction=batchmode",
+            "-synctex=1",
             "-halt-on-error",
             f'"{tex_file.as_posix()}"'
         ]
