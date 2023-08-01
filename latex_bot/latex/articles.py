@@ -179,20 +179,28 @@ class PlainArticle:
         return self._main_tex.__str__()
 
 
-    def add_text(self, text:str):
-        """
-        Adds `text` to `self._body_text`
-        """
-        self._elements[self.INDEX] = text
-        self.INDEX += 1
-        self._update_main_tex()
-
-
     def add_package(self, package:TexPackage):
         """
         Appends `package` to `self._packages`
         """
         self._packages.append(package)
+        self._update_main_tex()
+
+
+    def add_text(self, text:str):
+        """
+        Adds `text` to `self._elements`
+        """
+        self._elements[self.INDEX] = text
+        self.INDEX += 1
+        self._update_main_tex()
+
+    def add_paragraph(self, para:str):
+        """
+        Adds "\n" + `para` to self._elements
+        """
+        self._elements[self.INDEX] = "\n" + para + "\n"
+        self.INDEX += 1
         self._update_main_tex()
 
     
