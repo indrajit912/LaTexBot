@@ -2,7 +2,7 @@
 # Author: Indrajit Ghosh
 # Created On: Jul 23, 2023
 
-from latex import *
+from .latex import *
 from pathlib import Path
 
 DESKTOP = Path.home() / "Desktop"
