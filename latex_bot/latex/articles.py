@@ -10,6 +10,7 @@ from datetime import datetime
 from .indrajit_ams_templates import IndraAMS
 from .tex_templates import TexFontTemplates
 from .utils import compile_tex, open_file
+from typing import Union
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 TEX_GARBAGE_DIR = Path(__file__).parent / "tex_garbage"
@@ -31,29 +32,22 @@ class LaTexArticle:
         title:str="Untitled \\LaTeX\ Article",
         authors:list=[IndraAMS.indrajit],
         date:str=r"\today",
-        packages:list=None,
-        abstract:str="",
+        abstract:str=None,
         project_dir:Path=Path.cwd() / "new_latex_article",
-        amsartstyle:bool=False,
-        texfont_template:TexFile=None,
+        amsartstyle:bool=False
     ):
         self._title = title
         self._authors = authors
         self._date = date
-        self._packages = (
-            PlainArticle._get_default_packages()
-            if packages is None
-            else packages
-        )
         self._abstract = abstract
+
         self._project_dir = project_dir
         self._amsartstyle = amsartstyle
-        self._texfont_template = (
-            TexFontTemplates.helvetica_fourier_it
-            if texfont_template is None
-            else texfont_template
-        )
-        
+
+        # Elements of the LaTeX Article
+        self.INDEX = 0
+        self._elements = []
+
 
 
 class PlainArticle:
@@ -164,6 +158,17 @@ class PlainArticle:
         self._papersize = papersize
         self._fontsize = fontsize
 
+        # The following list holds all elements that to be 
+        # appeared in the _body_text such as 
+        #   `\section`, 
+        #   `\subsection`
+        #   `table`, 
+        #   `list`, 
+        #   `figure`
+        #   `matrix`,
+        
+        self._body_elements = []
+
         self._update_main_tex()
 
 
@@ -186,6 +191,24 @@ class PlainArticle:
         """
         self._packages.append(package)
         self._update_main_tex()
+
+    
+    def add_section(self, data:Union[TexSection, dict]):
+        """
+        TODO: Adds a `\section` to the Article.
+
+        Attribute:
+        ----------
+            `data`: `TexSection` or `dict`
+                    e.g. {'heading': "Section Heading", 'content': "Section Content"}
+        """
+        # If `data` is a `dict` then create a `TexSection`
+        section = (
+            TexSection(**data)
+            if isinstance(data, dict)
+            else data
+        )
+        pass
 
 
     def create(self, _compile:bool=True, **kwargs):
@@ -392,6 +415,8 @@ class PlainArticle:
             + "\n"
 
         )
+
+        # TODO: create a function to get _main_body_text
 
         _abst_tex = fr"""
 \begin{{abstract}}

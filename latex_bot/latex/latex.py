@@ -946,7 +946,6 @@ class TexSection(TexFile):
             self,
             heading:str="Untitled \\LaTeX\\ Section",
             content:str="",
-            *,
             filename:str=None,
             author:str=None
     ):
