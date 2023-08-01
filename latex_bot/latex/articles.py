@@ -244,11 +244,13 @@ class PlainArticle:
         self._update_main_tex()
 
     
-    def add_table(self, data):
+    def add_table(self, tex_table:TexTable):
         """
-        TODO: Adds table 
+        Adds TexTable 
         """
-        pass
+        self._elements[self.INDEX] = tex_table.__str__()
+        self.INDEX += 1
+        self._update_main_tex()
 
 
     def create(self, _compile:bool=True, **kwargs):

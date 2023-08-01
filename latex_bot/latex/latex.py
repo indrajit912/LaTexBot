@@ -12,7 +12,14 @@ from .utils import open_file, _print_tex_error_from_log
 
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
-__all__ = ["Author", "TexPackage", "TexFile", "TexSection", "Preamble"]
+__all__ = [
+    "Author", 
+    "TexPackage", 
+    "TexFile", 
+    "TexTable", 
+    "TexSection", 
+    "Preamble"
+]
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
@@ -910,17 +917,175 @@ class TexEnvironment:
 
 class TexTable:
     """
-    TODO: A class representing `LaTeX` table
+    A class representing `LaTeX` table
 
     Author: Indrajit Ghosh
     Date: 
 
-    Reference(s):
-    -------------
-        [1] https://github.com/astanin/python-tabulate/blob/master/tabulate/__init__.py
-        [2] https://github.com/JelteF/PyLaTeX/blob/master/pylatex/table.py
+    Parameters
+    ----------
+    columns : list
+        A list of column names for the table.
+    rows : list, optional
+        A list of lists representing the rows of the table. Each inner list should
+        contain the values for each column in the respective row. Default is None.
+    col_spec : str, optional
+        The column specification for the `tabular` or `longtable` environment in LaTeX.
+        Default is None, which generates "l c c c" for n columns, where n is the number
+        of columns provided in the `columns` parameter.
+    longtable : bool, optional
+        If True, the table will be rendered using the `longtable` environment in LaTeX,
+        allowing the table to span multiple pages. If False, the `tabular` environment
+        will be used. Default is False.
+    center : bool, optional
+        If True, the table will be centered in the output. If False, the table will be
+        left-aligned. Default is True.
+
+    Attributes
+    ----------
+    _columns : list
+        A list containing the column names of the table.
+    _num_of_cols : int
+        The number of columns in the table.
+    _col_spec : str
+        The column specification for the `tabular` or `longtable` environment in LaTeX.
+    _longtable : bool
+        If True, the table will be rendered using the `longtable` environment in LaTeX.
+    _center : bool
+        If True, the table will be centered in the output. If False, the table will be
+        left-aligned.
+    _rows : list
+        A list of lists representing the rows of the table. Each inner list contains the
+        values for each column in the respective row.
+    _row_gap : str, optional
+        Optional gap specification between rows in the `longtable` environment in LaTeX.
+    _top_line : bool
+        If True, a top horizontal line will be added to the table. Default is False.
+    _bottom_line : bool
+        If True, a bottom horizontal line will be added to the table. Default is False.
+    _texcode : str
+        The generated LaTeX code for the entire table.
+
+    Methods
+    -------
+    add_row(row: list)
+        Adds a new row to the table.
+        
     """
-    pass
+    def __init__(
+            self,
+            columns:list,
+            rows:list=None,
+            col_spec:str=None,
+            longtable:bool=False,
+            center:bool=True,
+            *,
+            row_gap:str=None,
+            top_line:bool=False,
+            bottom_line:bool=False
+    ):
+        self._columns:list = columns # ["Name", "Email", "Address"]
+        self._num_of_cols = len(self._columns)
+
+        if col_spec is None:
+            self._col_spec = " l " + " ".join(['c'] * (len(self._columns) - 1)) # "l c c c"
+        elif len(col_spec) == 1:
+            self._col_spec = " ".join([col_spec] * len(self._columns))
+        else:
+            self._col_spec = col_spec
+
+        self._longtable = longtable
+        self._center = center
+
+        self._rows:list = (
+            [] if rows is None
+            else rows
+        )
+
+        self._row_gap = (
+            row_gap
+            if row_gap
+            else ""
+        )
+        self._top_line = top_line
+        self._bottom_line = bottom_line
+
+        self._update_tex()
+
+
+    def _update_tex(self):
+        """
+        Updates the LaTeX code for the entire table
+        """
+        _tex = "\n"
+        _tex += (
+            r"\begin{center}" + "%\n" 
+            if self._center
+            else ''
+        )
+
+        _tex += (
+            r"\begin{longtable}{%s}\hline" % self._col_spec + "%\n"
+            if self._longtable
+            else 
+            r"\begin{tabular}{%s}" % self._col_spec + "%\n"
+        )
+
+        _top_line_str = (
+            "\n    " + r"\hline%"
+            if self._top_line
+            else ''
+        )
+        _tex += _top_line_str + "\n"
+
+        _tex += (
+            "    "
+            + " & ".join(self._columns) + r"\\%"
+            + "\n    "
+            + r"\hline\hline%"
+            + "\n\n"
+        )
+
+        for row in self._rows:
+            _gap_str = (
+                "[" + self._row_gap + "]"
+                if self._row_gap != ''
+                else ''
+            )
+            _tex += "    " + " & ".join(str(val) for val in row) + r"\\" + _gap_str + "%\n"
+
+        _bottom_line_str = (
+            "    " + r"\hline%" + "\n"
+            if self._bottom_line
+            else ''
+        )
+        _tex += _bottom_line_str + "\n"
+
+        _tex += f"\\end{{longtable}}%\n" if self._longtable else "\\end{tabular}%\n"
+
+        _tex += (
+            r"\end{center}%"
+            if self._center
+            else ''
+        )
+        _tex += "\n"
+
+        self._texcode = _tex
+
+
+    def __str__(self):
+        self._update_tex()
+        return self._texcode
+    
+
+    def add_row(self, row:list):
+        """
+        Adds a row to `self._rows`
+        """
+        self._rows.append(row)
+
+
+
 
 class TexMatrix:
     """
@@ -938,7 +1103,7 @@ class TexMatrix:
 
 class TexSection(TexFile):
     """
-    A class representing a `LaTeX` section
+    A class representing `LaTeX` section
 
     Author: Indrajit Ghosh
     Date: Aug 1, 2023
