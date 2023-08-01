@@ -5,6 +5,7 @@
 
 import tempfile, shutil, platform, subprocess, os
 from pathlib import Path
+import fnmatch
 
 TEX_ERROR_FOUND = (
     "\n"
@@ -15,6 +16,11 @@ TEX_ERROR_FOUND = (
     + '\033[0m'
     + "\n"
 )
+
+PATTERNS_TO_DELETE = [
+    '*.aux', '*.bbl', '*.blg', '*.out', '*.toc',
+    '*.synctex.gz', '*.gz', '*.log'
+]
 
 def make_temp_dir():
     """
@@ -65,23 +71,32 @@ def open_file(file_path, in_browser=False):
         subprocess.Popen(commands)
 
 
-def _clear_tex_output_files(tex_dir:Path):
+def filename_matches_patterns(filename, patterns):
     """
-    This function deletes all output files such as `.aux`, `.bbl` etc 
-    from the given dir
+    Checks if the given filename matches one of the patterns in the patterns list.
+    
+    Parameters:
+        filename (str): The filename to check.
+        patterns (list): List of patterns to match against the filename.
+                        e.g - ["*.txt", "data_*.csv", "*.png"]
+        
+    Returns:
+        bool: True if the filename matches one of the patterns, False otherwise.
     """
-    _to_del = [
-        '.aux', '.bbl', '.blg', '.out', '.toc',
-        '.synctex.gz', '.gz', '.log'
-    ]
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
+
+
+def _clear_tex_output_files(tex_dir: Path):
+    """
+    This function deletes all output files such as `.aux`, `.bbl`, etc., from the given directory.
+    """
     tex_dir = Path(tex_dir)
 
     if not tex_dir.exists():
-        raise FileNotFoundError(f"No such dir found with location: {tex_dir}")
-    
-    
-    for f in tex_dir.glob("*"):
-        if f.is_file() and f.suffix in _to_del:
+        raise FileNotFoundError(f"No such directory found with location: {tex_dir}")
+
+    for f in tex_dir.glob('*'):
+        if filename_matches_patterns(f.name, PATTERNS_TO_DELETE):
             f.unlink()
 
     print("\nAll LaTeX output files deleted!\n")
