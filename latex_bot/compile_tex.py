@@ -57,9 +57,9 @@ def compile_texfile_to_pdf(texfile:Path):
     )
     
     compile_tex(
-        main_tex=texfile,
-        tex_dir=texfile.parent,
+        texfile=texfile,
         tex_compiler=_tex_compiler,
+        output_format='.pdf',
         bibtex=_use_bibtex
     )
 
