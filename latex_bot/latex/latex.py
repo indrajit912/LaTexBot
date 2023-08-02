@@ -1085,6 +1085,90 @@ class TexTable:
         self._rows.append(row)
 
 
+class TexFigure:
+    """
+    TODO: A class representing `LaTeX figure`
+
+    Author: Indrajit Ghosh
+    Date: Aug 02, 2023
+
+
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[<--->] # command from the `graphicx` package
+            \caption{<--->}
+            \label{<--->}
+        \end{figure}
+
+    Options in \begin{figure}[ ]:
+    ------------------------------
+
+    h: Place the figure "here" at the current position in the text where the 
+    figure environment appears. If there is enough space on the page, the 
+    figure will be placed here.
+
+    t: Place the figure at the "top" of a page, above any text that appears on the page.
+
+    b: Place the figure at the "bottom" of a page, below any text that appears on the page.
+
+    p: Place the figure on a separate "page" that contains only floating elements such 
+    as figures and tables.
+
+    !: Override the internal parameters of LaTeX to force the figure to be placed, even if 
+    the specified location is not ideal according to its usual placement rules.
+
+    The options can be combined, and the order matters. For example, using [htbp] will tell 
+    LaTeX to try placing the figure "here," then at the "top" of a page, then at the "bottom," 
+    and finally on a "separate page."
+
+
+    Options in \includegraphics[ ]:
+    -------------------------------
+    options:
+
+    `width`: Sets the width of the inserted image. 
+        For example, \includegraphics[width=0.8\textwidth]{image.jpg} will set 
+        the width of the image to 80% of the text width.
+    
+    `height`: Sets the height of the inserted image. 
+        For example, \includegraphics[height=4cm]{image.jpg} will set the 
+        height of the image to 4 centimeters.
+    
+    `scale`: Scales the image by a given factor. 
+        For example, \includegraphics[scale=0.5]{image.jpg} will scale the 
+        image to half its original size.
+    
+    `angle`: Rotates the image by a given angle in degrees. 
+        For example, \includegraphics[angle=45]{image.jpg} will rotate the 
+        image by 45 degrees.
+    
+    `trim`: Crops the image by specifying the left, bottom, right, and top 
+        trimming values in the format trim = {left} {bottom} {right} {top}. 
+        For example, \includegraphics[trim=10mm 20mm 10mm 30mm]{image.jpg} will 
+        remove 10mm from the left, 20mm from the bottom, 10mm from the right, and 
+        30mm from the top of the image.
+    
+    `clip`: Clips the image to the dimensions specified by trim. This option is 
+        used in conjunction with the trim option. 
+        For example, \includegraphics[trim=10mm 20mm 10mm 30mm, clip]{image.jpg} 
+        will trim and clip the image as specified.
+    
+    `keepaspectratio`: Maintains the aspect ratio of the image when resizing. 
+        For example, \includegraphics[width=5cm, keepaspectratio]{image.jpg} will 
+        set the width to 5 centimeters while preserving the aspect ratio.
+    
+    `natwidth` and `natheight`: Specifies the natural width and height of the image. 
+        These options are used to override the values stored in the image file. 
+        For example, \includegraphics[natwidth=200pt, natheight=150pt]{image.jpg} will 
+        set the natural width to 200 points and the natural height to 150 points.
+    
+    `draft`: Replaces the image with a placeholder box of the same size. This option is 
+        useful for faster compilation during the draft phase when you don't want to 
+        include the actual images.
+
+    """
+    pass
+
 
 
 class TexMatrix:

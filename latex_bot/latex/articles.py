@@ -636,6 +636,15 @@ class PlainArticle:
                     "\n"
                 ]
             ),
+            TexPackage(name="longtable"),
+            TexPackage(
+                name="graphicx",
+                comment="Required to include graphics"
+            ),
+            TexPackage(
+                name="array",
+                comment="This is required for styling tables"
+            ),
             TexPackage(
                 name="hyperref",
                 associated_cmds=r"""
@@ -654,7 +663,7 @@ class PlainArticle:
 	pdfpagemode=UseOutlines,
 }
 """
-            ),
+            ),   
         ]
     
 
