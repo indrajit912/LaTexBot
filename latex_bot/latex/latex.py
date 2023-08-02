@@ -920,7 +920,7 @@ class TexTable:
     A class representing `LaTeX` table
 
     Author: Indrajit Ghosh
-    Date: 
+    Date: Aug 01, 2023
 
     Parameters
     ----------
@@ -988,7 +988,7 @@ class TexTable:
         self._num_of_cols = len(self._columns)
 
         if col_spec is None:
-            self._col_spec = " l " + " ".join(['c'] * (len(self._columns) - 1)) # "l c c c"
+            self._col_spec = "l " + " ".join(['c'] * (len(self._columns) - 1)) # "l c c c"
         elif len(col_spec) == 1:
             self._col_spec = " ".join([col_spec] * len(self._columns))
         else:

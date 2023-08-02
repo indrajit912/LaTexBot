@@ -474,7 +474,8 @@ class PlainArticle:
             else _abst_tex
         )
 
-        self._body_text = "\n".join([e.__str__() for e in self._elements.values()])
+        self._body_text = "\n".join([self._elements[i+1].__str__() for i in range(len(self._elements))])
+        
         _main_body_text = _abst + self._body_text
         _main_end_text = (
             None if not self._amsartstyle
