@@ -474,7 +474,7 @@ class PlainArticle:
             else _abst_tex
         )
 
-        self._body_text = "\n".join([self._elements[i+1].__str__() for i in range(len(self._elements))])
+        self._body_text = "\n".join([self._elements[i].__str__() for i in sorted(self._elements.keys())])
         
         _main_body_text = _abst + self._body_text
         _main_end_text = (
