@@ -1522,8 +1522,8 @@ class AmsArticle:
             tex_dir=self._project_dir
         )
 
-        print(f" - Writing `{self.main_tex.filename}{self.main_tex.file_extension}`...")
-        self.main_tex.write(
+        print(f" - Writing `{self._main_tex.filename}{self._main_tex.file_extension}`...")
+        self._main_tex.write(
             tex_dir=self._project_dir
         )
 
