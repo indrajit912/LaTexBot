@@ -1,4 +1,4 @@
-# A module for AMS Article Template.
+# A module for Article Template.
 #
 # Author: Indrajit Ghosh
 # Created on: Jul 20, 2023
@@ -16,37 +16,6 @@ TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 TEX_GARBAGE_DIR = Path(__file__).parent / "tex_garbage"
 
 __all__ = ["PlainArticle", "Article", "AmsArticle"]
-
-
-class LaTexArticle:
-    """
-    A class representing `LaTeX Article`
-
-    Author: Indrajit Ghosh
-    Date: Jul 31, 2023
-
-    TODO: Add doc
-    """
-    def __init__(
-        self,
-        title:str="Untitled \\LaTeX\ Article",
-        authors:list=[IndraAMS.indrajit],
-        date:str=r"\today",
-        abstract:str=None,
-        project_dir:Path=Path.cwd() / "new_latex_article",
-        amsartstyle:bool=False
-    ):
-        self._title = title
-        self._authors = authors
-        self._date = date
-        self._abstract = abstract
-
-        self._project_dir = project_dir
-        self._amsartstyle = amsartstyle
-
-        # Elements of the LaTeX Article
-        self.INDEX = 0
-        self._elements = []
 
 
 
