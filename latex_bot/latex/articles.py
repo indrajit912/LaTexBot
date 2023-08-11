@@ -1032,7 +1032,8 @@ class Article:
             if 'introduction' in _sec_filenames:
                 # Introduction is there
                 _main_body_text += (
-                        r"\section{Introduction}%\n"
+                        r"\section{Introduction}%"
+                        + "\n"
                         + r"\label{sec:introduction" + "\n"
                         + r"\input{" + self._sections_dir.name + "/introduction"
                         + "}%\n\n"
