@@ -19,7 +19,8 @@ TEX_ERROR_FOUND = (
 
 PATTERNS_TO_DELETE = [
     '*.aux', '*.bbl', '*.blg', '*.out', '*.toc',
-    '*.synctex.gz', '*.gz', '*.log'
+    '*.synctex.gz', '*.gz', '*.log', "*-blx.bib",
+    "*.run.xml"
 ]
 
 def make_temp_dir():
