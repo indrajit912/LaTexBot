@@ -8,26 +8,26 @@
 from pathlib import Path
 import subprocess, os, shutil
 
-from constants import *
+from .constants import *
 
-from tex_templates.references_bib_tex import REFERENCES
-from tex_templates.math_constants_tex import MATH_CONSTANTS
-from tex_templates.thesis_style_ist_tex import STYLE_IST
-from tex_templates.art_sections_tex import SECTIONS
+from .tex_templates.references_bib_tex import REFERENCES
+from .tex_templates.math_constants_tex import MATH_CONSTANTS
+from .tex_templates.thesis_style_ist_tex import STYLE_IST
+from .tex_templates.art_sections_tex import SECTIONS
 
-from tex_templates.ams_structure_tex import AMS_STRUCTURE
-from tex_templates.thesis_structure_tex import THESIS_STRUCTURE
-from tex_templates.art_structure_tex import ARTICLE_STRUCTURE
-from tex_templates.beamer_structure_tex import BEAMER_STRUCTURE
+from .tex_templates.ams_structure_tex import AMS_STRUCTURE
+from .tex_templates.thesis_structure_tex import THESIS_STRUCTURE
+from .tex_templates.art_structure_tex import ARTICLE_STRUCTURE
+from .tex_templates.beamer_structure_tex import BEAMER_STRUCTURE
 
-from tex_templates.plain_art_main_tex import plain_art_main_constants
-from tex_templates.ams_main_tex import ams_main_tex_constants
-from tex_templates.art_main_tex import art_main_tex_constants
-from tex_templates.thesis_chapters_tex import *
-from tex_templates.thesis_main_tex import MAIN
-from tex_templates.beamer_main_tex import BEAMER_MAIN
+from .tex_templates.plain_art_main_tex import plain_art_main_constants
+from .tex_templates.ams_main_tex import ams_main_tex_constants
+from .tex_templates.art_main_tex import art_main_tex_constants
+from .tex_templates.thesis_chapters_tex import *
+from .tex_templates.thesis_main_tex import MAIN
+from .tex_templates.beamer_main_tex import BEAMER_MAIN
 
-from tex_templates.beamer_indrametrodrid_sty import INDRAMETRODRID
+from .tex_templates.beamer_indrametrodrid_sty import INDRAMETRODRID
 
 
 HOME = Path.home()

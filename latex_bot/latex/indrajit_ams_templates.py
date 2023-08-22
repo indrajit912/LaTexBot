@@ -5,7 +5,7 @@
 # Date: Jul 21, 2023
 #
 
-from latex import *
+from .latex import *
 
 
 # TODO: Add all your AMS packages here

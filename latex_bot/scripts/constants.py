@@ -5,7 +5,7 @@
 # Date: May 24, 2022
 #
 
-from terminal_style import IndraStyle
+from .terminal_style import IndraStyle
 
 TEX_TEMPLATES = {
     "plainart": "Plain Article",

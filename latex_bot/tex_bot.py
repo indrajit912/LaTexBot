@@ -9,7 +9,7 @@
 #
 
 from latex import *
-from functions import *
+from scripts.functions import *
 
 COMPILE_TEX_LIVES_HERE = Path(__file__).resolve().parent / 'compile_tex.py'
 CWD = Path.cwd()
