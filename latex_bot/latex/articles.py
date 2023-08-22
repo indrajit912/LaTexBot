@@ -5,11 +5,12 @@
 #
 
 from .latex import *
-from pathlib import Path
-from datetime import datetime
 from .indrajit_ams_templates import IndraAMS
 from .tex_templates import TexFontTemplates
 from .utils import compile_tex, open_file
+
+from pathlib import Path
+from datetime import datetime
 from typing import Union
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
@@ -1034,7 +1035,7 @@ class Article:
                 _main_body_text += (
                         r"\section{Introduction}%"
                         + "\n"
-                        + r"\label{sec:introduction" + "\n"
+                        + r"\label{sec:introduction}" + "\n"
                         + r"\input{" + self._sections_dir.name + "/introduction"
                         + "}%\n\n"
                     )
