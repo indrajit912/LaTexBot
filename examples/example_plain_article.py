@@ -46,6 +46,9 @@ article = PlainArticle(
     project_dir=Path.home() / "Desktop/new_plain_art"
 )
 
+# Add some theorem styles
+article.add_to_preamble(text=r"\newtheorem{thm}{Theorem}")
+
 # Add some texts
 article.add_text(text="\\lipsum[1]")
 
@@ -68,7 +71,16 @@ article.add_table(tex_table=table)
 # Add more stuffs
 article.add_paragraph(para="\\lipsum[2-3]")
 
+# Add theorem
+thm = TexEnvironment(
+    name="thm", 
+    content=r"Everything is false if \[ \int f(z) \mathrm{d}z = 0.\]"
+)
+article.add_texenv(thm)
+
+
 # Show the output
+# print(article)
 article.show_output()
 
 
