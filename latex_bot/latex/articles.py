@@ -188,6 +188,11 @@ class PlainArticle:
         self._papersize = papersize
         self._fontsize = fontsize
 
+        # The following variable is used to add stuffs in article
+        # preamble. This `list` will be added to self._main_tex's 
+        # preamble in the method self._update_main_tex()
+        self._post_preamble = []
+
         self._update_main_tex()
 
 
@@ -293,6 +298,22 @@ class PlainArticle:
         """
         self._elements[self.INDEX] = tex_table.__str__()
         self.INDEX += 1
+        self._update_main_tex()
+
+    
+    def add_texenv(self, tex_env:TexEnvironment):
+        """
+        Adds tex_env
+        """
+        self._elements[self.INDEX] = tex_env.__str__()
+        self.INDEX += 1
+        self._update_main_tex()
+
+    def add_to_preamble(self, text:str):
+        """
+        Adds text to the preamble of the main TeX file.
+        """
+        self._post_preamble.append(text)
         self._update_main_tex()
 
 
@@ -614,6 +635,8 @@ class PlainArticle:
             file_extension=".tex",
             classfile=False
         )
+
+        self._main_tex.add_to_preamble("\n".join(self._post_preamble))
 
         if self._tex_template:
             # If TeX template is given then change self._main_tex accordingly
