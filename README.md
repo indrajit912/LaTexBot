@@ -64,14 +64,15 @@ If you see a `pdf` then everything is working as fine!
 
 ## Usage
 
-1. Import the desired class from the `LaTexBot` package into your Python script.
+1. Import the desired class (e.g. `PlainArticle`) from the `latex_bot` package into your Python script.
 
-2. Instantiate the class and customize the LaTeX document as needed.
+2. Create an `PlainArticle` class object.
 
 3. Use the provided methods to write and compile the document.
 
+#### Example.
 ```python
-from LaTexBot import TexFile, PlainArticle
+from latex_bot import PlainArticle
 
 # Create a PlainArticle document
 document = PlainArticle(
@@ -87,6 +88,19 @@ document.add_text("This is the introduction section.")
 document.show_output()
 document.create()
 ```
+4. You can use `LaTexBot` to create a specific LaTeX templates, such as `plainart`, `article`, `amsart`, `thesis`, `beamer` etc. The bot will set up a `LaTeX` project directory with a predefined custom `TeX` settings for you everytime! See the example below:
+
+#### Example
+- Open terminal window and `cd` to `LaTexBot`.
+- Activate the `virtualenv` (in case you are using one!)
+```
+source env/bin/activate
+```
+- Run the bot by the following cmd
+```
+python3 main.py
+```
+- The bot will ask for the template to create. After that it will create the corresponding `LaTeX` project directory in the current working directory. You can copy that project somewhere else if you wish!
 
 # Documentation
 For detailed documentation and examples, please refer to the LaTexBot Wiki (*Will be updated soon!*).
