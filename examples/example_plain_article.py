@@ -43,7 +43,7 @@ article = PlainArticle(
     authors=[
         author1
     ],
-    project_dir="~/Desktop/new_plain_art/"
+    project_dir=Path.home() / "Desktop/new_plain_art"
 )
 
 # Show the output
