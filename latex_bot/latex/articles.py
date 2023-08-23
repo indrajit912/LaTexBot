@@ -577,6 +577,10 @@ class PlainArticle:
                 comment="To get high quality fonts"
             ),
             TexPackage(
+                name=["amsmath", "amssymb", "amsthm", "amscd"],
+                comment= "amssymb internally loads amsfonts"
+            ),
+            TexPackage(
                 name="geometry",
                 options=["top=1in", "bottom=1in", "left=1in", "right=1in"]
             ),
