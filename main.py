@@ -5,11 +5,13 @@
 #
 
 from latex_bot import *
+from pathlib import Path
 
 
 def main():
-    art = PlainArticle()
-    print(art)
+    root = Path.cwd()
+    bot = LaTexBot(root_dir=root)
+    bot.show_options()
 
 
 if __name__ == '__main__':

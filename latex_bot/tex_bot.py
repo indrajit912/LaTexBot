@@ -8,8 +8,8 @@
 # Status: Ongoing
 #
 
-from latex import *
-from scripts.functions import *
+from .latex import *
+from .scripts.functions import *
 import subprocess
 import os
 
@@ -108,9 +108,7 @@ class LaTexBot:
 
 
 def main():
-    root = Path.home() / "Desktop"
-    latex_bot = LaTexBot(root_dir=root)
-    latex_bot.show_options()
+    print("LaTexBot module!")
 
 
 if __name__ == '__main__':
