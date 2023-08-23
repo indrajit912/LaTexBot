@@ -13,6 +13,7 @@ from .utils import open_file, _print_tex_error_from_log
 TEX_DIR = Path(__file__).parent / "tex_dir"
 
 __all__ = [
+    "Email",
     "Author", 
     "TexPackage", 
     "TexFile", 
@@ -23,12 +24,80 @@ __all__ = [
 
 TODAY = datetime.now().strftime('%b %d, %Y') # Today's date in `Mmm dd, YYYY`
 
-class Author:
-    r"""
-    A class representing an Article author
+class Email(str):
+    """
+    A class representing an email address with LaTeX formatting capabilities.
 
+    This class inherits from the built-in str class and extends it to provide
+    LaTeX-formatted representations of email addresses.
+
+    Args:
+        email_id (str): The email address.
+        texttt (bool, optional): If True, wrap the email in \texttt{} in LaTeX formatting.
+
+    Example:
+        >>> email = Email("indrajit_ghosh@gmail.com", texttt=True)
+        >>> print(email)
+        r"\texttt{indrajit\_ghosh@gmail.com}"
+    """
+
+    def __new__(cls, email_id, texttt=False):
+        """
+        Create a new Email instance.
+
+        Args:
+            email_id (str): The email address.
+            texttt (bool, optional): If True, wrap the email in \texttt{} in LaTeX formatting.
+
+        Returns:
+            Email: The Email instance.
+        """
+        instance = super(Email, cls).__new__(cls, email_id)
+        instance.texttt = texttt
+        return instance
+
+    def __str__(self):
+        """
+        Get the LaTeX-formatted representation of the email.
+
+        Returns:
+            str: The LaTeX-formatted email.
+        """
+        escaped_email = TexFile.latex_escape(self)
+        if self.texttt:
+            return r"\texttt{" + escaped_email + "}"
+        else:
+            return escaped_email
+
+class Author:
+    """
+    A class representing an Article author
+    
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
+    Modified On: Aug 23, 2023
+
+
+    Parameters:
+    -----------
+    name : str, optional
+        Name of the author.
+    department : str, optional
+        Department of the author.
+    institute : str, optional
+        Institute of the author.
+    address : list, optional
+        Address of the author as a list of strings.
+    email : str, optional
+        Email address of the author.
+    current_address : list, optional
+        Current address of the author as a list of strings.
+    support : str, optional
+        Support information for the author.
+
+    Example:
+    --------
+    author = Author(name="John Doe", institute="University X")
     """
     _default_name = "Author Name"
     _default_dept = "Dept. of the Author"
@@ -38,186 +107,194 @@ class Author:
         "Post Office, City",
         "State - XXX XXX, Country"
     ]
-
+    
     def __init__(
-            self,
-            name:str=None,
-            department:str=None,
-            institute:str=None,
-            address:list=None,
-            email:str=None,
-            current_address:list=None,
-            support:str=None
+        self,
+        name: str = None,
+        department: str = None,
+        institute: str = None,
+        address: list = None,
+        email: str = None,
+        current_address: list = None,
+        support: str = None
     ):
+        """
+        Initialize an Author instance.
+        """
         self._name = (
             name
             if name is not None
             else self._default_name
         )
-
-        self._dept:str = (
+        self._dept: str = (
             department
             if department is not None
             else self._default_dept
         )
-
-        self._institute:str = (
+        self._institute: str = (
             institute
             if institute is not None
             else self._default_institute
         )
-
-        self._addr:list = (
+        self._addr: list = (
             address
             if address is not None
             else self._default_addr
         )
-
-        _fulladdr = [self._dept, self._institute] + self._addr # `dept\\addr`
-
-        self._amsAddrTeX:str = self._add_comma_to_list(_fulladdr)
-
-        self._email:str = email
-        self._curr_addr:list = current_address
-
+        _fulladdr = [self._dept, self._institute] + self._addr
+        self._amsAddrTeX: str = self._add_comma_to_list(_fulladdr)
+        self._email: str = (
+            None
+            if email is None
+            else TexFile.latex_escape(email)
+        )
+        self._curr_addr: list = current_address
         self._currAddrTeX = (
             self._add_comma_to_list(self._curr_addr)
             if self._curr_addr is not None
             else None
         )
-
         self._support = support
 
     @property
     def name(self):
+        """Get or set the author's name."""
         return self._name
-
+    
     @name.setter
-    def name(self, new:str):
+    def name(self, new: str):
         self._name = new
 
     @property
     def department(self):
+        """Get or set the author's department."""
         return self._dept
     
     @department.setter
-    def department(self, new:str):
+    def department(self, new: str):
         self._dept = new
     
     @property
     def institute(self):
+        """Get or set the author's institute."""
         return self._institute
 
     @institute.setter
-    def institute(self, new:str):
+    def institute(self, new: str):
         self._institute = new
 
     @property
     def address(self):
+        """Get or set the author's address."""
         return self._addr
     
     @address.setter
-    def address(self, new:list):
+    def address(self, new: list):
         self._addr = new
 
     @property
     def email(self):
+        """Get or set the author's email."""
         return self._email
     
     @email.setter
-    def email(self, new:str):
+    def email(self, new: str):
         self._email = new
 
     @property
     def current_address(self):
+        """Get or set the author's current address."""
         return self._curr_addr
     
     @current_address.setter
-    def current_address(self, new:list):
+    def current_address(self, new: list):
         self._curr_addr = new
 
     @property
     def support(self):
+        """Get or set the author's support information."""
         return self._support
     
     @support.setter
-    def support(self, new:str):
+    def support(self, new: str):
         self._support = new
 
-
     @staticmethod
-    def _add_texlinebreak_to_list(lst:list):
+    def _add_texlinebreak_to_list(lst: list):
         """
-        This function accepts a list and add `\\` i.e. r"\textbackslash{}\textbackslash{}"
-        in between each elements.
-
-        Parameter(s):
-        -------------
-            `lst`: `list`
+        Add `\\` between elements of a list and return as a string.
+        
+        Parameters:
+        -----------
+        lst : list
+            List of strings.
 
         Returns:
         --------
-            `str`
-
+        str
+            Joined string with '\\\\' between elements.
+        
         Example:
         --------
-        >>> lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
-        >>> _add_texbackslash_to_list(lst)
-            r"Indrajit Ghosh\\RS Hostel\\ISI Bangalore"
+        lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
+        _add_texlinebreak_to_list(lst)
+        # Output: "Indrajit Ghosh\\\\RS Hostel\\\\ISI Bangalore"
         """
-        fine_lst = []
-        for e in lst:
-            if e != "":
-                fine_lst.append(e)
-        
+        fine_lst = [e for e in lst if e != ""]
         return "\\\\".join(fine_lst)
     
     @staticmethod
-    def _add_comma_to_list(lst:list, _and:bool=True):
+    def _add_comma_to_list(lst: list, _and: bool = True):
         """
-        This function accepts a list and add `, ` in between each of its elements.
-
-        Parameter(s):
-        -------------
-            `lst`: `list`
+        Add ', ' or ' and ' between elements of a list and return as a string.
+        
+        Parameters:
+        -----------
+        lst : list
+            List of strings.
+        _and : bool, optional
+            Whether to use ' and ' before the last element, by default True.
 
         Returns:
         --------
-            `str`
+        str
+            Joined string with ', ', ' and ' as appropriate.
 
         Example:
         --------
-        >>> lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
-        >>> _add_texbackslash_to_list(lst)
-            r"Indrajit Ghosh, RS Hostel and ISI Bangalore"
+        lst = ["Indrajit Ghosh", "RS Hostel", "ISI Bangalore"]
+        _add_comma_to_list(lst)
+        # Output: "Indrajit Ghosh, RS Hostel and ISI Bangalore"
         """
-        fine_lst = []
-        for e in lst:
-            if e != "":
-                fine_lst.append(e)
+        fine_lst = [e for e in lst if e != ""]
         if len(fine_lst) == 1:
             return fine_lst[0]
-        
         if not _and:
             return ", ".join(fine_lst)
-        
         return ", ".join(fine_lst[:-1]) + " and " + fine_lst[-1]
     
     @staticmethod
-    def join_authors(lst_authors:list):
+    def join_authors(lst_authors: list):
         """
-        Joins the list of authors and return appropriate `str`
-
-        Parameter:
-        ----------
-            `list[Author(), ..., Author()]`
+        Join a list of authors' names and return as a comma-separated string.
+        
+        Parameters:
+        -----------
+        lst_authors : list[Author(), ..., Author()]
+            List of Author instances.
 
         Returns:
-        -------
-            `str`
+        --------
+        str
+            Comma-separated string of author names.
+
+        Example:
+        --------
+        authors = [Author(name="John Doe"), Author(name="Jane Smith")]
+        Author.join_authors(authors)
+        # Output: "John Doe, Jane Smith"
         """
         return ", ".join([ath._name for ath in lst_authors])
-    
 
 
 class TexPackage:
