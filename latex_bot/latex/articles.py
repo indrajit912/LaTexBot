@@ -9,6 +9,7 @@ from .indrajit_ams_templates import IndraAMS
 from .tex_templates import TexFontTemplates
 from .utils import compile_tex, open_file
 
+import os, subprocess
 from pathlib import Path
 from datetime import datetime
 from typing import Union
@@ -308,19 +309,72 @@ class PlainArticle:
         else:
             raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
 
-        print(f" - Writing `{self._main_tex.filename}.{self._main_tex.file_extension}`...\n")
+        print(f" - Writing `{self._main_tex.filename}.{self._main_tex.file_extension}`...")
         self._main_tex.write(
             tex_dir=self._project_dir
         )
 
-        # TODO: Create references
+        _open_pdf = True
+
+        # Create references
+        if self._references:
+            _refs = "\n".join(self._references)
+
+            _ref_bib = TexFile(
+                classfile=True,
+                body_text=_refs,
+                filename="references",
+                file_extension='.bib',
+                author=self._authors
+            )
+
+            print(f" - Writing `references.bib`...\n")
+            _ref_bib.write(tex_dir=self._project_dir)
+
+            # Change _open_pdf so that the pdf won't be opened after the 
+            # first pdflatex compilation
+            _open_pdf = False
 
         if _compile:
+
+            print(f"- Compiling using `{self._main_tex._tex_compiler}`")
             self._main_tex._compile(
                 tex_dir=self._project_dir,
-                _open = True,
+                _open = _open_pdf,
                 **kwargs
             )
+
+            if self._references:
+                # cd self._project_dir
+                os.chdir(self._project_dir)
+
+                # Compile main.aux
+                print(f"- Compiling using `bibtex`")
+                _main_aux = self._main_tex._filename + '.aux'
+                # os.system(f"bibtex {_main_aux}")
+                subprocess.run(
+                    ["bibtex", _main_aux],
+                    stdout=subprocess.PIPE,
+                    cwd=self._project_dir
+                )
+
+                # Compile main.tex
+                print(f"- Compiling using `{self._main_tex._tex_compiler}`")
+                self._main_tex._compile(
+                    tex_dir=self._project_dir,
+                    _open = False,
+                    **kwargs
+                )
+
+                # Compile main.tex
+                print(f"- Compiling using `{self._main_tex._tex_compiler}`\n")
+                self._main_tex._compile(
+                    tex_dir=self._project_dir,
+                    _open = True,
+                    **kwargs
+                )
+
+
 
     def show_output(self):
         """
@@ -525,11 +579,6 @@ class PlainArticle:
         _main_end_text = ""
 
         if self._references:
-            # Write `references.bib`
-            _ref_filepath = self._project_dir / "references.bib"
-            with open(_ref_filepath, "w") as f:
-                f.write("\n".join(self._references))
-
             # Add to _main_end_text
             _main_end_text = (
                 r"% Bibliography"
