@@ -15,8 +15,9 @@ TEX_DIR = Path(__file__).parent / "tex_dir"
 __all__ = [
     "Email",
     "Author", 
-    "TexPackage", 
-    "TexFile", 
+    "TexFile",
+    "TexPackage",
+    "TexEnvironment",
     "TexTable", 
     "TexSection", 
     "Preamble"
@@ -296,29 +297,44 @@ class Author:
         """
         return ", ".join([ath._name for ath in lst_authors])
 
-
 class TexPackage:
     """
-    A class to represent a `LaTeX` Package
-
+    A class to represent a LaTeX Package
+    
     Author: Indrajit Ghosh
     Date: Jul 20, 2023
+
+    Parameters:
+    -----------
+    name : str or list
+        Name of the LaTeX package. If a list is provided, package names will be joined with commas.
+    options : list, optional
+        List of options to be passed to the package.
+    comment : str, optional
+        Comment or description associated with the package.
+    associated_cmds : str or list, optional
+        Additional LaTeX commands associated with the package.
+
+    Example:
+    --------
+    package = TexPackage(name="geometry", options=["margin=1in"], comment="Set page margins")
     """
     def __init__(
             self, 
             name, 
-            options:list=None,
-            comment:str=None,
-            associated_cmds=None
+            options: list = None,
+            comment: str = None,
+            associated_cmds = None
     ):
-        
+        """Initialize a TexPackage instance."""
+
         if isinstance(name, str):
             self._name = name
         elif isinstance(name, list):
             self._name = ",".join(name)
         else:
             raise TypeError(
-                f"The `name` attr of an {self.__class__.__name__} object \ can be of type `str` or `list`.\n"
+                f"The `name` attribute of a {self.__class__.__name__} object can be of type `str` or `list`.\n"
             )
         
         self._options = (
@@ -337,7 +353,7 @@ class TexPackage:
             if isinstance(associated_cmds, list):
                 pass
             else:
-                raise Exception("The attr `associated_cmds` of a `TexPackage` should be of type `list`.")
+                raise Exception("The `associated_cmds` attribute of a `TexPackage` should be of type `list`.")
             
         self._associated_cmds = (
             "%\n".join(associated_cmds)
@@ -345,8 +361,10 @@ class TexPackage:
             else ""
         )
 
-
     def __str__(self):
+        """
+        Return the LaTeX representation of the package.
+        """
         _pkg_str = ''
 
         if self._options == '':
@@ -364,16 +382,20 @@ class TexPackage:
 
         return _pkg_str
 
-    
     def __add__(self, right):
+        """
+        Concatenate the LaTeX representation of two packages or a package and a string.
+        """
         return self.__str__() + right.__str__()
-    
+
     def __radd__(self, left):
+        """
+        Concatenate the LaTeX representation of a package with a string on the left side.
+        """
         if left == 0:
             return self
         if isinstance(left, str):
             return left.rstrip().__add__("\n" + self.__str__())
-        
 
 
 class TexFile:
@@ -984,12 +1006,54 @@ class TexFile:
 
 class TexEnvironment:
     """
-    TODO: A class representing `LaTeX` environment
-
+    A class representing a LaTeX environment
+    
     Author: Indrajit Ghosh
-    Date: 
+    Date: Aug 23, 2023
     """
-    pass
+    def __init__(self, name, content=None, options=None):
+        """
+        Initialize a TexEnvironment instance.
+        
+        Parameters:
+        -----------
+        name : str
+            Name of the LaTeX environment.
+        content : str or list, optional
+            Content to be placed within the environment. If a list is 
+            provided, content will be joined with line breaks.
+        options : list, optional
+            List of options to be passed to the environment.
+        
+        Example:
+        --------
+        environment = TexEnvironment(name="quote", content="This is a quotation.")
+        """
+        self._name = name
+        self._options = (
+            ",".join(options)
+            if options is not None
+            else ""
+        )
+        self._content = (
+            "\n".join(content)
+            if isinstance(content, list)
+            else content
+        )
+
+
+    def __str__(self):
+        """
+        Return the LaTeX representation of the environment.
+        """
+        env_str = f"\\begin{{{self._name}}}"
+
+        if self._options:
+            env_str += f"[{self._options}]"
+
+        env_str += f"\n    {self._content}\n\\end{{{self._name}}}"
+        return "\n" + env_str + "\n"
+
 
 
 class TexTable:
