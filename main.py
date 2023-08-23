@@ -1,7 +1,7 @@
 # LaTeX Bot
 #
 # Author: Indrajit Ghosh
-# Created On: Aug 22, 2023
+# Created On: Aug 23, 2023
 #
 
 from latex_bot import *
