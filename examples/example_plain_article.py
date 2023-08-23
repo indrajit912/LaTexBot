@@ -34,20 +34,43 @@ author1 = Author(
         "8th Mile, Mysore Road",
         "Bangalore 560 059"
     ],
-    email="someone@somewhere.com"
+    email="some_one@somewhere.com"
 )
 
 # Create the PlainArticle object
 article = PlainArticle(
-    title="My Cool \\LaTeX Article",
+    title="My Cool \\LaTeX\ Article",
     authors=[
         author1
     ],
     project_dir=Path.home() / "Desktop/new_plain_art"
 )
 
+# Add some texts
+article.add_text(text="\\lipsum[1]")
+
+# Create TexTable
+table = TexTable(
+    columns=["Name", "Email Id", "Address"]
+)
+
+table._rows = [
+    ["Indrajit Ghosh", Email("indra_jit@gmail.com", texttt=True), "ISI Bangalore"],
+    ["Anirban Pal", Email("ani@isibang.ac.in", texttt=True), "ISI Bangalore"],
+    ["Ritvik", Email("ritvik@yahoo.in", texttt=True), "IIT Madras"],
+    ["Soumyashant Nayak", Email("soumyashant@somewhere.com", texttt=True), "IISc Bangalore"]
+]
+
+# Add the table
+article.add_table(tex_table=table)
+
+
+# Add more stuffs
+article.add_paragraph(para="\\lipsum[2-3]")
+
 # Show the output
 article.show_output()
+
 
 # Create the article
 # article.create()
