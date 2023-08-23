@@ -27,7 +27,45 @@ class PlainArticle:
     Author: Indrajit Ghosh
     Date: Jul 22, 2023
 
-    TODO: Add doc
+    This class provides functionality to create a Plain Article in LaTeX format.
+    It supports customization of title, authors, date, abstract, body text, and more.
+    The class generates the main LaTeX file, compiles it, and can also show the output
+    without creating the full project.
+
+    Args:
+        `title` (str): Title of the Plain Article.
+        `authors` (list): List of authors using the Author class.
+        `date` (str): Date of the document.
+        `packages` (list): List of TexPackage instances for additional packages.
+        `body_text` (str): Body text content of the document.
+        `project_dir` (Path): Project directory for the Plain Article.
+        `amsartstyle` (bool): Use AMS article style if True.
+        `abstract` (str): Abstract content of the document.
+        `tex_template` (TexFile): Template to customize the LaTeX structure.
+
+        `pdfsubject` (str): PDF subject metadata.
+        `pdfkeywords` (str): PDF keywords metadata.
+        `pdfcreator` (str): PDF creator metadata.
+        `pdfcreationdate` (str): PDF creation date metadata.
+        `pdfcolorlink` (bool): Enable color links in PDF.
+        `pdflinkcolor` (str): Color of internal links in PDF.
+        `pdfurlcolor` (str): Color of URLs in PDF.
+        `pdfcitecolor` (str): Color of citation links in PDF.
+        `papersize` (str): Paper size of the document.
+        `fontsize` (str): Font size of the document.
+
+    Methods:
+        `add_package`: Add a LaTeX package to the document.
+        `add_text`: Add text content to the document.
+        `add_paragraph`: Add a paragraph to the document.
+        `add_section`: Add a section to the document.
+        `add_subsection`: Add a subsection to the document.
+        `add_table`: Add a table to the document.
+        `create`: Create the Plain Article in the specified project directory.
+        `show_output`: Show the output without creating the full project.
+
+    Note:
+        The class relies on external modules such as `latex`, `Author`, and `TexFile`.
     """
     default_title = "Plain Article \\TeX\\ Template"
     default_authors = [Author()]
