@@ -8,7 +8,6 @@
 from .latex import *
 
 
-# TODO: Add all your AMS packages here
 class IndraAMS:
     r"""
     Packages I usually use for `amsart`
@@ -32,7 +31,7 @@ class IndraAMS:
         `macros`: Macros I use in `amsart`
                 e.g.-   \newcommand{\C}{\mathbb{C}}
                         \newcommand{\R}{\mathbb{R}}
-                        \newcommand{\N}{\mathbbm{N}}
+                        \newcommand{\N}{\mathbb{N}}
     """
     indrajit:Author = Author(
         name="Indrajit Ghosh",
@@ -280,8 +279,8 @@ class IndraAMS:
 %%%%%%% Analysis %%%%%%%%%%%%
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\N}{\mathbbm{N}}
-\newcommand{\Q}{\mathbbm{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Sp}{\mathbb{S}}
 \newcommand{\F}{\mathbb{F}} % Field F

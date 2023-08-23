@@ -1,4 +1,4 @@
-# A bot to generate blank LaTeX files
+# A bot to generate LaTeX files
 #
 # Author: Indrajit Ghosh
 #
@@ -10,65 +10,74 @@
 
 from latex import *
 from scripts.functions import *
+import subprocess
+import os
 
 COMPILE_TEX_LIVES_HERE = Path(__file__).resolve().parent / 'compile_tex.py'
 CWD = Path.cwd()
 
+class LaTexBot:
+    """
+    A Bot that can create LaTeX templates!
 
-def main():
+    Author: Indrajit Ghosh
+    """
     
-    res = choose_from_list(TEX_TEMPLATES.values(), "Choose the template you want:")
-    clear_terminal_screen()
+    def __init__(self, root_dir:Path=CWD):
+        self._root_dir = root_dir
 
-    if res == TEX_TEMPLATES['quit']:
-        print("Thanks for visiting!")
+    def show_options(self):
+        res = choose_from_list(TEX_TEMPLATES.values(), "Choose the template you want:")
+        clear_terminal_screen()
 
-    elif res == TEX_TEMPLATES['plainart']:
+        if res == TEX_TEMPLATES['quit']:
+            print("Thanks for visiting!")
+        elif res == TEX_TEMPLATES['plainart']:
+            self.create_plain_article()
+        elif res == TEX_TEMPLATES['newart']:
+            self.create_new_article()
+        elif res == TEX_TEMPLATES['amsart']:
+            self.create_ams_article()
+        else:
+            self.create_custom_article(res)
+
+    def create_plain_article(self):
         # TODO: Use latex modules
-
-        # First Read `.yml` file for default config
-        # tex_dir = CWD or yml config
-
-        # Create `PlainArticle()` object
         plainart = PlainArticle(
             title="My Plain Aritle",
             authors=[IndraAMS.indrajit],
             body_text="Hello there! I'm using \\LaTeX.",
-            project_dir=CWD / "new_plain_art",
+            project_dir=self._root_dir / "new_plain_art",
             amsartstyle=False
         )
-        
-        # Create plainart
         plainart.create()
 
-    elif res == TEX_TEMPLATES['newart']:
+    def create_new_article(self):
         # TODO: Article
         newart = Article(
             authors=[IndraAMS.indrajit],
             amsartstyle=False,
-            project_dir=CWD / "new_article"
+            packages=IndraArt.packages,
+            theorem_styles=IndraAMS.thmstyles,
+            custom_commands=IndraAMS.macros,
+            project_dir=self._root_dir / "new_article"
         )
-        
-        # Create `Article()` object
         newart.create()
 
-    elif res == TEX_TEMPLATES['amsart']:
+    def create_ams_article(self):
         # TODO: AMS article
         amsart = AmsArticle(
             authors=[IndraAMS.indrajit],
             packages=IndraAMS.packages,
             theorem_styles=IndraAMS.thmstyles,
             custom_commands=IndraAMS.macros,
-            project_dir=CWD / "new_ams_article"
+            project_dir=self._root_dir / "new_ams_article"
         )
-
-        # Create `AmsArticle()` object
         amsart.create()
-        
-    else:
-        # TODO: Else cases
 
-        article_title = "Your Article's Title Here" # TODO: Take input
+    def create_custom_article(self, res):
+        # TODO: Else cases
+        article_title = "Your Article's Title Here"  # TODO: Take input
         author_name = "Your Name Here"
         email = "someone@somewhere.com"
         address = "Enter your address"
@@ -80,7 +89,7 @@ def main():
             "address": address
         }
 
-        informations = INDRAJIT # Don't forget to update here
+        informations = INDRAJIT  # Don't forget to update here
         informations.setdefault("title", article_title)
 
         output_dir_path = setup_output_directory(res)
@@ -96,6 +105,12 @@ def main():
         clear_terminal_screen()
 
         print(f"\n\n\t\t::: YOUR TeX WORKING DIRECTORY :::\n\n   {output_dir_path}\n\n")
+
+
+def main():
+    root = Path.home() / "Desktop"
+    latex_bot = LaTexBot(root_dir=root)
+    latex_bot.show_options()
 
 
 if __name__ == '__main__':
