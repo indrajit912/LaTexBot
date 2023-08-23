@@ -41,6 +41,7 @@ class PlainArticle:
         `project_dir` (Path): Project directory for the Plain Article.
         `amsartstyle` (bool): Use AMS article style if True.
         `abstract` (str): Abstract content of the document.
+        `references` (list): References for the document.
         `tex_template` (TexFile): Template to customize the LaTeX structure.
 
         `pdfsubject` (str): PDF subject metadata.
@@ -84,6 +85,7 @@ class PlainArticle:
             project_dir:Path=None,
             amsartstyle:bool=False,
             abstract:str=None,
+            references:list=None,
             tex_template:TexFile=None,
             *,
             pdfsubject:str = "Mathematics",
@@ -127,6 +129,12 @@ class PlainArticle:
             abstract
             if abstract
             else self.default_abstract
+        )
+
+        self._references = (
+            references
+            if references
+            else []
         )
 
         # `self._body_text` is important.
@@ -185,7 +193,33 @@ class PlainArticle:
     def __str__(self):
         self._update_main_tex()
         return self._main_tex.__str__()
+    
+    @property
+    def abstract(self):
+        return self._abstract
 
+    @abstract.setter
+    def abstract(self, new_abstract:str):
+        self._abstract = new_abstract
+        self._update_main_tex()
+
+    @property
+    def references(self):
+        return self._references
+    
+    @references.setter
+    def references(self, new_refs:list):
+        self._references = new_refs
+        self._update_main_tex()
+
+    def add_reference(self, reference:str):
+        """
+        Adds a reference to the Article.
+        This function appends the `reference` to `self._references`
+        and then set the new reference.
+        """
+        self._references.append(reference)
+        self._update_main_tex()
 
     def add_package(self, package:TexPackage):
         """
@@ -278,6 +312,8 @@ class PlainArticle:
         self._main_tex.write(
             tex_dir=self._project_dir
         )
+
+        # TODO: Create references
 
         if _compile:
             self._main_tex._compile(
@@ -485,10 +521,31 @@ class PlainArticle:
         self._body_text = "\n".join([self._elements[i].__str__() for i in sorted(self._elements.keys())])
         
         _main_body_text = _abst + self._body_text
-        _main_end_text = (
-            None if not self._amsartstyle
-            else "\n\\mbox{}%\n\\vfill%\n\\Addresses%"
-        )
+
+        _main_end_text = ""
+
+        if self._references:
+            # Write `references.bib`
+            _ref_filepath = self._project_dir / "references.bib"
+            with open(_ref_filepath, "w") as f:
+                f.write("\n".join(self._references))
+
+            # Add to _main_end_text
+            _main_end_text = (
+                r"% Bibliography"
+                + "%\n"
+                + r"\nocite{*}"
+                + "%\n"
+                + r"\bibliographystyle{plain}"
+                + "%\n"
+                + r"\bibliography{references}"
+                + "%\n\n"
+            )
+
+        if self._amsartstyle:
+            _main_end_text += "\n\\mbox{}%\n\\vfill%\n\\Addresses%"
+
+        _main_end_text = None if _main_end_text == '' else _main_end_text
 
         _documentclass = f"\\documentclass[{self._fontsize},{self._papersize}]{{article}}"
 
@@ -592,9 +649,16 @@ class PlainArticle:
                 + r"{\Author" + _index + "Department, "
                 + r"\Author" + _index + "Institute"
                 + r"\\ "
-                + r"\Author" + _index + "Addr}%"
-                + "\n"
+                + r"\Author" + _index + "Addr"
             )
+            if  author.email:
+                _author_inside_begin_doc += (
+                    r"\\ "
+                    + "Email: \\texttt{\\Author" + _index
+                    + "Email}"
+                )
+            
+            _author_inside_begin_doc += "}%\n"
         else:
             _author_inside_begin_doc = ''
             

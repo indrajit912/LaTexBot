@@ -9,7 +9,8 @@ def main():
 
     art = PlainArticle(
         title="\\TeX\ Template Article",
-        project_dir=Path.home() / "Desktop" /"new_article"
+        authors=[IndraAMS.indrajit],
+        project_dir=Path.home() / "Desktop" /"new_article",
     )
 
     art.add_text(
@@ -51,9 +52,23 @@ types like lists and dictionaries are not hashable and cannot be used as keys in
         TexPackage(name="longtable")
     )
 
+    # art._amsartstyle = True
 
-    art.show_output()
+    art.add_reference(
+        reference=r"""
+@article{smith2020article,
+  author = {Smith, John and Johnson, Jane},
+  title = {An Example Article},
+  journal = {Journal of Examples},
+  year = {2020},
+  volume = {10},
+  pages = {1-10},
+}
+"""
+    )
 
+
+    art.create()
 
 
 
