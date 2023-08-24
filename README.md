@@ -107,16 +107,16 @@ python3 main.py
 ```
 - The bot will ask for the template to create. After that it will create the corresponding `LaTeX` project directory in the current working directory. You can copy that project somewhere else if you wish!
 
-# Documentation
+## Documentation
 For detailed documentation and examples, please refer to the LaTexBot Wiki (*Will be updated soon!*).
 
-# Contributions
+## Contributions
 Contributions to LaTexBot are welcome! If you find a bug, have a feature request, or want to contribute improvements, please submit a pull request or open an issue on [GitHub](https://github.com/indrajit912/LaTexBot.git).
 
-# Contact
+## Contact
 - Author: **Indrajit Ghosh**
 - Email: indrajitghosh912@gmail.com
 - GitHub: [indrajit912](https://github.com/indrajit912)
 
-# License
+## License
 This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code as per the terms of the license.
