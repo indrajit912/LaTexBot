@@ -42,7 +42,7 @@ class IndraAMS:
             "RVCE Post, Bengaluru",
             "Karnataka - 560 059, India"
         ],
-        email="rs\\_math1902@isibang.ac.in"
+        email="rs_math1902@isibang.ac.in"
     )
     packages:list = [
         TexPackage(name="inputenc", options=['utf8']),
