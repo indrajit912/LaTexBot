@@ -898,6 +898,70 @@ class TexFile:
         return texfilepath
     
     @staticmethod
+    def render_tex_template(template_path:Path, variable_dict):
+        """
+        TODO: Added this function late! Imeplement it throughout the project whereever applicable.
+
+        Render a LaTeX template by replacing Python variable placeholders with actual values.
+
+        Args:
+        -----
+            template_path (str): Path to the LaTeX template file.
+            variable_dict (dict): Dictionary containing variable names and their corresponding values.
+
+        Returns:
+        --------
+            str: Rendered LaTeX content as a string.
+
+        Example:
+        --------
+            Suppose you have the following `main.tex` file
+                `main.tex`
+
+                    \documentclass{article}
+                    \title{{{ title }}}
+                    \author{{{ author }}}
+                    \date{{{ date }}}
+                    \begin{document}
+                    \maketitle
+
+                    This is a sample document authored by {{ author }} on {{ date }}.
+
+                    \end{document}
+
+            Then you run the following
+
+            >>> template_path = 'demo.tex'  # Replace with the actual path to your template file
+            >>> variables = {
+                'author': 'John Doe',
+                'title': 'My Document Title',
+                'date': '2023-08-24',
+            }
+            >>> rendered_tex = render_tex_template(template_path, variables)
+
+                    \documentclass{article}
+                    \title{My Document Title}
+                    \author{John Doe}
+                    \date{2023-08-24}
+                    \begin{document}
+                    \maketitle
+
+                    This is a sample document authored by John Doe on 2023-08-24.
+
+                    \end{document}
+        """
+        template_path = Path(template_path).resolve()
+        
+        with open(template_path, 'r') as template_file:
+            template_content = template_file.read()
+
+        for variable_name, variable_value in variable_dict.items():
+            placeholder = f'{{{{ {variable_name} }}}}'
+            template_content = template_content.replace(placeholder, str(variable_value))
+
+        return template_content
+    
+    @staticmethod
     def latex_escape(text:str):
         """
         This function accepts plain text and return the TeX escaped text.

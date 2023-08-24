@@ -240,7 +240,6 @@ def is_latex_installed():
         # pdflatex command returned an error, but it means LaTeX is installed
         # We assume that the command is installed but there might be some error in the execution.
         return True
-    
 
 
 def main():
