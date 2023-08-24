@@ -313,7 +313,12 @@ class IndraAMS:
 %%% variables are defined as follows:
 %%%
 
-\DeclareMathOperator{\dist}{dist} % The distance function: dist(x, K)
+% Inline \chi
+\DeclareRobustCommand{\rchi}{{\mathpalette\irchi\relax}}
+\newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}} % inner command, used by \rchi
+
+% The distance function: dist(x, K)
+\DeclareMathOperator{\dist}{dist}
 
 % Celling and Floor function
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
