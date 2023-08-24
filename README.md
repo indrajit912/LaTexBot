@@ -12,15 +12,20 @@ LaTexBot is a Python project developed by Indrajit Ghosh to simplify the process
 - Easily integrate LaTeX code into your Python project.
 
 ## Dependencies
-This project requires a LaTeX distribution to be installed on your system. A LaTeX distribution is necessary to compile and generate documents from LaTeX source code. You can choose from the following popular LaTeX distributions:
 
-- **TeX Live:** TeX Live is a cross-platform, comprehensive distribution that provides a wide range of packages and tools for LaTeX typesetting. It's available for various operating systems including Windows, macOS, and Linux. You can download TeX Live from their official website: [TeX Live](https://www.tug.org/texlive/)
+This project requires the following dependencies to be installed on your system:
 
-- **MiKTeX:** MiKTeX is a LaTeX distribution for Windows, known for its ease of installation and package management capabilities. It provides a user-friendly interface for package installation and updates. You can download MiKTeX from their official website: [MiKTeX](https://miktex.org/)
+- **Python 3.x:** This project is built using Python 3.x. If you don't have Python 3.x installed, you can download it from the official Python website: [Python Downloads](https://www.python.org/downloads/)
 
-- **MacTeX:** MacTeX is a distribution specifically designed for macOS, providing everything you need to work with LaTeX on a Mac. It includes various tools and editors that integrate well with the macOS environment. You can download MacTeX from their official website: [MacTeX](https://www.tug.org/mactex/)
+- **LaTeX Distribution:** A LaTeX distribution is necessary to compile and generate documents from LaTeX source code. You can choose from the following popular LaTeX distributions:
 
-Please make sure to install one of these LaTeX distributions before using this project to ensure that you can compile the LaTeX source code and generate the desired documents.
+  - **TeX Live:** TeX Live is a cross-platform, comprehensive distribution that provides a wide range of packages and tools for LaTeX typesetting. It's available for various operating systems including Windows, macOS, and Linux. You can download TeX Live from their official website: [TeX Live](https://www.tug.org/texlive/)
+
+  - **MiKTeX:** MiKTeX is a LaTeX distribution for Windows, known for its ease of installation and package management capabilities. It provides a user-friendly interface for package installation and updates. You can download MiKTeX from their official website: [MiKTeX](https://miktex.org/)
+
+  - **MacTeX:** MacTeX is a distribution specifically designed for macOS, providing everything you need to work with LaTeX on a Mac. It includes various tools and editors that integrate well with the macOS environment. You can download MacTeX from their official website: [MacTeX](https://www.tug.org/mactex/)
+
+Before using this project, ensure that you have installed Python 3.x and one of the LaTeX distributions mentioned above. For detailed instructions on installing LaTeX, you can refer to the [LaTeX Installation Guide](https://github.com/indrajit912/HowTo/blob/cec45debd154246d029396e9f151d9407f7e5567/guides/install_latex.md) created by Indrajit Ghosh.
 
 
 ## Installation
