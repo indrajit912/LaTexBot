@@ -4,6 +4,10 @@
 
 LaTexBot is a Python project developed by Indrajit Ghosh to simplify the process of writing and compiling LaTeX documents. The project provides a collection of classes that enable users to produce various LaTeX document templates with ease.
 
+**Author:** [Indrajit Ghosh](https://github.com/indrajit912)
+
+**Project URL:** [LaTexBot](https://github.com/indrajit912/LaTexBot)
+
 ## Features
 
 - Write and compile LaTeX documents effortlessly.
