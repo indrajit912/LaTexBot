@@ -816,6 +816,8 @@ class PlainArticle:
     
 
 class Article:
+    # TODO: This class needs to be fixed! Article() doesn't print references
+    # after compilation.
     r"""
     A class representing an Article LaTeX document.
 
@@ -1823,7 +1825,14 @@ class AmsArticle:
         if self._keywords:
             self._main_post_doc_cmds += r"\keywords{\Keywords}%" + "\n"
 
-        self._main_body_text = r"\maketitle" + "%\n" + r"%\tableofcontents" + "\n\n"
+        self._main_body_text = (
+            r"\maketitle"
+            + "%\n"
+            + r"\thispagestyle{empty}"
+            + "%\n"
+            + r"%\tableofcontents"
+            + "\n\n"
+        )
         if self._sections:
             if 'abstract' in [sec._filename for sec in self._sections]:
                 # Abstract is there
@@ -2107,7 +2116,7 @@ class AmsArticle:
             body_text=r"""
 \lipsum[1-2]
 \begin{thm}
-    The set of $\N$ is unbounded.
+    The set of all natural numbers, $\N$, is unbounded.
 \end{thm}
 \begin{proof}
     The proof is obvious.
@@ -2133,56 +2142,41 @@ class AmsArticle:
             `list[`str`, ..., `str`]`
         """
         ref1 = r"""
-@Book{konrad_unbdd,
- Author = {Schm{\"u}dgen, Konrad},
- Title = {Unbounded self-adjoint operators on {Hilbert} space},
- FSeries = {Graduate Texts in Mathematics},
- Series = {Grad. Texts Math.},
- ISSN = {0072-5285},
- Volume = {265},
- ISBN = {978-94-007-4752-4; 978-94-007-4753-1},
- Year = {2012},
- Publisher = {Dordrecht: Springer},
- Language = {English},
- Keywords = {47-01,47B25,81Q10,47Axx,47E05,47F05,35Pxx},
- zbMATH = {6046473},
- Zbl = {1257.47001}
+@Book{smith_book,
+  Author = {Smith, John},
+  Title = {Exploring Infinite Operators on {Hilbert} Spaces},
+  FSeries = {Graduate Texts in Mathematics},
+  Series = {Grad. Texts Math.},
+  ISSN = {1234-5678},
+  Volume = {123},
+  ISBN = {978-12-345-6789-0; 978-98-765-4321-0},
+  Year = {2020},
+  Publisher = {City Publishers},
+  Language = {English},
+  Keywords = {Mathematics, Operators, Hilbert Space, Analysis},
+  zbMATH = {98765432},
+  Zbl = {1234.56789}
 }
-
 """
         ref2 = r"""
-@Article{kaufman,
- Author = {Kaufman, William E.},
- Title = {Representing a closed operator as a quotient of continuous operators},
- FJournal = {Proceedings of the American Mathematical Society},
- Journal = {Proc. Am. Math. Soc.},
- ISSN = {0002-9939},
- Volume = {72},
- Pages = {531--534},
- Year = {1978},
- Language = {English},
- DOI = {10.2307/2042466},
- Keywords = {47A10,47A55},
- zbMATH = {3627811},
- Zbl = {0404.47001}
+@article{smith_2021,
+  author    = {Richard A. Doe},
+  title     = {Quantum Mechanics in Action},
+  journal   = {Journal of Advanced Physics},
+  volume    = {42},
+  number    = {3},
+  pages     = {123--145},
+  year      = {2021},
+  publisher = {Physics Publishing Co.},
 }
-
 """
         ref3 = r"""
-@Article{lennon,
- Author = {Lennon, M. J. J.},
- Title = {On sums and products of unbounded operators in {Hilbert} space},
- FJournal = {Transactions of the American Mathematical Society},
- Journal = {Trans. Am. Math. Soc.},
- ISSN = {0002-9947},
- Volume = {198},
- Pages = {273--285},
- Year = {1974},
- Language = {English},
- DOI = {10.2307/1996759},
- Keywords = {47A65,47C99},
- zbMATH = {3467887},
- Zbl = {0298.47012}
+@inproceedings{brown_2020,
+  author    = {Michael Brown},
+  title     = {Machine Learning Approaches for Image Recognition},
+  booktitle = {Proceedings of the International Conference on Computer Science},
+  pages     = {56--67},
+  year      = {2020},
 }
 """
         return [ref1, ref2, ref3]
