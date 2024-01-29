@@ -2,7 +2,7 @@
 #
 # Author: Indrajit Ghosh
 # Created On: Jun 17, 2023
-# Modified On: Jul 20, 2023
+# Modified On: Jul 20, 2023; Jan 29, 2024
 #
 
 from datetime import datetime
@@ -20,6 +20,8 @@ __all__ = [
     "TexEnvironment",
     "TexTable", 
     "TexSection", 
+    "Frame",
+    "BeamerSection",
     "Preamble"
 ]
 
@@ -1451,7 +1453,96 @@ class TexSection(TexFile):
             + "\n\n"
         )
     
+
+class Frame:
+    """
+    A class representing a `Frame` in a TeX Beamer Section
+
+    Author: Indrajit Ghosh
+    Date: Jan 29, 2024
+    """
+    def __init__(self, title:str, text:str=''):
+        self._title = title
+        self._text = text
+
+    def __str__(self):
+        return (
+            "\n"
+            + r"\frame %"
+            + "\n"
+            + r"{%"
+            + "\n"
+            + r"\frametitle{"
+            + self._title
+            + r"}%"
+            + "\n\n"
+            + self._text
+            + "\n\n"
+            + r"}%"
+
+        )
     
+    @property
+    def title(self):
+        return self._title
+    
+    @title.setter
+    def title(self, new_title:str):
+        self._title = new_title
+
+    @property
+    def text(self):
+        return self._text
+    
+    @text.setter
+    def text(self, new_text):
+        self._text = new_text
+
+class BeamerSection(TexFile):
+    """
+    A class representing a LaTeX Beamer Section
+    This is a `TexFile(classfile=True)` object
+
+    Author: Indrajit Ghosh
+    Date: Jan 29, 2024
+    """
+    def __init__(
+            self,
+            heading:str="Untitled Beamer Section",
+            filename:str=None,
+            author:str=None
+    ):
+        
+        self._heading:str = heading
+        self._content = ''
+
+        super().__init__(
+            filename=filename,
+            author=author,
+            body_text=self.__str__(),
+            classfile=True
+        )
+
+    
+    def __str__(self):
+        return (
+            "\n\n"
+            "\\section{"
+            + self._heading
+            + "} %\n" 
+            + self._content 
+            + "\n\n"
+        )
+    
+    def add_frame(self, frame:Frame):
+        """
+        Adds a frame to the section
+        """
+        if isinstance(frame, Frame):
+            self._content += frame.__str__() + "\n"
+            super().__setattr__("body_text", self.__str__())
+        else:
+            raise TypeError("Only `Frame` type object can be added to BeamerSection!")
 
 
 class Preamble(TexFile):

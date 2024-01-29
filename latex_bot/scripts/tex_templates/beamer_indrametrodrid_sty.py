@@ -7,7 +7,7 @@ INDRAMETRODRID = r"""
 %%% Author : Indrajit Ghosh
 %%% Institute : Indian Statistical Institute Bangalore
 %%% Email : rs_math1902@isibang.ac.in
-%%% Date : May 28, 20222
+%%% Date : May 28, 2022
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

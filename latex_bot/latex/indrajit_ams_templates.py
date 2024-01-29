@@ -155,8 +155,10 @@ class IndraAMS:
 %%% We need to do the following outside of any group,
 %%% since it’s not \global:
 \renewcommand{\thebigthm}{\Alph{bigthm}} % Number as "Theorem A."
+
 \theoremstyle{definition}
 \newtheorem{defn}[thm]{Definition} % Numbered along with thm
+
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{Remark} % Numbered along with thm
 \newtheorem{ex}[thm]{Example} % Numbered along with thm
@@ -208,7 +210,7 @@ class IndraAMS:
 %%% My Custom Environments
 %%
 %\newenvironment{nam}[args]{begdef}{enddef}
-\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+%\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
 
 %%% The following causes equations to be numbered within sections:
 \numberwithin{equation}{section}
