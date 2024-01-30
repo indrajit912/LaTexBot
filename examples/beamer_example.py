@@ -21,7 +21,7 @@ sys.path.append(parent_dir)
 ##################################################################
 
 
-from latex_bot import Beamer, Frame, BeamerSection, Email
+from latex_bot import Beamer
 from pathlib import Path
 
 def main():
@@ -32,7 +32,7 @@ def main():
         institute="Indian Statistical Institute Bangalore",
         email="rs_math1902@isibang.ac.in",
         institute_code="ISI",
-        purpose="IIT Bombay Conference -- Feb 2024",
+        purpose="Write the Conference Name -- Mmm YYYY",
         project_dir=Path.home() / "Desktop/new_beamer"
     )
 

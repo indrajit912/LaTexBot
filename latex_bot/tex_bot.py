@@ -38,11 +38,13 @@ class LaTexBot:
             self.create_new_article()
         elif res == TEX_TEMPLATES['amsart']:
             self.create_ams_article()
+        elif res == TEX_TEMPLATES['beamer']:
+            self.create_beamer()
         else:
             self.create_custom_article(res)
 
     def create_plain_article(self):
-        # TODO: Use latex modules
+        # PlainArticle
         plainart = PlainArticle(
             title="My Plain Aritle",
             authors=[IndraAMS.indrajit],
@@ -53,7 +55,7 @@ class LaTexBot:
         plainart.create()
 
     def create_new_article(self):
-        # TODO: Article
+        # Article
         newart = Article(
             authors=[IndraAMS.indrajit],
             amsartstyle=False,
@@ -65,7 +67,7 @@ class LaTexBot:
         newart.create()
 
     def create_ams_article(self):
-        # TODO: AMS article
+        # AMS article
         amsart = AmsArticle(
             authors=[IndraAMS.indrajit],
             packages=IndraAMS.packages,
@@ -74,6 +76,20 @@ class LaTexBot:
             project_dir=self._root_dir / "new_ams_article"
         )
         amsart.create()
+
+    def create_beamer(self):
+        # Beamer
+        beamer = Beamer(
+            title="Sample Presentation Title Here",
+            subtitle="Here is subtitle",
+            author="Indrajit Ghosh",
+            institute="Indian Statistical Institute Bangalore",
+            email="rs_math1902@isibang.ac.in",
+            institute_code="ISI",
+            purpose="Write the Conference Name -- Mmm YYYY",
+            project_dir=self._root_dir / "new_beamer"
+        )
+        beamer.create()
 
     def create_custom_article(self, res):
         # TODO: Else cases
