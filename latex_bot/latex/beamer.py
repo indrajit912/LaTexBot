@@ -6,10 +6,10 @@
 
 from .latex import *
 from .articles import AmsArticle
+from .utils import compile_tex
 
-from datetime import datetime
 from pathlib import Path
-from typing import Union
+from typing import List
 
 __all__ = ["Beamer"]
 
@@ -20,7 +20,54 @@ class Beamer:
 
     Author: Indrajit Ghosh
     Date: Jan 29, 2024
+
+    Attributes that this class would create:
+    - Beamer._main_tex
+        TexFile
+    - Beamer._preamble
+        TexFile
+    - Beamer._reference_bib
+        TexFile
+    - Beamer._sections
+        [TexFile, ..., TexFile]
+    - Beamer._indra_metrodrid_sty
+        TexFile
+
+    Class-level Attributes:
+    - Beamer.default_title
+        Default title for the presentation.
+    - Beamer.default_author
+        Default author for the presentation.
+    - Beamer.default_date
+        Default date for the presentation using LaTeX's \today.
+    - Beamer.default_project_dir
+        Default project directory using Path.cwd().
+
+    Methods:
+    - __init__(self, ...)
+        Initializes a Beamer instance with various parameters.
+    - __str__(self) -> str
+        String representation of the Beamer instance.
+    - create(self)
+        Creates the Beamer
+    - _update(self)
+        Updates the Beamer instance by calling internal update methods.
+    - _update_preamble(self)
+        Updates the preamble based on attributes.
+    - _update_reference_bib(self)
+        Updates references based on attributes.
+    - _update_main_tex(self)
+        Updates the main TexFile for the project.
+    - _default_beamer_packages()
+        Returns a list of default TexPackage instances for Beamer.
+    - _default_beamer_custom_cmds()
+        Returns a string containing default custom commands for Beamer.
+    - _default_beamer_sections()
+        Returns a list of default BeamerSection instances.
+    - _get_indra_metrodrid_theme()
+        Returns LaTeX code for the Beamer theme 'indrametrodrid'.
     """
+    default_theme = "IndraMetrodrid"
     default_title = "Presentation Title Here"
     default_author = "Indrajit Ghosh"
     default_date = r"\today"
@@ -28,6 +75,7 @@ class Beamer:
 
     def __init__(
         self,
+        theme:str=None,
         title:str=None,
         subtitle:str=None,
         author:str=None,
@@ -36,10 +84,10 @@ class Beamer:
         email:str=None,
         purpose:str=None,
         date:str=None,
-        packages:list = None, # `list` of `TexPackage`s
+        packages:List[TexPackage] = None,
         theorem_styles:str = None,
         custom_commands:str = None,
-        sections:list = None, # `list` of `TexFile`s
+        sections:List[TexFile] = None,
         references:list=None,
         project_dir:Path=None,
         *,
@@ -48,6 +96,10 @@ class Beamer:
         pdfcreator:str = "MixTeX",
         pdfcreationdate:str = r"\today",
     ):
+        self._theme:str = (
+            theme if theme is not None
+            else self.default_theme
+        )
         self._title:str = (
             title if title is not None
             else self.default_title
@@ -141,9 +193,91 @@ class Beamer:
             classfile=True,
             body_text=self._get_indra_metrodrid_theme(),
             filename="beamerthemeIndraMetrodrid",
-            output_format='sty',
+            file_extension='.sty',
             author="Indrajit Ghosh"
         )
+
+        self._update()
+
+
+    def __str__(self) -> str:
+        self._update()
+        return self._main_tex.__str__()
+
+    def create(self, _compile:bool=True):
+        """
+        Creates the Beamer
+        """
+        self._update()
+
+        # Creating `self._project_dir`
+        if not self._project_dir.exists():
+            print("\n\n - Creating the project directory...")
+            self._project_dir.mkdir()
+            print(" - Creating `sections` dir ...\n")
+            self._sections_dir.mkdir()
+        else:
+            raise FileExistsError(f"The project directory already exists at `{self._project_dir}`\n")
+
+        # Writing TexFiles 
+        print(f" - Writing `{self._preamble.filename}{self._preamble.file_extension}`...")
+        self._preamble.write(
+            tex_dir=self._project_dir
+        )
+
+        print(f" - Writing `{self._main_tex.filename}{self._main_tex.file_extension}`...")
+        self._main_tex.write(
+            tex_dir=self._project_dir
+        )
+
+        if self._theme == 'IndraMetrodrid':
+            print(f" - Writing `{self._indra_metrodrid_sty.filename}{self._indra_metrodrid_sty.file_extension}`...")
+            self._indra_metrodrid_sty.write(
+                tex_dir=self._project_dir
+            )
+
+
+        if self._references:
+            print(f" - Writing `{self._reference_bib.filename}{self._reference_bib.file_extension}`...")
+            self._reference_bib.write(
+                tex_dir=self._project_dir
+            )
+
+        print("\n - Writing sections...")
+
+        for sec in self._sections:
+            print(f" -- Writing `{sec.filename}{sec.file_extension}`...")
+            sec.write(
+                tex_dir = self._sections_dir
+            )
+
+        if _compile:
+            _main_tex:Path = self._project_dir / (self._main_tex.filename + self._main_tex.file_extension)
+
+            compile_tex(
+                texfile=_main_tex,
+                tex_compiler='pdflatex',
+                output_format='.pdf',
+                bibtex=True
+            )
+        
+
+        print(f"\n\nProject Dir: `{self._project_dir}`\n")
+
+
+    def _update(self):
+        """
+        Updates the `beamer`. This method should be called
+        whenever an attr is set.
+
+        This method calls the following methods:
+            self._update_preamble()
+            self._update_reference_bib()
+            self._update_main_tex()
+        """
+        self._update_preamble()
+        self._update_reference_bib()
+        self._update_main_tex()
 
     def _update_preamble(self):
         """
@@ -159,13 +293,30 @@ class Beamer:
             author=self._author
         )
 
+    def _update_reference_bib(self):
+        """
+        Updates references
+        """
+        if self._references:
+            _ref_body_text = ""
+            for ref in self._references:
+                _ref_body_text += ref
+
+            self._reference_bib = TexFile(
+                filename="references",
+                classfile=True,
+                file_extension=".bib",
+                body_text=_ref_body_text,
+                author=self._author
+            )
 
     def _update_main_tex(self):
         """
         This method will update main `TexFile` for the project
         Updates the `self._main_tex` attr
         """
-        main_pre_cmds = (
+        _main_pre_cmds = r"\usetheme{" + self._theme + "}%\n"
+        _main_pre_cmds += (
             r"\newcommand{\Title}{" + self._title + "}%"
             + "\n"
             + r"\newcommand{\SubTitle}{" + self._subtitle + "}%"
@@ -179,20 +330,20 @@ class Beamer:
         )
 
         if self._institute_code:
-            main_pre_cmds += r"\newcommand{\InstituteCode}{" + self._institute_code + "}%\n"
+            _main_pre_cmds += r"\newcommand{\InstituteCode}{" + self._institute_code + "}%\n"
 
         if self._email:
-            main_pre_cmds += r"\newcommand{\Email}{" + self._email + "}%\n"
+            _main_pre_cmds += r"\newcommand{\Email}{" + self._email + "}%\n"
 
         if self._purpose:
-            main_pre_cmds += r"\newcommand{\Purpose}{" + self._purpose + "}%\n"
+            _main_pre_cmds += r"\newcommand{\Purpose}{" + self._purpose + "}%\n"
 
-        main_pre_cmds += r"""
+        _main_pre_cmds += r"""
 %%--------------------------------------------------------------
 %%%	       PDF Constants
 %%--------------------------------------------------------------
 """
-        main_pre_cmds += (
+        _main_pre_cmds += (
             r"\newcommand{\pdfTitle}{" + self._title + "}%"
             + "\n"
             r"\newcommand{\pdfAuthor}{" + self._author + "}%"
@@ -205,10 +356,95 @@ class Beamer:
             + "\n"
         )
 
-        main_pre_cmds += r"\input{" + self._preamble.filename + "}%\n"
+        _main_pre_cmds += (
+            "\n"
+            + r"\title[\ShortTitle]{\Title}"
+            + "%\n"
+            + r"\subtitle{\SubTitle}"
+            + "%\n"
+            + r"\author{\Author}"
+            + "%\n"
+            + r"\institute"
+        )
 
+        if self._institute_code:
+            _main_pre_cmds += r"[\InstituteCode]"
 
+        if self._email:
+            _main_pre_cmds += r"{\InstituteName \\ \Email}%"
+        else:
+            _main_pre_cmds += r"{\InstituteName}%"
+        
+        _main_pre_cmds += (
+            "\n\n"
+            + r"\date["
+            + self._date
+            + r"]{\Purpose}"
+            + "%\n"
+        )
 
+        _main_preamble = "\n" + r"\input{" + self._preamble.filename + "}\n"
+
+        _main_post_doc_cmds = (
+            r"\frame{\titlepage}"
+            + "%\n"
+            + r"\frame{\tableofcontents}"
+            + "%\n"
+        )
+
+        _main_body_text = ""
+
+        if self._sections:
+            for sec in self._sections:
+                _main_body_text += (
+                    "\n"
+                    + r"\input{" + self._sections_dir.name + "/" + sec._filename
+                    + "}%\n\n"
+                )
+
+        else:
+            _main_body_text += r"\lipsum[1]"
+
+        # Add references
+        if self._references:
+            _main_body_text += (
+                "\n" + "%" + "-"*60 + "%\n%" + " " * 20
+                + "References"
+                + "\n" + "%" + "-"*60 + "%" + " " * 20
+                + "\n"
+                + r"\section{References}%"
+                + "\n"
+            )
+            _frame_txt = (
+                r"""
+    \medskip
+    \bibliographystyle{alpha} % Alvailable styles: plain, alpha, abbrv, ieeetr, unsrt
+    \nocite{*}
+    """
+                + r"\bibliography{"
+                + self._reference_bib.filename + '.bib'
+                + "}%\n"
+            )
+            _frame_ref = Frame(
+                title="References",
+                options=['allowframebreaks'],
+                text=_frame_txt
+            )
+
+            _main_body_text += _frame_ref.__str__()
+        
+        self._main_tex = TexFile(
+            tex_compiler="pdflatex",
+            output_format=".pdf",
+            documentclass=r"\documentclass{beamer}",
+            preamble=_main_preamble,
+            pre_doc_commands=_main_pre_cmds,
+            post_doc_commands=_main_post_doc_cmds,
+            body_text=_main_body_text,
+            file_extension=".tex",
+            filename="main",
+            classfile=False
+        )
 
     @staticmethod
     def _default_beamer_packages():
@@ -226,14 +462,17 @@ class Beamer:
             TexPackage(
                 name="hyperref",
                 associated_cmds=[
-                    r"""pdftitle={\pdfTitle},
+                    r"""
+\hypersetup{
+	pdftitle={\pdfTitle},
 	pdfauthor={\pdfAuthor},
 	pdfsubject={\pdfSubject},
 	pdfcreationdate={\pdfCreationDate},
 	pdfcreator={\pdfCreator},
 	pdfpagemode=UseOutlines
-"""             
-            ]
+}
+"""
+                ]
             ),
             TexPackage(
                 name="tikz",
@@ -350,7 +589,7 @@ class Beamer:
 
         return [intro, sect]
     
-
+    @staticmethod
     def _get_indra_metrodrid_theme():
         """
         This function returns the LaTeX code required for the 

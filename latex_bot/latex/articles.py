@@ -1901,7 +1901,7 @@ class AmsArticle:
 
     def _update_reference_bib(self):
         """
-        Updates reference
+        Updates references
         """
         _ref_body_text = ""
         for ref in self._references:

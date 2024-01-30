@@ -1461,15 +1461,25 @@ class Frame:
     Author: Indrajit Ghosh
     Date: Jan 29, 2024
     """
-    def __init__(self, title:str, text:str=''):
+    def __init__(self, title:str, text:str='', options:list=None):
         self._title = title
         self._text = text
+        self._options = (
+            options if options is not None
+            else []
+        )
 
     def __str__(self):
+        _options_str = (
+            "[" + "".join([opt for opt in self._options]) + "]"
+            if self._options
+            else ''
+        )
         return (
             "\n"
-            + r"\frame %"
-            + "\n"
+            + r"\frame"
+            + _options_str
+            + "%\n"
             + r"{%"
             + "\n"
             + r"\frametitle{"
@@ -1510,11 +1520,16 @@ class BeamerSection(TexFile):
             self,
             heading:str="Untitled Beamer Section",
             filename:str=None,
-            author:str=None
+            author:str=None,
+            label:str=None
     ):
         
         self._heading:str = heading
         self._content = ''
+        self._label:str = (
+            label if label is not None
+            else heading.replace(' ', '_').lower()
+        )
 
         super().__init__(
             filename=filename,
@@ -1530,6 +1545,7 @@ class BeamerSection(TexFile):
             "\\section{"
             + self._heading
             + "} %\n" 
+            + r"\label{sec:" + self._label + "}%\n"
             + self._content 
             + "\n\n"
         )
