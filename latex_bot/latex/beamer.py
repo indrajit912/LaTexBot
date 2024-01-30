@@ -6,10 +6,12 @@
 
 from .latex import *
 from .articles import AmsArticle
-from .utils import compile_tex
+from .utils import compile_tex, open_file
 
 from pathlib import Path
 from typing import List
+
+TEX_GARBAGE_DIR = Path(__file__).parent / "tex_garbage"
 
 __all__ = ["Beamer"]
 
@@ -126,7 +128,7 @@ class Beamer:
         )
 
         self._email = (
-            Email(email) if email is not None
+            Email(email, texttt=True) if email is not None
             else ''
         )
 
@@ -264,6 +266,38 @@ class Beamer:
 
         print(f"\n\nProject Dir: `{self._project_dir}`\n")
 
+    
+    def show_output(self):
+        """
+        This method shows the output without creating the project
+        It sets `self._project_dir` to `TEX_GARBAGE`
+        """
+        if not TEX_GARBAGE_DIR.exists():
+            TEX_GARBAGE_DIR.mkdir()
+
+        self._update()
+
+        _str_to_hash = (
+            self._main_tex.__str__()
+            + ''.join([sec.__str__() for sec in self._sections])
+            + self._reference_bib.__str__()
+        )
+        self._main_tex._filename = TexFile.tex_hash(_str_to_hash)
+        self._project_dir = TEX_GARBAGE_DIR / self._main_tex.filename
+        self._sections_dir = self._project_dir / "sections"
+
+        self._update()
+
+        if self._project_dir.exists():
+            output = self._project_dir / (self._main_tex._filename + self._main_tex._output_format)
+            if output.exists():
+                open_file(output)
+            else:
+                print("No Output file found.\n")
+        
+        else:
+            self.create()
+
 
     def _update(self):
         """
@@ -333,7 +367,7 @@ class Beamer:
             _main_pre_cmds += r"\newcommand{\InstituteCode}{" + self._institute_code + "}%\n"
 
         if self._email:
-            _main_pre_cmds += r"\newcommand{\Email}{" + self._email + "}%\n"
+            _main_pre_cmds += r"\newcommand{\Email}{" + str(self._email) + "}%\n"
 
         if self._purpose:
             _main_pre_cmds += r"\newcommand{\Purpose}{" + self._purpose + "}%\n"
@@ -532,9 +566,7 @@ class Beamer:
             Frame(
                 title="Frame Title Here",
                 text = r"""
-    Etiam euismod. Fusce facilisis lacinia dui. Suspendisse potenti. In mi erat,
-    cursus id, nonummy sed, ullamcorper eget, sapien. Praesent pretium,
-    magna in eleifend egestas, pede pede pretium lorem!
+    Etiam euismod. Fusce facilisis lacinia dui.
     
     \begin{thm}[von Neumann]
     	
