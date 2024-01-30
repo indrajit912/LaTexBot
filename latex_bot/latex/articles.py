@@ -1744,7 +1744,7 @@ class AmsArticle:
         main_pre_cmds = (
             r"\newcommand{\Title}{" + self._title + "}%"
             + "\n"
-            r"\newcommand{\ShortTitle}{" + self._short_title + "}%"
+            + r"\newcommand{\ShortTitle}{" + self._short_title + "}%"
             + "\n\n"
         )
 
