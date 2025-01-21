@@ -6,7 +6,7 @@
 #
 
 from datetime import datetime
-import copy, re, hashlib, subprocess, os, sys
+import copy, re, hashlib, subprocess
 from pathlib import Path
 from .utils import open_file, _print_tex_error_from_log
 

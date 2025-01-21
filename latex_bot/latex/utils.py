@@ -5,7 +5,7 @@
 
 import tempfile, shutil, platform, subprocess, os
 from pathlib import Path
-import fnmatch, sys, re
+import fnmatch, sys
 
 TEX_ERROR_FOUND = (
     "\n"

@@ -259,8 +259,7 @@ class Beamer:
             compile_tex(
                 texfile=_main_tex,
                 tex_compiler='pdflatex',
-                output_format='.pdf',
-                bibtex=True
+                output_format='.pdf'
             )
         
 
