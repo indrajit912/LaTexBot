@@ -8,6 +8,7 @@
 
 from pathlib import Path
 import sys
+import re
 
 
 HOME = Path.home()
@@ -33,41 +34,60 @@ def list_files(path):
     return files
 
 
-def compile_texfile_to_pdf(texfile:Path):
+def determine_bibliography_backend(texfile: Path) -> str:
+    r"""
+    Determines whether to use `biber` or `bibtex` based on the presence of `\usepackage{biblatex}`.
+    Handles cases where `biblatex` is used with or without options.
     """
-    Use `compile_tex()` to compiles the given `texfile` and opens the generated pdf 
+    preamble_file = texfile.parent / "preamble.tex"
+    use_biblatex = False
+    biblatex_pattern = re.compile(r"\\usepackage(\[[^\]]*\])?\{biblatex\}")
+
+    try:
+        # Check the main TeX file for biblatex
+        with open(texfile, "r") as f:
+            if re.search(biblatex_pattern, f.read()):
+                use_biblatex = True
+
+        # Check preamble.tex if it exists
+        if preamble_file.exists():
+            with open(preamble_file, "r") as f:
+                if re.search(biblatex_pattern, f.read()):
+                    use_biblatex = True
+    except Exception as e:
+        print(f"Error reading files: {e}")
+        sys.exit(1)
+
+    return "biber" if use_biblatex else "bibtex"
+
+
+def compile_texfile_to_pdf(texfile: Path):
+    """
+    Compiles the given TeX file to PDF, dynamically selecting the bibliography backend.
     """
     texfile = Path(texfile)
     try:
-        with open(texfile, 'r') as f:
-            if "metropolis" in f.read():
-                commented_metropolis = r"""%\usetheme{metropolis}""" in f.read()
-                _tex_compiler = 'pdflatex' if commented_metropolis else 'xelatex'
+        # Determine the TeX compiler (check for Metropolis theme)
+        with open(texfile, "r") as f:
+            tex_content = f.read()
+            if "metropolis" in tex_content:
+                commented_metropolis = r"""%\usetheme{metropolis}""" in tex_content
+                tex_compiler = "pdflatex" if commented_metropolis else "xelatex"
             else:
-                _tex_compiler = 'pdflatex'
-    
-    
+                tex_compiler = "pdflatex"
 
-        _bib_files = []
-        for f in texfile.parent.glob('*.bib'):
-            _bib_files.append(f)
-
-        _use_bibtex = (
-            True
-            if _bib_files
-            else False
-        )
+        # Determine the bibliography backend
+        backend = determine_bibliography_backend(texfile)
 
         compile_tex(
             texfile=texfile,
-            tex_compiler=_tex_compiler,
-            output_format='.pdf',
-            bibtex=_use_bibtex
+            tex_compiler=tex_compiler,
+            output_format=".pdf",
+            backend=backend
         )
 
     except FileNotFoundError as e:
         print(f"NO_TEX_FILE_FOUND: {e}")
-
 
 
 def main():

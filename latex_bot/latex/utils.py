@@ -143,7 +143,7 @@ def compile_tex(
         texfile:Path, 
         tex_compiler:str='pdflatex', 
         output_format:str='.pdf', 
-        bibtex:bool=True
+        backend: str = "bibtex"
 ):
     """
     Compiles a `TeX` file and opens the output
@@ -180,17 +180,17 @@ def compile_tex(
         )
         sys.exit(1)
     
-    if bibtex:
-        aux_file:Path = texfile.with_suffix('.aux').name
+    if backend in {"bibtex", "biber"}:
+        aux_file = texfile.with_suffix(".aux").name if backend == 'bibtex' else texfile.name.rstrip(".tex")
 
-        # Run BibTeX on the generated .aux file
-        print(f"- Compiling using `bibtex` ...")
-        subprocess.run(['bibtex', aux_file], stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
+        # Run the appropriate bibliography backend
+        print(f"- Compiling using `{backend}` ...")
+        subprocess.run([backend, aux_file], stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
+        # Recompile for cross-references
         print(f"- Compiling using `{tex_compiler}` ...")
         subprocess.run(_cmds, stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
-
-        print(f"- Compiling using `{tex_compiler}` ...\n")
+        print(f"- Compiling using `{tex_compiler}` ...")
         subprocess.run(_cmds, stdout=subprocess.DEVNULL, cwd=tex_compiler_cwd)
 
     
