@@ -33,32 +33,46 @@ def list_files(path):
 
     return files
 
-
 def determine_bibliography_backend(texfile: Path) -> str:
     r"""
-    Determines whether to use `biber` or `bibtex` based on the presence of `\usepackage{biblatex}`.
-    Handles cases where `biblatex` is used with or without options.
+    Determines whether to use `biber` or `bibtex` based on the `backend` option in `\usepackage{biblatex}`.
+    If no `\usepackage{biblatex}` is found, defaults to `bibtex`.
     """
     preamble_file = texfile.parent / "preamble.tex"
-    use_biblatex = False
-    biblatex_pattern = re.compile(r"\\usepackage(\[[^\]]*\])?\{biblatex\}")
+    
+    # Regex to match \usepackage{biblatex} with optional arguments (e.g., [backend=biber,style=alphabetic]).  
+    biblatex_pattern = re.compile(r"\\usepackage(\[([^\]]*)\])?\{biblatex\}")
 
-    try:
-        # Check the main TeX file for biblatex
-        with open(texfile, "r") as f:
-            if re.search(biblatex_pattern, f.read()):
-                use_biblatex = True
+    def find_backend_in_file(file_path: Path) -> str:
+        """Searches for the backend in the given file."""
+        try:
+            with open(file_path, "r") as f:
+                for line in f:
+                    match = re.search(biblatex_pattern, line)
+                    if match:
+                        options = match.group(2)  # Extract options inside [...]
+                        if options:
+                            backend_match = re.search(r"backend=(\w+)", options)
+                            if backend_match:
+                                return backend_match.group(1)  # Return the backend value
+                        return "biber"  # Default to biber if backend is not explicitly set
+        except Exception as e:
+            print(f"Error reading file {file_path}: {e}")
+        return None
 
-        # Check preamble.tex if it exists
-        if preamble_file.exists():
-            with open(preamble_file, "r") as f:
-                if re.search(biblatex_pattern, f.read()):
-                    use_biblatex = True
-    except Exception as e:
-        print(f"Error reading files: {e}")
-        sys.exit(1)
+    # Check the main TeX file
+    backend = find_backend_in_file(texfile)
+    if backend:
+        return backend
 
-    return "biber" if use_biblatex else "bibtex"
+    # Check the preamble.tex file if it exists
+    if preamble_file.exists():
+        backend = find_backend_in_file(preamble_file)
+        if backend:
+            return backend
+
+    # Default to bibtex if no \usepackage{biblatex} is found
+    return "bibtex"
 
 
 def compile_texfile_to_pdf(texfile: Path):
