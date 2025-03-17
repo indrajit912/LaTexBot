@@ -22,7 +22,7 @@ PATTERNS_TO_DELETE = [
     '*.synctex.gz', '*.gz', '*.log', "*-blx.bib",
     "*.run.xml", "*.bcf", "*.snm", "*.nav",
     "*.fdb_latexmk", "*.fls", "*.acr", "*.idx",
-    "*.ilg", "*.ind"
+    "*.ilg", "*.ind", "*.vrb"
 ]
 
 def make_temp_dir():
